@@ -110,11 +110,11 @@ const DefaultLayout: React.FC<{
                 icon: <FontAwesomeIcon icon={faSignOut}></FontAwesomeIcon>,
                 onClick: () => {
                     nProgress.start();
-                    signOut();
+                    // signOut();
                     // HINT: use this method call if need to end SSO server authentication session:
-                    // signOut({
-                    //     callbackUrl: '/api/end-session'
-                    // });
+                    signOut({
+                        callbackUrl: '/api/end-session'
+                    });
                 }
             });
         } else {
@@ -133,6 +133,7 @@ const DefaultLayout: React.FC<{
     }
 
     const displayUserName = session?.user?.name;
+    console.log(session?.user);
 
     function renderAvatar() {
         if (status === 'authenticated') {
