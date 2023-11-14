@@ -14,6 +14,12 @@ import { InputAddNewUserForm } from '@/components/common/input/InputAddNewUserFo
 import { InputSelectAddNewUserForm } from '@/components/common/input/InputSelectAddNewUserForm';
 import { useController } from 'react-hook-form';
 import { SelectOptions } from '@/components/interfaces/AddNewUserForms';
+import useSWR from 'swr';
+import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
+
+interface DataItem {
+    roleName: string;
+}
 
 interface AddNewUserFormResponse {
     response: string;
@@ -37,24 +43,29 @@ const AddNewUserPage: Page = () => {
     });
 
     const { field: fieldCurrentRole } = useController({ name: 'currentRole', control });
+
+    const swrFetcher = useSwrFetcherWithAccessToken();
     const [roleOptions, setRoleOptions] = useState<SelectOptions<string>[]>([]);
+
+    const { data } = useSWR<DataItem[]>(BackendApiUrl.getRoleList, swrFetcher);
+
     useEffect(() => {
-        const fetchRoleList = async () => {
-          try {
-            const response = await fetch(BackendApiUrl.getRoleList);
-            const roleList = await response.json();
-            setRoleOptions(roleList);
-          } catch (error) {
-            console.error('Error fetching role list:', error);
-          }
+        const dataSource = () => {
+            if (!data) {
+                return [];
+            }
+
+            const options = data.map((item) => ({
+                label: item.roleName,
+                value: item.roleName,
+            }));
+
+            return options;
         };
-    
-        fetchRoleList();
-      }, []); 
 
-    // const { data, error, isValidating } = useSWR<DataItem[]>(BackendApiUrl.getRoleList, swrFetcher);
+        setRoleOptions(dataSource());
+    }, [data]);
 
-      
     const onSubmit = async (formData: AddNewUserFormProps) => {
         const payload = {
             ...formData,
