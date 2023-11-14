@@ -196,24 +196,30 @@ const Home: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <div className='categoryHome'>
-                                    <div className='categoryTitleHome'>
-                                        <FontAwesomeIcon icon={Q.second.icon} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
-                                        <br />
-                                        {Q.second.title}
-                                    </div>
-                                    <div className='categoryDescriptionHome'>
-                                        <div style={{
-                                            padding: '16px',
-                                            position: 'relative',
-                                            top: '50%',
-                                            left: '50%',
-                                            transform: 'translate3d(-50%,-50%,0)',
-                                        }}>
-                                            {Q.second.description}
+
+                                {
+                                    !Q.second.title && !Q.second.description ?
+                                        <div></div>
+                                        :
+                                        <div className='categoryHome'>
+                                            <div className='categoryTitleHome'>
+                                                <FontAwesomeIcon icon={Q.second.icon} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
+                                                <br />
+                                                {Q.second.title}
+                                            </div>
+                                            <div className='categoryDescriptionHome'>
+                                                <div style={{
+                                                    padding: '16px',
+                                                    position: 'relative',
+                                                    top: '50%',
+                                                    left: '50%',
+                                                    transform: 'translate3d(-50%,-50%,0)',
+                                                }}>
+                                                    {Q.second.description}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
+                                }
 
                             </div>
                         )
