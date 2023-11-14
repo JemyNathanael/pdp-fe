@@ -48,7 +48,7 @@ const DefaultLayout: React.FC<{
                     {
                         key: '/sub-menu-b',
                         label: 'Sub Menu B',
-                        onClick: () => router.push('/')
+                        onClick: () => router.push('/ManageUser')
                     },
                     {
                         key: '/sub-menu-c',
