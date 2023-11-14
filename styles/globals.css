@@ -8,3 +8,16 @@
 #nprogress .bar {
     background: limegreen !important;
 }
+
+
+.addButton {
+    background-color: green;
+    color: white;
+    margin-right: 530px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 120px;
+  }
+  

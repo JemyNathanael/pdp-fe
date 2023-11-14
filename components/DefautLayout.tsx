@@ -53,7 +53,7 @@ const DefaultLayout: React.FC<{
                     {
                         key: '/sub-menu-c',
                         label: 'Sub Menu C',
-                        onClick: () => router.push('/')
+                        onClick: () => router.push('/manage-user')
                     }
                 ]
             },
