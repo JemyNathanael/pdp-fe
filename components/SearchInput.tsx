@@ -5,8 +5,7 @@ import { Input } from "antd";
 export default function SearchInput({ onSearch, placeholder }) {
     return (
         <div>
-            <div className="m-5">
-                <div className="grid grid-cols-2 gap-4">
+            <div className="my-5">
                     <div className="w-80">
                         <Input
                             className="text-center border border-[#A3A3A3] rounded"
@@ -17,7 +16,6 @@ export default function SearchInput({ onSearch, placeholder }) {
                     </div>
                 </div>
             </div>
-        </div>
     );
 }
 

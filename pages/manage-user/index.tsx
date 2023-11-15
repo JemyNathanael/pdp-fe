@@ -75,7 +75,6 @@ const AddNewUserPage: React.FC = () => {
 
         const { data } = await fetchPOST<AddNewUserFormResponse>(BackendApiUrl.addNewUser, payload);
 
-        console.log(data);
         if (data) {
             setOpenModal(false);
             setShowPopupSuccess(true);
