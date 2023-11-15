@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { Title } from '../../../../components/Title';
 import { Page } from '../../../../types/Page';
 import { WithCategoryLayout } from '@/components/CategoryLayout';
