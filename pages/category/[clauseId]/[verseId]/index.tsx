@@ -2,36 +2,47 @@ import React, { FC } from 'react';
 import { Title } from '../../../../components/Title';
 import { Page } from '../../../../types/Page';
 import { WithCategoryLayout } from '@/components/CategoryLayout';
+import { Select } from 'antd';
 
-// interface pageProps {
-//     params: {
-//         clauseId: string
-//     }
-// }
+interface selectType {
+    value: string;
+    label: string;
+}
 
-// interface VerseProps {
-//     clauseId: string
-// }
-
-const Verse: FC = () => {
-
-    return (
-        <div>
-            <div className="text-3xl font-semibold mb-5">
-                Ayat
-            </div>
-            <p>
-                Ayat ayat
-            </p>
-        </div>
-    );
-};
+const selectOptions: selectType[] = [
+    {
+        label: 'Sesuai Sepenuhnya',
+        value: 'Sesuai Sepenuhnya'
+    },
+    {
+        label: 'Sesuai Sebagian',
+        value: 'Sesuai Sebagian'
+    },
+    
+    {
+        label: 'Tidak Sesuai',
+        value: 'Tidak Sesuai'
+    },
+    {
+        label: 'Tidak Dapat Diterapkan',
+        value: 'Tidak Dapat Diterapkan'
+    },
+]
 
 const VersePage: Page = () => {
     return (
         <div>
             <Title>Ayat</Title>
-            <Verse></Verse>
+            <div className='flex'>
+                <Select
+                    className='w-56 rounded-none'
+                    defaultValue={selectOptions[0]?.label}
+                    options={selectOptions} 
+                />
+                <div className='bg-blue-300 flex flex-1'>
+
+                </div>
+            </div>
         </div>
     );
 }

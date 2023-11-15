@@ -5,9 +5,8 @@ import { faSignIn, faHome } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import Collapsible from "./Collapsible";
-import { Content } from "antd/es/layout/layout";
 
-const { Sider } = Layout;
+const { Sider, Content, Header } = Layout;
 
 const sidebarBackgroundColor = '#4F7471';
 
@@ -69,7 +68,7 @@ const CategoryLayout: React.FC<{
     }
 
     const logoutButton = () => (
-        <button className="flex items-center text-[#4F7471] font-semibold border-2 border-[#4F7471] px-3 py-1 rounded-full">
+        <button className="flex items-center text-[#4F7471] font-semibold border-2 border-[#4F7471] h-9 px-3 rounded-full">
             <FontAwesomeIcon className="mr-2" icon={faSignIn} color="#4F7471"></FontAwesomeIcon>
             Logout
         </button>
@@ -90,51 +89,56 @@ const CategoryLayout: React.FC<{
                     <meta key="meta-charset" charSet="utf-8" />
                     <meta key="meta-viewport" name="viewport" content="width=device-width, initial-scale=1" />
                     <link key="favicon" rel="icon" href="/favicon.ico" />
-                        <div className="flex items-center">
-                            <button className="p-6 border-r-2 border-r-gray-200">
-                                <FontAwesomeIcon icon={faHome} color="#4F7471" className="fa-xl" onClick={() => router.push('/')}></FontAwesomeIcon>
-                            </button>
-                            <div className="p-6 flex-1 text-[#4F7471] font-bold text-xl">
-                                LOGO
-                            </div>
-                            <div className="p-6 flex flex-1 flex-row-reverse items-center">
-                                {logoutButton()}
-                                <div className="mr-6 font-semibold text-xs">
-                                    Halo, Nama
-                                </div>
-                            </div>
-                        </div>
                 </Head>
 
-                <Sider width={300} className="pb-24 hidden lg:block">
-                    <div className="p-2 px-4 m-4 text-white font-bold">
-                        Placholder Title
+                <Header className="bg-white px-0 flex items-center">
+                    <div className="flex flex-1 items-center">
+                        <button className="p-6 border-r-2 border-r-gray-200">
+                            <FontAwesomeIcon icon={faHome} color="#4F7471" className="fa-xl" onClick={() => router.push('/')}></FontAwesomeIcon>
+                        </button>
+                        <div className="p-6 flex-1 text-[#4F7471] font-bold text-xl">
+                            LOGO
+                        </div>
+                        <div className="p-6 flex flex-1 flex-row-reverse items-center">
+                            {logoutButton()}
+                            <div className="mr-6 font-semibold text-xs">
+                                Halo, Nama
+                            </div>
+                        </div>
                     </div>
-                    <div className="m-4">
-                        {
-                            clauses.map((clause, i) =>
-                                <Collapsible
-                                open={openAll}
-                                title={clause.title}
-                                routePath={clause.routePath}
-                                childrenItem={clause.children}
-                                changeCollapseStatus={changeCollapseStatusByIndex}
-                                resetToggle={resetToggleFromButtonState}
-                                toggledFlag={toggledFromCollapseOrExpandAll}
-                                currentIndex={i}
-                                key={i}
-                                /> 
-                            )
-                        }
-                    </div>
-                    <button className="mx-8 mt-5 text-white underline text-xs" onClick={handleExpandOrCollapseAll}>
-                        Expand / Collapse all
-                    </button>
-                </Sider>
-        
-                <Content className="m-5 p-8 bg-white">
-                    {children}
-                </Content>
+                </Header>
+                
+                <Layout>
+                    <Sider width={300} className="pb-24 hidden lg:block">
+                        <div className="p-2 px-4 m-4 text-white font-bold">
+                            Placholder Title
+                        </div>
+                        <div className="m-4">
+                            {
+                                clauses.map((clause, i) =>
+                                    <Collapsible
+                                    open={openAll}
+                                    title={clause.title}
+                                    routePath={clause.routePath}
+                                    childrenItem={clause.children}
+                                    changeCollapseStatus={changeCollapseStatusByIndex}
+                                    resetToggle={resetToggleFromButtonState}
+                                    toggledFlag={toggledFromCollapseOrExpandAll}
+                                    currentIndex={i}
+                                    key={i}
+                                    /> 
+                                )
+                            }
+                        </div>
+                        <button className="mx-8 mt-5 text-white underline text-xs" onClick={handleExpandOrCollapseAll}>
+                            Expand / Collapse all
+                        </button>
+                    </Sider>
+            
+                    <Content className="p-7">
+                        {children}
+                    </Content>
+                </Layout>
 
             </Layout>
         </ConfigProvider>
