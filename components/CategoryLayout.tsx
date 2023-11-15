@@ -5,6 +5,7 @@ import { faSignIn, faHome } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import Collapsible from "./Collapsible";
+import { Content } from "antd/es/layout/layout";
 
 const { Sider } = Layout;
 
@@ -12,12 +13,12 @@ const sidebarBackgroundColor = '#4F7471';
 
 const CategoryLayout: React.FC<{
     children: React.ReactNode
-}> = () => {
+}> = ({ children }) => {
 
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [openAll, setOpenAll] = useState(false);
     const [toggledFromCollapseOrExpandAll, setToggledFromCollapseOrExpandAll] = useState(false);
     const router = useRouter();
-    
+     
     const clauses = [
         {
             title: 'Pasal 22',
@@ -43,25 +44,30 @@ const CategoryLayout: React.FC<{
                 }
             ]
         },
-    ]
-
+    ];
+    
     const itemsCollapseStateMap = clauses.map(() => false);
 
     function changeCollapseStatusByIndex(index: number, state: boolean) {
         itemsCollapseStateMap[index] = state;
+        console.log(itemsCollapseStateMap);
     }
 
-    function handleExpandOrCollapseState() {
-        const isAllExpanded = itemsCollapseStateMap.every(state => state === true);
-        const isAllCollapsed = itemsCollapseStateMap.every(state => state === false);
-        if (isAllExpanded) {
-            setDrawerOpen(false);
-        } else if (isAllCollapsed) {
-            setDrawerOpen(true);
-        }
-        setToggledFromCollapseOrExpandAll((prev) => !prev);
+    function resetToggleFromButtonState() {
+        setToggledFromCollapseOrExpandAll(false);
     }
-    
+
+    function handleExpandOrCollapseAll() {
+        setToggledFromCollapseOrExpandAll(true);
+        console.log(itemsCollapseStateMap);
+        const isAllExpanded = itemsCollapseStateMap.every(state => state === true);
+        if (isAllExpanded) {
+            setOpenAll(false);
+        } else {
+            setOpenAll(true);
+        }
+    }
+
     const logoutButton = () => (
         <button className="flex items-center text-[#4F7471] font-semibold border-2 border-[#4F7471] px-3 py-1 rounded-full">
             <FontAwesomeIcon className="mr-2" icon={faSignIn} color="#4F7471"></FontAwesomeIcon>
@@ -108,11 +114,12 @@ const CategoryLayout: React.FC<{
                         {
                             clauses.map((clause, i) =>
                                 <Collapsible
-                                open={drawerOpen}
+                                open={openAll}
                                 title={clause.title}
                                 routePath={clause.routePath}
                                 childrenItem={clause.children}
                                 changeCollapseStatus={changeCollapseStatusByIndex}
+                                resetToggle={resetToggleFromButtonState}
                                 toggledFlag={toggledFromCollapseOrExpandAll}
                                 currentIndex={i}
                                 key={i}
@@ -120,38 +127,15 @@ const CategoryLayout: React.FC<{
                             )
                         }
                     </div>
-                    <button className="mx-8 mt-5 text-white underline text-xs" onClick={handleExpandOrCollapseState}>
+                    <button className="mx-8 mt-5 text-white underline text-xs" onClick={handleExpandOrCollapseAll}>
                         Expand / Collapse all
                     </button>
                 </Sider>
-                {/* <Drawer placement="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-                    <ConfigProvider theme={{
-                        components: {
-                            Menu: {
-                                // https://github.com/ant-design/ant-design/blob/5.0.0/components/menu/style/theme.tsx#L194
-                                colorActiveBarBorderSize: 0
-                            }
-                        }
-                    }}>
-                     
-                    </ConfigProvider>
-                </Drawer>
-                <Layout>
-                    <div className='bg-topbar grid grid-cols-3 lg:hidden px-8 py-4 items-center'>
-                        <div>
-                            <Button onClick={() => setDrawerOpen(true)} type="primary">
-                                <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
-                            </Button>
-                        </div>
-                        <div className="h-12 p-2 text-white bg-slate-600">
-                            Logo
-                        </div>
-                        <div></div>
-                    </div>
-                    <Content className="m-5 p-8 bg-white">
-                        {children}
-                    </Content>
-                </Layout> */}
+        
+                <Content className="m-5 p-8 bg-white">
+                    {children}
+                </Content>
+
             </Layout>
         </ConfigProvider>
     );

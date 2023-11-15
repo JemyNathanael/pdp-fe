@@ -10,6 +10,7 @@ interface IProps {
   routePath: string;
   currentIndex: number;
   changeCollapseStatus: (index: number, state: boolean) => void;
+  resetToggle: () => void;
   toggledFlag: boolean;
 }
 
@@ -44,20 +45,22 @@ const Child: React.FC<ChildProps> = ({ routePath, title }) => {
     )
 }
 
-const Collapsible: React.FC<IProps> = ({ open, title, childrenItem, routePath, currentIndex, changeCollapseStatus, toggledFlag}) => {
+const Collapsible: React.FC<IProps> = ({ open, title, childrenItem, routePath, currentIndex, changeCollapseStatus, toggledFlag, resetToggle }) => {
   const [isOpen, setIsOpen] = useState(open);
   const router = useRouter();
 
   useEffect(() => {
-    console.log(toggledFlag)
-    if(open) {
-        setIsOpen(open);
-        changeCollapseStatus(currentIndex, true);
-    } else {
-        setIsOpen(false);
-        changeCollapseStatus(currentIndex, false);
+    if(toggledFlag) {
+        if(open) {
+            setIsOpen(open);
+            changeCollapseStatus(currentIndex, true);
+        } else {
+            setIsOpen(false);
+            changeCollapseStatus(currentIndex, false);
+        }
+        resetToggle();
     }
-  }, [changeCollapseStatus, currentIndex, open, toggledFlag])
+  }, [changeCollapseStatus, currentIndex, open, resetToggle, toggledFlag])
   
 
   const handleFilterOpening = () => {
