@@ -3,7 +3,9 @@ const baseUrl = '/api/be';
 
 export const BackendApiUrl = {
     test: baseUrl + '/api/test',
-    getUser:baseUrl + '/api/User'
+    getUser:baseUrl + '/api/User',
+    editUserRole: baseUrl + '/api/User/edit-user-role',
+    getRoleList: baseUrl + '/api/Dropdown/role-list',
 }
 
 export function GetUser(
