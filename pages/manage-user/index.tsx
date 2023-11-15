@@ -65,16 +65,14 @@ const AddNewUserPage: React.FC = () => {
     }, [data]);
 
     const onSubmit = async (formData: AddNewUserFormProps) => {
-        console.log(1)
         if (!isValid) {
-            console.log(2)
             return;
         }
 
         const payload = {
             ...formData,
         };
-        console.log("test", formData)
+
         const { data } = await fetchPOST<AddNewUserFormResponse>(BackendApiUrl.addNewUser, payload);
 
         console.log(data);
@@ -102,11 +100,15 @@ const AddNewUserPage: React.FC = () => {
         return null;
     }
 
+    const cancelModal = () => {
+        setOpenModal(false);
+    }
     return (
         <>
             <Modal
                 open={openModal}
                 centered
+                onCancel={() => cancelModal()}
                 footer={null}
                 width={800}
             >
