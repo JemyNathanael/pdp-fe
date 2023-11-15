@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ZodType, z } from 'zod';
+import { z } from 'zod';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import PopupAddNewUser from '@/components/manage-user/PopupAddNewUser';
 import { AddNewUserFormProps } from '@/components/interfaces/AddNewUserForms';
@@ -24,25 +24,24 @@ interface AddNewUserFormResponse {
     response: string;
 }
 
-const schema: ZodType<AddNewUserFormProps> = z.object({
-    fullName: z.string({ required_error: 'Name can\'t be empty' }).min(1, 'Name can\'t be empty'),
+const schema = z.object({
+    name: z.string({ required_error: 'Name can\'t be empty' }).min(1, 'Name can\'t be empty'),
     email: z.string({ required_error: 'Email can\'t be empty' }).email({ message: 'Email Format not valid' }).min(1, 'Email tidak boleh kosong'),
     password: z.string({ required_error: 'Password can\'t be empty' }),
     confirmPassword: z.string({ required_error: 'Confirmation password can\'t be empty' }),
-    role: z.number({ required_error: 'Role can\'t be empty' }).min(1, 'Role can\'t be empty'),
-    currentRole: z.string({ required_error: 'Current Role can\'t be empty' }),
+    role: z.string({ required_error: 'Role can\'t be empty' }).min(1, 'Role can\'t be empty'),
 });
 
 const AddNewUserPage: React.FC = () => {
     const { replace } = useRouter();
     const { fetchPOST } = useFetchWithAccessToken();
     const [showPopupSuccess, setShowPopupSuccess] = useState(false);
-    const { register, handleSubmit, reset, control, formState: { errors, isValid} } = useForm<AddNewUserFormProps>({
+    const { handleSubmit, reset, control, formState: { errors, isValid } } = useForm<AddNewUserFormProps>({
         resolver: zodResolver(schema),
         mode: 'onChange',
     });
 
-    const { field: fieldCurrentRole } = useController({ name: 'currentRole', control });
+    const { field: fieldCurrentRole } = useController({ name: 'role', control });
 
     const swrFetcher = useSwrFetcherWithAccessToken();
     const [roleOptions, setRoleOptions] = useState<SelectOptions<string>[]>([]);
@@ -78,11 +77,18 @@ const AddNewUserPage: React.FC = () => {
         console.log("test", formData)
         const { data } = await fetchPOST<AddNewUserFormResponse>(BackendApiUrl.addNewUser, payload);
 
-        if (data?.response) {
+        console.log(data);
+        if (data) {
+            setOpenModal(false);
             setShowPopupSuccess(true);
             reset();
         }
     };
+
+    const [openModal, setOpenModal] = useState<boolean>();
+    const setOk = () => {
+        setOpenModal(true);
+    }
 
     const renderPopupSuccess = () => {
         if (showPopupSuccess) {
@@ -97,58 +103,86 @@ const AddNewUserPage: React.FC = () => {
     }
 
     return (
-        <Modal
-            open={true}
-            centered
-            footer={[<button key={2} onClick={() => setShowPopupSuccess(true)} className="addButton">Add</button>]}
-            width={800}
-        >
-            <div>
+        <>
+            <Modal
+                open={openModal}
+                centered
+                footer={null}
+                width={800}
+            >
                 <div className="flex flex-col px-2 md:px-4 lg:px-8 mt-4 md:mt-16">
-                <h3 className="text-xl sm:text-2xl text-center font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Add New Account</h3>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <InputAddNewUserForm
-                        id={'fullName'}
-                        label='Name'
-                        register={register('fullName', { required: true })}
-                        placeholder='Insert Name'
-                        formErrorMessage={errors.fullName?.message}
-                    />
-                    <InputAddNewUserForm
-                        id={'email'}
-                        label='Email'
-                        register={register('email', { required: true })}
-                        placeholder='Insert Email'
-                        formErrorMessage={errors.email?.message}
-                    />
-                    <InputAddNewUserForm
-                        id={'password'}
-                        label='Password'
-                        register={register('password', { required: true })}
-                        placeholder='Insert Password'
-                        formErrorMessage={errors.password?.message}
-                    />
-                    <InputAddNewUserForm
-                        id={'confirmPassword'}
-                        label='Confirm Password'
-                        register={register('password', { required: true })}
-                        placeholder='Insert Confirmation Password'
-                        formErrorMessage={errors.confirmPassword?.message}
-                    />
-                    <InputSelectAddNewUserForm
-                        label='Role'
-                        value={listCurrentRole.find(e => e.value === fieldCurrentRole.value) ?? ''}
-                        name={fieldCurrentRole.name}
-                        options={roleOptions}
-                        onChange={(selectedOptions: SelectOptions<string>) => fieldCurrentRole.onChange(selectedOptions.value)}
-                        placeholder='Choose Role'
-                        formErrorMessage={errors?.currentRole?.message}
-                    />
-                </form>
-                {renderPopupSuccess()}
+                    <h3 className="text-xl sm:text-2xl text-center font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Add New Account</h3>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <Controller
+                            name="name"
+                            control={control}
+                            render={({ field }) => (
+                                <InputAddNewUserForm
+                                    id={'fullName'}
+                                    label='Name'
+                                    field={{ ...field }}
+                                    placeholder='Insert Name'
+                                    formErrorMessage={errors.name?.message}
+                                />
+                            )} />
+                        <Controller
+                            name="email"
+                            control={control}
+                            render={({ field }) => (
+                                <InputAddNewUserForm
+                                    id={'email'}
+                                    label='Email'
+                                    field={{ ...field }}
+                                    placeholder='Insert Email'
+                                    formErrorMessage={errors.email?.message}
+                                />
+                            )} />
+                        <Controller
+                            name="password"
+                            control={control}
+                            render={({ field }) => (
+                                <InputAddNewUserForm
+                                    id={'password'}
+                                    label='Password'
+                                    field={{ ...field }}
+                                    placeholder='Insert Password'
+                                    formErrorMessage={errors.password?.message}
+                                />
+                            )} />
+
+                        <Controller
+                            name="confirmPassword"
+                            control={control}
+                            render={({ field }) => (
+                                <InputAddNewUserForm
+                                    id={'password'}
+                                    label='Confirm Password'
+                                    field={{ ...field }}
+                                    placeholder='Insert Confirmation Password'
+                                    formErrorMessage={errors.confirmPassword?.message}
+                                />
+                            )} />
+
+                        <InputSelectAddNewUserForm
+                            label='Role'
+                            value={listCurrentRole.find(e => e.value === fieldCurrentRole.value) ?? ''}
+                            name={fieldCurrentRole.name}
+                            options={roleOptions}
+                            onChange={(selectedOptions: SelectOptions<string>) => fieldCurrentRole.onChange(selectedOptions.value)}
+                            placeholder='Choose Role'
+                            formErrorMessage={errors?.role?.message}
+                        />
+
+                        <button type="submit" className="addButton">Add</button>
+                    </form>
+                </div>
+            </Modal>
+            <div className="">
+                <h1>test</h1>
+                <button onClick={() => setOk()}>Ok</button>
             </div>
-            </div>
-        </Modal>
+            {renderPopupSuccess()}
+        </>
     );
 };
 export default AddNewUserPage;

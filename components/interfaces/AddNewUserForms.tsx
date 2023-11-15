@@ -1,9 +1,9 @@
 export interface AddNewUserFormProps {
-    fullName: string
+    name: string
     email: string
     password: string
-    confirmPassword: string
-    currentRole:string
+    confirmPassword: string | null
+    role: string
 }
 
 export interface SelectOptions<T> {

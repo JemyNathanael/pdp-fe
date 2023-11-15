@@ -49,7 +49,7 @@ export const InputSelectAddNewUserForm = <T,>({
                     })
                 }}
             />
-            {formErrorMessage && <p className='text-md text-alertdanger font-normal font-body mt-1.5'>{formErrorMessage}</p>}
+            {formErrorMessage && <p className='text-md text-red-600 font-normal font-body mt-1.5'>{formErrorMessage}</p>}
         </div>
     );
 };
