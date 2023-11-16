@@ -7,6 +7,7 @@ import { Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import useSWR from 'swr';
+import { useDebounce } from "use-debounce";
 
 interface DataItem {
   id: string;
@@ -43,6 +44,8 @@ const OverviewUser: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<RecordProps>({ id: '', fullName: '', role: '' });
 
+  const [debouncedValue] = useDebounce(search, 1000);
+
   const filter: FilterData = {
     itemsPerPage: 10,
     page: page,
@@ -56,7 +59,7 @@ const OverviewUser: React.FC = () => {
 
   const { data, isValidating } = useSWR<DataItems>(
     GetUser(
-      filter.search,
+      debouncedValue,
       filter.itemsPerPage,
       filter.page,
     ),
@@ -84,7 +87,7 @@ const OverviewUser: React.FC = () => {
   const overviewData = dataSource();
 
   const filteredData = overviewData.filter(overview => {
-    const searchList = new RegExp(search, 'i')
+    const searchList = new RegExp(debouncedValue, 'i')
     return searchList.test(overview.email)
   });
 
