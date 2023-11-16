@@ -2,67 +2,53 @@ import React from 'react';
 import { Title } from '../../../../components/Title';
 import { Page } from '../../../../types/Page';
 import { WithCategoryLayout } from '@/components/CategoryLayout';
-import { Select } from 'antd';
-import { CategoryUploadedFileView } from '@/components/CategoryUploadedFile';
-import { AButton } from '@/components/Buttons';
+import { CategoryVerseContent } from '@/components/CategoryVerseContent';
+import { CategoryButton } from '@/components/CategoryButton';
 
-interface selectType {
-    value: string;
-    label: string;
+interface Checklist {
+    status: 'Sesuai Sepenuhnya' | 'Sesuai Sebagian' | 'Tidak Sesuai' | 'Tidak Dapat Diterapkan';
+    title: string;
+    uploadedFiles?: string[];
 }
 
-const selectOptions: selectType[] = [
+const dummyChecklist: Checklist[] = [
     {
-        label: 'Sesuai Sepenuhnya',
-        value: 'Sesuai Sepenuhnya'
-    },
+        status: 'Sesuai Sepenuhnya',
+        title: 'Apakah Anda dapat menunjukkan bahwa subjek data pribadi telah menyetujui pemrosesan data mereka?',
+        uploadedFiles: ['file-1.pdf', 'file-2.png', 'file-3.docx', 'file-4.pdf', 'file-5.xlsx']
+    }, 
     {
-        label: 'Sesuai Sebagian',
-        value: 'Sesuai Sebagian'
-    },
-    
-    {
-        label: 'Tidak Sesuai',
-        value: 'Tidak Sesuai'
-    },
-    {
-        label: 'Tidak Dapat Diterapkan',
-        value: 'Tidak Dapat Diterapkan'
-    },
-]
-
-const dummyFiles = ['file-1.pdf', 'file-2.png']
+        status: 'Sesuai Sepenuhnya',
+        title: 'Apakah permintaan persetujuan dapat dibedakan dengan jelas dari hal-hal lain, dengan cara yang dapat dimengerti dan dalam bentuk yang mudah diakses, dan ditulis dalam bahasa yang jelas dan lugas?',
+    }, 
+] 
 
 const VersePage: Page = () => {
+
+    // checklistIndex and fileIndex could be changed to checklist and file unique id after fetching the real data
+    function removeFileFromChecklist(checklistIndex: number, fileIndex: number) {
+        dummyChecklist[checklistIndex]?.uploadedFiles?.splice(fileIndex, 1)
+        console.log(dummyChecklist[0]?.uploadedFiles)
+    }
+
     return (
         <div>
             <Title>Ayat</Title>
-            <div className='flex'>
-                <Select
-                    className='w-52 rounded-none'
-                    defaultValue={selectOptions[0]?.label}
-                    options={selectOptions} 
-                />
-                <div className='flex-1 mx-5'>
-                    <div className='text-base'>
-                        Apakah Anda dapat menunjukkan bahwa subjek data pribadi telah menyetujui pemrosesan data mereka?
+            {
+                dummyChecklist.map((checklist, i) => 
+                    <div key={i} className='mb-16'>
+                        <CategoryVerseContent 
+                        title={checklist.title}
+                        status={checklist.status}
+                        uploadedFiles={checklist.uploadedFiles}
+                        removeFileFromChecklist={removeFileFromChecklist}
+                        checklistIndex={i}
+                        />
                     </div>
-                    <div className='flex mt-6'>
-                        <div className='bg-red-300 flex flex-1'>
-                            {
-                                dummyFiles.map((file, i) => 
-                                <div className='mr-8' key={i}>
-                                    <CategoryUploadedFileView filename={file}/>
-                                </div>
-                                )
-                            }
-                        </div>
-                        <div>
-                            <AButton text='+ Upload File'/>
-                            {/* <button className='border-[#4F7471] border-[3px] text-[#4F7471] font-semibold'>+ Upload</button> */}
-                        </div>
-                    </div>
-                </div>
+                )
+            }
+            <div className='flex flex-row-reverse mr-5'>
+                <CategoryButton text='Save' className='px-10'/>
             </div>
         </div>
     );

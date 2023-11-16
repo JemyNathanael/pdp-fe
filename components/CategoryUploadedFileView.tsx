@@ -4,10 +4,12 @@ import { faFile, faFileExcel, faFileImage, faFilePdf, faFileWord, faCircleXmark 
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
 interface UploadedFileViewProps {
-    filename: string
+    filename: string;
+    currentIndex: number;
+    removeFileByIndex: (index: number) => void;
 }
 
-export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ filename }) => {
+export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ filename, currentIndex, removeFileByIndex }) => {
     const fileExtension = filename.substring(filename.lastIndexOf('.')+1, filename.length).toLowerCase();
     const icon = extensionToIcon(fileExtension);
 
@@ -27,10 +29,12 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
 
     return (
         <div className='bg-white border-[#4F7471] border-[3px] h-[136px] w-[122px] rounded-md flex flex-col relative'>
-            <div className='relative mr-[-8px] mt-[-10px]'>
-                    <FontAwesomeIcon className='text-white text-[20px] absolute top-0 right-0 ' icon={faCircle} />
-                    <FontAwesomeIcon className='text-[#FF0000] text-[20px] absolute top-0 right-0 ' icon={faCircleXmark} />
-            </div>
+            <button onClick={() => removeFileByIndex(currentIndex)}>
+                <div className='relative mr-[-8px] mt-[-10px]'>
+                        <FontAwesomeIcon className='text-white text-[20px] absolute top-0 right-0 ' icon={faCircle} />
+                        <FontAwesomeIcon className='text-[#FF0000] text-[20px] absolute top-0 right-0 ' icon={faCircleXmark} />
+                </div>
+            </button>
             <div className='flex flex-1 items-center justify-center'>
                 <FontAwesomeIcon icon={icon} className='text-[#4F7471]' size={'3x'}/>
             </div>
