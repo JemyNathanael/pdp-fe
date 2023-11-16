@@ -25,7 +25,7 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
     const inputType = () => {
         if (id === 'email') return 'email';
         if (id === 'name') return 'text';
-        if (id === 'password') {
+        if (id === 'password' || id ==='confirmPassword') {
             return showPassword ? 'text' : 'password';
         }
         return 'text';

@@ -1,3 +1,4 @@
+import AddNewUserModal from "@/components/AddNewUserModal";
 import EditUserRoleModal from "@/components/EditUserRoleModal";
 import SearchInput from "@/components/SearchInput";
 import { GetUser } from "@/functions/BackendApiUrl";
@@ -28,6 +29,7 @@ interface DataRow extends DataItem {
 
 const OverviewUser: React.FC = () => {
   const [search, setSearch] = useState('');
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const swrFetcher = useSwrFetcherWithAccessToken();
@@ -63,15 +65,22 @@ const OverviewUser: React.FC = () => {
     return searchList.test(overview.email)
   });
 
-  function goToCreateUserPage(): void {
-    throw new Error("Function not implemented.");
-  }
+  const handleAdd = () => {
+    console.log("handleAdd")
+    setSelectedRecord(null);
+    setIsAddModalVisible(true);
+  };
+
+  // function goToCreateUserPage(): void {
+  //   throw new Error("Function not implemented.");
+  // }
   const handleEdit = (record) => {
     // console.log(record);
     setSelectedRecord(record);
     setIsModalVisible(true);
   };
   const handleCancel = () => {
+    setIsAddModalVisible(false);
     setIsModalVisible(false);
   };
   const handleSave = () => {
@@ -131,7 +140,7 @@ const OverviewUser: React.FC = () => {
         <SearchInput onSearch={onSearchHandler} placeholder={"Search by email"} />
         <div className="col-span-1 text-end">
           <button
-            onClick={() => goToCreateUserPage()}
+            onClick={handleAdd} 
             className="bg-greyeen text-white px-4 py-2 rounded mr-10">
             Add
           </button>
@@ -143,6 +152,12 @@ const OverviewUser: React.FC = () => {
         onCancel={handleCancel} 
         onSave={() => {handleSave} }
         record={selectedRecord} 
+      />
+      <AddNewUserModal
+       visible={isAddModalVisible} 
+       onCancel={handleCancel} 
+       onSave={handleSave}
+       record={selectedRecord} 
       />
       <footer className="font-semibold text-[#4F7471] text-center mt-5 md:mt-36">Copyright @ PT. Accelist Lentera Indonesia</footer>
     </div>
