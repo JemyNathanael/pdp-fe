@@ -38,56 +38,6 @@ const OverviewUser: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
 
-function handleEdit(): void {
-  throw new Error("Function not implemented.");
-}
-function handleDelete(): void {
-  throw new Error("Function not implemented.");
-}
-
-const columns: ColumnsType<DataRow> = [
-  {
-    title: "User",
-    dataIndex: "fullName",
-    key: "fullName",
-    width: 300
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-  },
-  {
-    title: "Role",
-    dataIndex: "role",
-    key: "role",
-  },
-  {
-    title: "Action",
-    key: "action",
-    width: 200,
-    render: (record) => (
-      <span className="flex mt-3 md:mt-0">
-        {(record.role !== "Admin") ?
-          <button
-            onClick={() => handleDelete()}
-            className="bg-[#CC0404] text-white px-4 py-2 rounded mr-4 "
-          >
-            Delete
-          </button> : <div className="mx-7 px-4 py-2"></div>
-        }
-
-        <button
-          onClick={() => handleEdit()}
-          className="bg-[#4F7471] text-white px-4 py-2 rounded "
-        >
-          Edit
-        </button>
-      </span>
-    ),
-  },
-];
-
   const filter: FilterData = {
     itemsPerPage: 10,
     page: page,
