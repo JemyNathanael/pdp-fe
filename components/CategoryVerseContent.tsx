@@ -40,7 +40,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ stat
     const router = useRouter();
 
     function removeFileByIndex(fileIndex: number) {
-        console.log('delete file index number: ', fileIndex);
         removeFileFromChecklist(checklistIndex, fileIndex)
     }
 

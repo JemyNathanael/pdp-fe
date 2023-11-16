@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile, faFileExcel, faFileImage, faFilePdf, faFileWord, faCircleXmark } from '@fortawesome/free-regular-svg-icons';
-import { faCircle } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faCircle } from '@fortawesome/free-solid-svg-icons';
 
 interface UploadedFileViewProps {
     filename: string;
@@ -13,7 +13,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     const fileExtension = filename.substring(filename.lastIndexOf('.')+1, filename.length).toLowerCase();
     const icon = extensionToIcon(fileExtension);
 
-    function extensionToIcon(fileExtension: string) {
+    function extensionToIcon(fileExtension: string): IconDefinition {
         if (fileExtension === 'pdf') {
             return faFilePdf;
         } else if (fileExtension === 'png') {

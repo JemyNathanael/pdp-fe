@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Head from 'next/head';
 import { ConfigProvider, Layout } from "antd";
-import { faSignIn, faHome } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import Collapsible from "./Collapsible";
@@ -69,7 +69,7 @@ const CategoryLayout: React.FC<{
 
     const logoutButton = () => (
         <button className="flex items-center text-[#4F7471] font-semibold border-2 border-[#4F7471] h-9 px-3 rounded-full">
-            <FontAwesomeIcon className="mr-2" icon={faSignIn} color="#4F7471"></FontAwesomeIcon>
+            <FontAwesomeIcon className="mr-2" icon={faArrowRightFromBracket} color="#4F7471"></FontAwesomeIcon>
             Logout
         </button>
     )

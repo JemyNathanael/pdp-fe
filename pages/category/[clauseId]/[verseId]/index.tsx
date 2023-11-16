@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Title } from '../../../../components/Title';
 import { Page } from '../../../../types/Page';
 import { WithCategoryLayout } from '@/components/CategoryLayout';
@@ -25,17 +25,43 @@ const dummyChecklist: Checklist[] = [
 
 const VersePage: Page = () => {
 
-    // checklistIndex and fileIndex could be changed to checklist and file unique id after fetching the real data
+    const [checklist, setChecklist] = useState<Checklist[]>()
+
+    useEffect(() => {
+      setChecklist(dummyChecklist);
+    }, [])
+    
+    // May need adjustment after integration
     function removeFileFromChecklist(checklistIndex: number, fileIndex: number) {
-        dummyChecklist[checklistIndex]?.uploadedFiles?.splice(fileIndex, 1)
-        console.log(dummyChecklist[0]?.uploadedFiles)
+        if(checklist) {
+            // Iterate every checklist, store it in tmpChecklist
+            const tempChecklist = checklist.map((checklist, cIndex) => {
+                // on every checklist iteration, filter out the removed file
+                const tempFiles = checklist.uploadedFiles?.filter((files, fIndex) => {
+                    if(cIndex !== checklistIndex || fIndex !== fileIndex) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })
+                // return the new checklist with the filtered out files
+                const newChecklist: Checklist = {
+                    status: checklist.status,
+                    title: checklist.title,
+                    uploadedFiles: tempFiles,
+                }
+                return newChecklist
+            })
+            // set the checklist state with the new checklist
+            setChecklist(tempChecklist);  
+        }
     }
 
     return (
         <div>
             <Title>Ayat</Title>
-            {
-                dummyChecklist.map((checklist, i) => 
+            {   checklist && 
+                checklist.map((checklist, i) => 
                     <div key={i} className='mb-16'>
                         <CategoryVerseContent 
                         title={checklist.title}
