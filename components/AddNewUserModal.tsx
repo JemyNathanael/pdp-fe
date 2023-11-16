@@ -45,8 +45,6 @@ const schema = z.object({
 });
 
 const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, onSave, record }) => {
-    console.log("Modal visible:", visible);
-    visible = true;
     const { replace } = useRouter();
     const { fetchPOST } = useFetchWithAccessToken();
     const [showPopupSuccess, setShowPopupSuccess] = useState(false);
@@ -91,17 +89,12 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
         const { data } = await fetchPOST<AddNewUserFormResponse>(BackendApiUrl.getUser, payload);
 
         if (data) {
-            setOpenModal(false);
+            visible = false;
             setShowPopupSuccess(true);
             reset();
             onSave();
         }
     };
-
-    const [openModal, setOpenModal] = useState<boolean>();
-    const setOk = () => {
-        setOpenModal(true);
-    }
 
     const renderPopupSuccess = () => {
         if (showPopupSuccess) {
@@ -115,92 +108,86 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
         return null;
     }
 
-    const cancelModal = () => {
-        setOpenModal(false);
+    const handleCancel = () => {
+        onCancel();
     }
+
     return (
         <>
             <Modal
-                visible={openModal}
+                open={visible}
                 centered
-                onCancel={() => cancelModal()}
+                onCancel={handleCancel}
                 footer={null}
                 width={800}
             >
-                {visible && (
-                    <div className="flex flex-col px-2 md:px-4 lg:px-8 mt-4 md:mt-16">
-                        <h3 className="text-xl sm:text-2xl text-center font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Add New Account</h3>
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <Controller
-                                name="name"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputAddNewUserForm
-                                        id={'fullName'}
-                                        label='Name'
-                                        field={{ ...field }}
-                                        placeholder='Insert Name'
-                                        formErrorMessage={errors.name?.message}
-                                    />
-                                )} />
-                            <Controller
-                                name="email"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputAddNewUserForm
-                                        id={'email'}
-                                        label='Email'
-                                        field={{ ...field }}
-                                        placeholder='Insert Email'
-                                        formErrorMessage={errors.email?.message}
-                                    />
-                                )} />
-                            <Controller
-                                name="password"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputAddNewUserForm
-                                        id={'password'}
-                                        label='Password'
-                                        field={{ ...field }}
-                                        placeholder='Insert Password'
-                                        formErrorMessage={errors.password?.message}
-                                    />
-                                )} />
+                <div className="flex flex-col px-2 md:px-4 lg:px-8 mt-4 md:mt-16">
+                    <h3 className="text-xl sm:text-2xl text-center font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Add New Account</h3>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <Controller
+                            name="name"
+                            control={control}
+                            render={({ field }) => (
+                                <InputAddNewUserForm
+                                    id={'fullName'}
+                                    label='Name'
+                                    field={{ ...field }}
+                                    placeholder='Insert Name'
+                                    formErrorMessage={errors.name?.message}
+                                />
+                            )} />
+                        <Controller
+                            name="email"
+                            control={control}
+                            render={({ field }) => (
+                                <InputAddNewUserForm
+                                    id={'email'}
+                                    label='Email'
+                                    field={{ ...field }}
+                                    placeholder='Insert Email'
+                                    formErrorMessage={errors.email?.message}
+                                />
+                            )} />
+                        <Controller
+                            name="password"
+                            control={control}
+                            render={({ field }) => (
+                                <InputAddNewUserForm
+                                    id={'password'}
+                                    label='Password'
+                                    field={{ ...field }}
+                                    placeholder='Insert Password'
+                                    formErrorMessage={errors.password?.message}
+                                />
+                            )} />
 
-                            <Controller
-                                name="confirmPassword"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputAddNewUserForm
-                                        id={'confirmPassword'}
-                                        label='Confirm Password'
-                                        field={{ ...field }}
-                                        placeholder='Insert Confirmation Password'
-                                        formErrorMessage={errors.confirmPassword?.message}
-                                    />
-                                )} />
+                        <Controller
+                            name="confirmPassword"
+                            control={control}
+                            render={({ field }) => (
+                                <InputAddNewUserForm
+                                    id={'confirmPassword'}
+                                    label='Confirm Password'
+                                    field={{ ...field }}
+                                    placeholder='Insert Confirmation Password'
+                                    formErrorMessage={errors.confirmPassword?.message}
+                                />
+                            )} />
 
-                            <InputSelectAddNewUserForm
-                                label='Role'
-                                value={listCurrentRole.find(e => e.value === fieldCurrentRole.value) ?? ''}
-                                name={fieldCurrentRole.name}
-                                options={roleOptions}
-                                onChange={(selectedOptions: SelectOptions<string>) => fieldCurrentRole.onChange(selectedOptions.value)}
-                                placeholder='Choose Role'
-                                formErrorMessage={errors?.role?.message}
-                            />
+                        <InputSelectAddNewUserForm
+                            label='Role'
+                            value={listCurrentRole.find(e => e.value === fieldCurrentRole.value) ?? ''}
+                            name={fieldCurrentRole.name}
+                            options={roleOptions}
+                            onChange={(selectedOptions: SelectOptions<string>) => fieldCurrentRole.onChange(selectedOptions.value)}
+                            placeholder='Choose Role'
+                            formErrorMessage={errors?.role?.message}
+                        />
 
-                            <button type="submit" className="addButton">Add</button>
-                        </form>
-                    </div>
-                )}
-
+                        <button type="submit" className="addButton">Add</button>
+                    </form>
+                </div>
             </Modal>
-            <div className="">
-                <h1>test</h1>
-                <button onClick={() => setOk()}>Ok</button>
-            </div>
             {renderPopupSuccess()}
         </>
     );
