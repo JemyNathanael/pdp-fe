@@ -30,6 +30,9 @@ const schema = z.object({
     password: z.string({ required_error: 'Password can\'t be empty' }),
     confirmPassword: z.string({ required_error: 'Confirmation password can\'t be empty' }),
     role: z.string({ required_error: 'Role can\'t be empty' }).min(1, 'Role can\'t be empty'),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
 });
 
 const AddNewUserPage: React.FC = () => {
