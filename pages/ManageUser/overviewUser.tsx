@@ -30,13 +30,18 @@ interface FilterData {
   page: number,
   search: string
 }
+interface RecordProps{
+  id: string;
+  fullName: string;
+  role: string;
+}
 
 const OverviewUser: React.FC = () => {
   const [search, setSearch] = useState('');
   const [page, setPages] = useState<number>(1);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [selectedRecord, setSelectedRecord] = useState<RecordProps>({ id: '', fullName: '', role: '' });
 
   const filter: FilterData = {
     itemsPerPage: 10,
@@ -85,12 +90,11 @@ const OverviewUser: React.FC = () => {
 
   const handleAdd = () => {
     console.log("handleAdd")
-    setSelectedRecord(null);
     setIsAddModalVisible(true);
   };
 
   const handleEdit = (record) => {
-    setSelectedRecord(record);
+    setSelectedRecord(record || { id: '', fullName: '', role: '' });
     setIsModalVisible(true);
   };
   const handleCancel = () => {
@@ -180,7 +184,6 @@ const OverviewUser: React.FC = () => {
       <EditUserRoleModal
         visible={isModalVisible}
         onCancel={handleCancel}
-        onSave={() => { handleSave }}
         record={selectedRecord}
       />
       <AddNewUserModal

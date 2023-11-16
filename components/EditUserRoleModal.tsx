@@ -11,8 +11,13 @@ import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAcces
 interface EditUserRoleModalProps {
   visible: boolean;
   onCancel: () => void;
-  onSave: (editedData: any, record: any) => void;
-  record: any;
+  record: RecordProps;
+}
+
+interface RecordProps {
+    id: string;
+    fullName: string;
+    role: string;
 }
 
 interface SuccessModalProps {
