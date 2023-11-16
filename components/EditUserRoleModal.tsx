@@ -26,6 +26,7 @@ interface UpdateUserRoleResponse {
 interface SelectOptions<T> {
     label : string;
     value : T;
+    disabled? : boolean;
 }
 
 interface DataItem {
@@ -60,11 +61,12 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
             const options = data.map((item) => ({
                 label: item.roleName,
                 value: item.roleName,
+                disabled: item.roleName === record?.role
             }));
             return options;
         };
         setRoleOptions(dataSource());
-    }, [data]);
+    }, [data, record]);
   
     const onFinish = async (formData : UpdateUserRoleResponse) => {
     const payload = {
@@ -73,7 +75,6 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
     };
     const {data} = await fetchPUT<UpdateUserRoleResponse>(BackendApiUrl.editUserRole, payload);
         if(data) {
-            console.log("Success updating user role");
             setSuccessModalVisible(true);
             onCancel();
         }
@@ -112,6 +113,11 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
                         <Select
                             options={roleOptions}
                             className='text-slate-500'>
+                                {roleOptions.map((item) => (
+                                    <Select.Option key={item.value} value={item.value} disabled={item.disabled}>
+                                        {item.label}
+                                    </Select.Option>
+                                ))}
                         </Select>
                     </Form.Item>
                 </Form>
