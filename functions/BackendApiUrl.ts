@@ -21,7 +21,7 @@ export function GetUser(
         param.append("itemsPerPage", itemsPerPage.toLocaleString());
     }
     if (page !== undefined) {
-        param.append("itemsPerPage", page.toLocaleString());
+        param.append("page", page.toLocaleString());
     }
 
     return BackendApiUrl.getUser + '?' + param.toString();
@@ -37,7 +37,7 @@ export function GetLog(
         param.append("itemsPerPage", itemsPerPage.toLocaleString());
     }
     if (page !== undefined) {
-        param.append("itemsPerPage", page.toLocaleString());
+        param.append("page", page.toLocaleString());
     }
     if (search !== undefined) {
         param.append('search', search);
