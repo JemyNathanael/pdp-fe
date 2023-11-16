@@ -6,7 +6,8 @@ export const BackendApiUrl = {
     getRoleList: baseUrl + '/api/Dropdown/role-list',
     getUser: baseUrl + '/api/User',
     editUserRole: baseUrl + '/api/User/edit-user-role',
-    logUser: baseUrl + '/api/User/manage-log'
+    logUser: baseUrl + '/api/User/manage-log',
+    getCategories: baseUrl + '/api/v1/category/get-category',
 }
 
 export function GetUser(
