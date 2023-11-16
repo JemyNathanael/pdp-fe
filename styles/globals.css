@@ -6,5 +6,47 @@
 @import '@fortawesome/fontawesome-svg-core/styles.css';
 
 #nprogress .bar {
-    background: limegreen !important;
+  background: limegreen !important;
+}
+
+.green-gradient-bg {
+  background: linear-gradient(45deg, #416a67, #019ba3);
+}
+
+.categoryHome {
+  border: solid white 1px;
+  flex-grow: 1;
+  border-radius: 8px;
+  flex-basis: 0;
+  text-align: center;
+  margin: 16px;
+  min-height: 200px;
+  position: relative;
+  max-width: 500px;
+}
+
+.categoryTitleHome {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.categoryDescriptionHome {
+  display: none;
+  background-color: #245958;
+  height: 100%;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.categoryHome:hover .categoryTitleHome {
+  display: none;
+}
+
+.categoryHome:hover .categoryDescriptionHome {
+  display: block;
 }
