@@ -9,10 +9,15 @@ import { useState } from "react";
 import useSWR from 'swr';
 
 interface DataItem {
-  id : string;
+  id: string;
   fullName: string;
   email: string;
   role: string;
+}
+
+interface DataItems {
+  datas: DataItem[]
+  totalData: number
 }
 
 interface DataRow extends DataItem {
@@ -20,32 +25,45 @@ interface DataRow extends DataItem {
   key: React.Key;
 }
 
-// function handleEdit(record): void {
-//   throw new Error("Function not implemented.");
-// }
-// function handleDelete(): void {
-//   throw new Error("Function not implemented.");
-// }
+interface FilterData {
+  itemsPerPage: number,
+  page: number,
+  search: string
+}
 
 const OverviewUser: React.FC = () => {
   const [search, setSearch] = useState('');
+  const [page, setPages] = useState<number>(1);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
+
+  const filter: FilterData = {
+    itemsPerPage: 10,
+    page: page,
+    search: search
+  };
   const swrFetcher = useSwrFetcherWithAccessToken();
 
   const onSearchHandler = (event) => {
     setSearch(event.target.value);
   }
 
-  const { data, isValidating } = useSWR<DataItem[]>(GetUser(search), swrFetcher);
+  const { data, isValidating } = useSWR<DataItems>(
+    GetUser(
+      filter.search,
+      filter.itemsPerPage,
+      filter.page,
+    ),
+    swrFetcher
+  );
 
   function dataSource(): DataRow[] {
-    if (!data) {
+    if (!data?.datas) {
       return [];
     }
 
-    return data.map((item, index) => {
+    return data.datas.map((item, index) => {
       const row: DataRow = {
         key: index,
         rowNumber: index + 1,
@@ -71,11 +89,7 @@ const OverviewUser: React.FC = () => {
     setIsAddModalVisible(true);
   };
 
-  // function goToCreateUserPage(): void {
-  //   throw new Error("Function not implemented.");
-  // }
   const handleEdit = (record) => {
-    // console.log(record);
     setSelectedRecord(record);
     setIsModalVisible(true);
   };
@@ -97,7 +111,7 @@ const OverviewUser: React.FC = () => {
       title: "User",
       dataIndex: "fullName",
       key: "fullName",
-      width:300
+      width: 300
     },
     {
       title: "Email",
@@ -112,7 +126,7 @@ const OverviewUser: React.FC = () => {
     {
       title: "Action",
       key: "action",
-      width:200,
+      width: 200,
       render: (record) => (
         <span className="flex mt-3 md:mt-0">
           {(record.role !== "Admin") ?
@@ -123,7 +137,7 @@ const OverviewUser: React.FC = () => {
               Delete
             </button> : <div className="mx-7 px-4 py-2"></div>
           }
-  
+
           <button
             onClick={() => handleEdit(record)}
             className="bg-[#4F7471] text-white px-4 py-2 rounded "
@@ -140,25 +154,40 @@ const OverviewUser: React.FC = () => {
         <SearchInput onSearch={onSearchHandler} placeholder={"Search by email"} />
         <div className="col-span-1 text-end">
           <button
-            onClick={handleAdd} 
+            onClick={handleAdd}
             className="bg-greyeen text-white px-4 py-2 rounded mr-10">
             Add
           </button>
         </div>
       </div>
-      <Table dataSource={filteredData} columns={columns} loading={isValidating} pagination={false} scroll={{ y: "max-content" }}/>      
-      <EditUserRoleModal 
-        visible={isModalVisible} 
-        onCancel={handleCancel} 
-        onSave={() => {handleSave} }
-        record={selectedRecord} 
+      <Table
+        dataSource={filteredData}
+        columns={columns}
+        loading={isValidating}
+        pagination={{
+          position: ['bottomCenter'],
+          simple: true, defaultCurrent: 1,
+          total: data?.totalData,
+          onChange: (page) => {
+            setPages(page);
+          },
+          current: page,
+          pageSize: 10
+        }}
+
+        id="overviewTable" />
+      <EditUserRoleModal
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        onSave={() => { handleSave }}
+        record={selectedRecord}
       />
       <AddNewUserModal
-       visible={isAddModalVisible} 
-       onCancel={handleCancel} 
-       onSave={handleSave}
-       record={selectedRecord} 
+        visible={isAddModalVisible}
+        onCancel={handleCancel}
+        onSave={handleSave}
       />
+
       <footer className="font-semibold text-[#4F7471] text-center mt-5 md:mt-36">Copyright @ PT. Accelist Lentera Indonesia</footer>
     </div>
   );

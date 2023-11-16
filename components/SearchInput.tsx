@@ -5,7 +5,7 @@ import { Input } from "antd";
 export default function SearchInput({ onSearch, placeholder }) {
     return (
         <div>
-            <div className="my-5">
+            <div className="mb-10">
                     <div className="w-80">
                         <Input
                             className="text-center border border-[#A3A3A3] rounded"

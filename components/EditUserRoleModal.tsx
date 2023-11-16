@@ -14,6 +14,7 @@ interface EditUserRoleModalProps {
   onSave: (editedData: any, record: any) => void;
   record: any;
 }
+
 interface SuccessModalProps {
   onGoToHome: () => void;
 }
@@ -81,7 +82,7 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
     const handleSuccessModalClose = () => {
         setSuccessModalVisible(false);
         onCancel();
-        mutate(GetUser(""));
+        mutate(GetUser('', 10, 1 ));
     };
 
   

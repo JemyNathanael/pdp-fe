@@ -28,7 +28,6 @@ interface AddNewUserModalProps {
     visible: boolean;
     onCancel: () => void;
     onSave: () => void;
-    record: any;
 }
 
 
@@ -44,7 +43,7 @@ const schema = z.object({
     path: ["confirmPassword"],
 });
 
-const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, onSave, record }) => {
+const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, onSave }) => {
     const { replace } = useRouter();
     const { fetchPOST } = useFetchWithAccessToken();
     const [showPopupSuccess, setShowPopupSuccess] = useState(false);

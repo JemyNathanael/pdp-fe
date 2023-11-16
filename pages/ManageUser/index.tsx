@@ -21,7 +21,7 @@ const TabNavigation = () => {
                 <div className="border-b">
                     <nav className="-mb-px flex">
                         <button
-                            className={`w-full ${tabClasses(1)}`}
+                            className={`w-full ${tabClasses(1)} mr-5`}
                             onClick={() => handleTabClick(1)}
                         >
                            <p className='text-center text-base'>Overview</p>
