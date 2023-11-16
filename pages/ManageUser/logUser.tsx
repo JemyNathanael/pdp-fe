@@ -5,6 +5,7 @@ import { Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import useSWR from 'swr';
+import { useDebounce } from "use-debounce";
 
 interface DataItem {
     dateandTime: string;
@@ -30,6 +31,8 @@ interface FilterData {
 const LogUser: React.FC = () => {
     const [search, setSearch] = useState('');
     const [page, setPages] = useState<number>(1);
+
+    const [debouncedValue] = useDebounce(search, 1000);
 
     const filter: FilterData = {
         itemsPerPage: 10,
@@ -69,7 +72,7 @@ const LogUser: React.FC = () => {
     const { data, isValidating } = useSWR<DataItems>(GetLog(
         filter.itemsPerPage,
         filter.page,
-        filter.search
+        debouncedValue
     ), swrFetcher);
 
     function dataSource(): DataRow[] {
@@ -92,7 +95,7 @@ const LogUser: React.FC = () => {
     const overviewData = dataSource();
 
     const filteredData = overviewData.filter(overview => {
-        const searchList = new RegExp(search, 'i')
+        const searchList = new RegExp(debouncedValue, 'i')
         return searchList.test(overview.user)
     });
 

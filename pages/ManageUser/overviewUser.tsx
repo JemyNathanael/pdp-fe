@@ -7,6 +7,7 @@ import { Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import useSWR from 'swr';
+import { useDebounce } from "use-debounce";
 
 interface DataItem {
   id: string;
@@ -30,13 +31,20 @@ interface FilterData {
   page: number,
   search: string
 }
+interface RecordProps{
+  id: string;
+  fullName: string;
+  role: string;
+}
 
 const OverviewUser: React.FC = () => {
   const [search, setSearch] = useState('');
   const [page, setPages] = useState<number>(1);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [selectedRecord, setSelectedRecord] = useState<RecordProps>({ id: '', fullName: '', role: '' });
+
+  const [debouncedValue] = useDebounce(search, 1000);
 
   const filter: FilterData = {
     itemsPerPage: 10,
@@ -51,7 +59,7 @@ const OverviewUser: React.FC = () => {
 
   const { data, isValidating } = useSWR<DataItems>(
     GetUser(
-      filter.search,
+      debouncedValue,
       filter.itemsPerPage,
       filter.page,
     ),
@@ -79,18 +87,17 @@ const OverviewUser: React.FC = () => {
   const overviewData = dataSource();
 
   const filteredData = overviewData.filter(overview => {
-    const searchList = new RegExp(search, 'i')
+    const searchList = new RegExp(debouncedValue, 'i')
     return searchList.test(overview.email)
   });
 
   const handleAdd = () => {
     console.log("handleAdd")
-    setSelectedRecord(null);
     setIsAddModalVisible(true);
   };
 
   const handleEdit = (record) => {
-    setSelectedRecord(record);
+    setSelectedRecord(record || { id: '', fullName: '', role: '' });
     setIsModalVisible(true);
   };
   const handleCancel = () => {
@@ -180,7 +187,6 @@ const OverviewUser: React.FC = () => {
       <EditUserRoleModal
         visible={isModalVisible}
         onCancel={handleCancel}
-        onSave={() => { handleSave }}
         record={selectedRecord}
       />
       <AddNewUserModal
