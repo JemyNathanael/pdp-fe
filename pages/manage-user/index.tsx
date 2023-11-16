@@ -73,7 +73,7 @@ const AddNewUserPage: React.FC = () => {
             ...formData,
         };
 
-        const { data } = await fetchPOST<AddNewUserFormResponse>(BackendApiUrl.addNewUser, payload);
+        const { data } = await fetchPOST<AddNewUserFormResponse>(BackendApiUrl.getUser, payload);
 
         if (data) {
             setOpenModal(false);

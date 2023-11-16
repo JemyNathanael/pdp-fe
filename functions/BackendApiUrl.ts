@@ -3,9 +3,9 @@ const baseUrl = '/api/be';
 
 export const BackendApiUrl = {
     test: baseUrl + '/api/test',
-    addNewUser: baseUrl + '/api/User',
     getRoleList: baseUrl + '/api/Dropdown/role-list',
-    getUser:baseUrl + '/api/User'
+    getUser:baseUrl + '/api/User',
+    editUserRole: baseUrl + '/api/User/edit-user-role',
 
 }
 

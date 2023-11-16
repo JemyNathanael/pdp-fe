@@ -1,3 +1,4 @@
+import EditUserRoleModal from "@/components/EditUserRoleModal";
 import SearchInput from "@/components/SearchInput";
 import { GetUser } from "@/functions/BackendApiUrl";
 import { useSwrFetcherWithAccessToken } from "@/functions/useSwrFetcherWithAccessToken";
@@ -5,9 +6,9 @@ import { Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import useSWR from 'swr';
-import AddNewUserPage from "../manage-user";
 
 interface DataItem {
+  id : string;
   fullName: string;
   email: string;
   role: string;
@@ -18,58 +19,17 @@ interface DataRow extends DataItem {
   key: React.Key;
 }
 
-function handleEdit(): void {
-  throw new Error("Function not implemented.");
-}
-function handleDelete(): void {
-  throw new Error("Function not implemented.");
-}
-
-const columns: ColumnsType<DataRow> = [
-  {
-    title: "User",
-    dataIndex: "fullName",
-    key: "fullName",
-    width:300
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-  },
-  {
-    title: "Role",
-    dataIndex: "role",
-    key: "role",
-  },
-  {
-    title: "Action",
-    key: "action",
-    width:200,
-    render: (record) => (
-      <span className="flex mt-3 md:mt-0">
-        {(record.role !== "Admin") ?
-          <button
-            onClick={() => handleDelete()}
-            className="bg-[#CC0404] text-white px-4 py-2 rounded mr-4 "
-          >
-            Delete
-          </button> : <div className="mx-7 px-4 py-2"></div>
-        }
-
-        <button
-          onClick={() => handleEdit()}
-          className="bg-[#4F7471] text-white px-4 py-2 rounded "
-        >
-          Edit
-        </button>
-      </span>
-    ),
-  },
-];
+// function handleEdit(record): void {
+//   throw new Error("Function not implemented.");
+// }
+// function handleDelete(): void {
+//   throw new Error("Function not implemented.");
+// }
 
 const OverviewUser: React.FC = () => {
   const [search, setSearch] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
   const swrFetcher = useSwrFetcherWithAccessToken();
 
   const onSearchHandler = (event) => {
@@ -87,6 +47,7 @@ const OverviewUser: React.FC = () => {
       const row: DataRow = {
         key: index,
         rowNumber: index + 1,
+        id: item.id,
         fullName: item.fullName,
         email: item.email,
         role: item.role,
@@ -105,7 +66,65 @@ const OverviewUser: React.FC = () => {
   function goToCreateUserPage(): void {
     throw new Error("Function not implemented.");
   }
+  const handleEdit = (record) => {
+    // console.log(record);
+    setSelectedRecord(record);
+    setIsModalVisible(true);
+  };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  const handleSave = () => {
+    console.log("save");
+    handleCancel();
+  }
+  const handleDelete = () => {
+    console.log("delete");
+  }
 
+
+  const columns: ColumnsType<DataRow> = [
+    {
+      title: "User",
+      dataIndex: "fullName",
+      key: "fullName",
+      width:300
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+    },
+    {
+      title: "Action",
+      key: "action",
+      width:200,
+      render: (record) => (
+        <span className="flex mt-3 md:mt-0">
+          {(record.role !== "Admin") ?
+            <button
+              onClick={() => handleDelete()}
+              className="bg-[#CC0404] text-white px-4 py-2 rounded mr-4 "
+            >
+              Delete
+            </button> : <div className="mx-7 px-4 py-2"></div>
+          }
+  
+          <button
+            onClick={() => handleEdit(record)}
+            className="bg-[#4F7471] text-white px-4 py-2 rounded "
+          >
+            Edit
+          </button>
+        </span>
+      ),
+    },
+  ];
   return (
     <div id="overview">
       <div className="grid grid-cols-2 gap-4">
@@ -118,8 +137,13 @@ const OverviewUser: React.FC = () => {
           </button>
         </div>
       </div>
-      <Table dataSource={filteredData} columns={columns} loading={isValidating} pagination={false} scroll={{ y: "max-content" }}/>
-      <AddNewUserPage/>
+      <Table dataSource={filteredData} columns={columns} loading={isValidating} pagination={false} scroll={{ y: "max-content" }}/>      
+      <EditUserRoleModal 
+        visible={isModalVisible} 
+        onCancel={handleCancel} 
+        onSave={() => {handleSave} }
+        record={selectedRecord} 
+      />
       <footer className="font-semibold text-[#4F7471] text-center mt-5 md:mt-36">Copyright @ PT. Accelist Lentera Indonesia</footer>
     </div>
   );
