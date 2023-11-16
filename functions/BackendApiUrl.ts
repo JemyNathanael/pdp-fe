@@ -4,7 +4,7 @@ const baseUrl = '/api/be';
 export const BackendApiUrl = {
     test: baseUrl + '/api/test',
     getUser: baseUrl + '/api/User',
-    logUser: baseUrl + '/api/User/manage-log'
+    logUser: baseUrl + '/api/User/manage-log',
     getCategories: baseUrl + '/api/v1/category/get-category'
 
 }
