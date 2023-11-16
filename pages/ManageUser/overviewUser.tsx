@@ -171,6 +171,7 @@ const OverviewUser: React.FC = () => {
           onChange: (page) => {
             setPages(page);
           },
+
           current: page,
           pageSize: 10
         }}
@@ -187,6 +188,7 @@ const OverviewUser: React.FC = () => {
         onCancel={handleCancel}
         onSave={handleSave}
       />
+
 
       <footer className="font-semibold text-[#4F7471] text-center mt-5 md:mt-36">Copyright @ PT. Accelist Lentera Indonesia</footer>
     </div>
