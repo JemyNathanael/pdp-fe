@@ -12,9 +12,20 @@ interface DataItem {
   role: string;
 }
 
+interface DataItems {
+  datas: DataItem[]
+  totalData: number
+}
+
 interface DataRow extends DataItem {
   rowNumber: number;
   key: React.Key;
+}
+
+interface FilterData {
+  itemsPerPage: number,
+  page: number,
+  search: string
 }
 
 function handleEdit(): void {
@@ -29,7 +40,7 @@ const columns: ColumnsType<DataRow> = [
     title: "User",
     dataIndex: "fullName",
     key: "fullName",
-    width:300
+    width: 300
   },
   {
     title: "Email",
@@ -44,7 +55,7 @@ const columns: ColumnsType<DataRow> = [
   {
     title: "Action",
     key: "action",
-    width:200,
+    width: 200,
     render: (record) => (
       <span className="flex mt-3 md:mt-0">
         {(record.role !== "Admin") ?
@@ -69,20 +80,34 @@ const columns: ColumnsType<DataRow> = [
 
 const OverviewUser: React.FC = () => {
   const [search, setSearch] = useState('');
+  const [page, setPages] = useState<number>(1);
+
+  const filter: FilterData = {
+    itemsPerPage: 10,
+    page: page,
+    search: search
+  };
   const swrFetcher = useSwrFetcherWithAccessToken();
 
   const onSearchHandler = (event) => {
     setSearch(event.target.value);
   }
 
-  const { data, isValidating } = useSWR<DataItem[]>(GetUser(search), swrFetcher);
+  const { data, isValidating } = useSWR<DataItems>(
+    GetUser(
+      filter.search,
+      filter.itemsPerPage,
+      filter.page,
+    ),
+    swrFetcher
+  );
 
   function dataSource(): DataRow[] {
-    if (!data) {
+    if (!data?.datas) {
       return [];
     }
 
-    return data.map((item, index) => {
+    return data.datas.map((item, index) => {
       const row: DataRow = {
         key: index,
         rowNumber: index + 1,
@@ -117,7 +142,22 @@ const OverviewUser: React.FC = () => {
           </button>
         </div>
       </div>
-      <Table dataSource={filteredData} columns={columns} loading={isValidating} pagination={false} scroll={{ y: "max-content" }}/>
+      <Table
+        dataSource={filteredData}
+        columns={columns}
+        loading={isValidating}
+        pagination={{
+          position: ['bottomCenter'],
+          simple: true, defaultCurrent: 1,
+          total: data?.totalData,
+          onChange: (page) => {
+            setPages(page);
+          },
+          current:page,
+          pageSize:10
+        }}
+
+        id="overviewTable" />
       <footer className="font-semibold text-[#4F7471] text-center mt-5 md:mt-36">Copyright @ PT. Accelist Lentera Indonesia</footer>
     </div>
   );
