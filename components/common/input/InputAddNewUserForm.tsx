@@ -19,20 +19,25 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
     field,
 }) => {
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false); // New state for confirm password
 
-    const isPasswordType = id === 'password';
+    const isPasswordType = id === 'password' || id === 'confirmPassword';
 
     const inputType = () => {
         if (id === 'email') return 'email';
         if (id === 'name') return 'text';
-        if (id === 'password' || id ==='confirmPassword') {
-            return showPassword ? 'text' : 'password';
+        if (isPasswordType) {
+            return isPasswordType && (showPassword || showConfirmPassword) ? 'text' : 'password';
         }
         return 'text';
     };
 
     const toggleShowPassword = () => {
-        setShowPassword(!showPassword);
+        if (id === 'password') {
+            setShowPassword(!showPassword);
+        } else if (id === 'confirmPassword') {
+            setShowConfirmPassword(!showConfirmPassword);
+        }
     };
 
     const borderClass = () => {
@@ -57,7 +62,7 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
                         className="absolute top-1/2 right-4 cursor-pointer transform -translate-y-1/2"
                         onClick={toggleShowPassword}
                     >
-                        {showPassword ? (
+                        {showPassword || showConfirmPassword ? (
                             <FontAwesomeIcon icon={faEye} />
                         ) : (
                             <FontAwesomeIcon icon={faEyeSlash} />
