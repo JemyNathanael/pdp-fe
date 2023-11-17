@@ -41,7 +41,7 @@ interface DeleteUserModel {
 }
 
 
-interface RecordProps{
+interface RecordProps {
   id: string;
   fullName: string;
   role: string;
@@ -105,7 +105,7 @@ const OverviewUser: React.FC = () => {
 
           <button
             onClick={() => handleEdit(record)}
-            className="bg-[#4F7471] text-white px-4 py-2 rounded "
+            className="bg-[#4F7471] text-white px-6 py-2 rounded "
           >
             Edit
           </button>
@@ -174,7 +174,7 @@ const OverviewUser: React.FC = () => {
   function goBackPage() {
     setDeleteModal(false)
   }
-  
+
   const handleAdd = () => {
     setIsAddModalVisible(true);
   };
@@ -237,7 +237,7 @@ const OverviewUser: React.FC = () => {
         <div className="col-span-1 text-end">
           <button
             onClick={handleAdd}
-            className="bg-greyeen text-white px-4 py-2 rounded mr-10">
+            className="bg-greyeen text-white px-5 py-2 rounded mr-7">
             Add
           </button>
         </div>
@@ -256,7 +256,7 @@ const OverviewUser: React.FC = () => {
           current: page,
           pageSize: 10
         }}
-        
+
         id="overviewTable" />
       <EditUserRoleModal
         visible={isModalVisible}
