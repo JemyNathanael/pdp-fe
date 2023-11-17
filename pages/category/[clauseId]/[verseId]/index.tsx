@@ -4,6 +4,7 @@ import { Page } from '../../../../types/Page';
 import { WithCategoryLayout } from '@/components/CategoryLayout';
 import { CategoryVerseContent } from '@/components/category/CategoryVerseContent';
 import { CategoryButton } from '@/components/category/CategoryButton';
+import { Authorize } from '@/components/Authorize';
 
 interface Checklist {
     status: 'Sesuai Sepenuhnya' | 'Sesuai Sebagian' | 'Tidak Sesuai' | 'Tidak Dapat Diterapkan';
@@ -58,7 +59,7 @@ const VersePage: Page = () => {
     }
 
     return (
-        <div>
+        <Authorize>
             <Title>Ayat</Title>
             {   checklist && 
                 checklist.map((checklist, i) => 
@@ -76,7 +77,7 @@ const VersePage: Page = () => {
             <div className='flex flex-row-reverse mr-5'>
                 <CategoryButton text='Save' className='px-10'/>
             </div>
-        </div>
+        </Authorize>
     );
 }
 

@@ -1,13 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Head from 'next/head';
 import { ConfigProvider, Layout } from "antd";
 import { faHome, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import Collapsible from "./category/Collapsible";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import nProgress from "nprogress";
 
 const { Sider, Content, Header } = Layout;
+
+const clauses = [
+    {
+        title: 'Pasal 22',
+        routePath: '/category/22',
+        children: [
+            {
+                title: 'Ayat 1',
+                routePath: '/category/22/1'
+            },
+            {
+                title: 'Ayat 2',
+                routePath: '/category/22/2'
+            }
+        ]
+    },
+    {
+        title: 'Pasal 5',
+        routePath: '/category/5',
+        children: [
+            {
+                title: 'Ayat 1',
+                routePath: '/category/5/1'
+            }
+        ]
+    },
+];
 
 const sidebarBackgroundColor = '#4F7471';
 
@@ -17,42 +45,22 @@ const CategoryLayout: React.FC<{
 
     const [openAll, setOpenAll] = useState(false);
     const [toggledFromCollapseOrExpandAll, setToggledFromCollapseOrExpandAll] = useState(false);
+    const [clausesExpandedState, setClausesExpandedState] = useState<boolean[]>()
     const router = useRouter();
     const { data: session } = useSession();
     const displayUserName = session?.user?.name;
-     
-    const clauses = [
-        {
-            title: 'Pasal 22',
-            routePath: '/category/22',
-            children: [
-                {
-                    title: 'Ayat 1',
-                    routePath: '/category/22/1'
-                },
-                {
-                    title: 'Ayat 2',
-                    routePath: '/category/22/2'
-                }
-            ]
-        },
-        {
-            title: 'Pasal 5',
-            routePath: '/category/5',
-            children: [
-                {
-                    title: 'Ayat 1',
-                    routePath: '/category/5/1'
-                }
-            ]
-        },
-    ];
     
-    const itemsCollapseStateMap = clauses.map(() => false);
+    useEffect(() => {
+        const itemsCollapseStateMap = clauses.map(() => false);
+        setClausesExpandedState(itemsCollapseStateMap);
+    }, [])
 
     function changeCollapseStatusByIndex(index: number, state: boolean) {
-        itemsCollapseStateMap[index] = state;
-        console.log(itemsCollapseStateMap);
+        const tempStateMap = clausesExpandedState;
+        if (tempStateMap) {
+            tempStateMap[index] = state;
+            setClausesExpandedState(tempStateMap);
+        }
     }
 
     function resetToggleFromButtonState() {
@@ -61,17 +69,26 @@ const CategoryLayout: React.FC<{
 
     function handleExpandOrCollapseAll() {
         setToggledFromCollapseOrExpandAll(true);
-        console.log(itemsCollapseStateMap);
-        const isAllExpanded = itemsCollapseStateMap.every(state => state === true);
-        if (isAllExpanded) {
-            setOpenAll(false);
-        } else {
-            setOpenAll(true);
+        console.log(clausesExpandedState);
+        if(clausesExpandedState) {
+            const isAllExpanded = clausesExpandedState.every(state => state === true);
+            if (isAllExpanded) {
+                setOpenAll(false);
+            } else {
+                setOpenAll(true);
+            }
         }
     }
 
+    function onClickLogout() {
+        nProgress.start();
+            signOut({
+                callbackUrl: '/api/end-session'
+            });
+    }
+
     const logoutButton = () => (
-        <button className="flex items-center text-[#4F7471] font-semibold border-2 border-[#4F7471] h-9 px-3 rounded-full">
+        <button onClick={onClickLogout} className="flex items-center text-[#4F7471] font-semibold border-2 border-[#4F7471] h-9 px-3 rounded-full">
             <FontAwesomeIcon className="mr-2" icon={faArrowRightFromBracket} color="#4F7471"></FontAwesomeIcon>
             Logout
         </button>

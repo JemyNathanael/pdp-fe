@@ -2,6 +2,7 @@ import React from 'react';
 import { Title } from '../../components/Title';
 import { Page } from '../../types/Page';
 import { WithCategoryLayout } from '@/components/CategoryLayout';
+import { Authorize } from '@/components/Authorize';
 
 const Category: React.FC = () => {
 
@@ -12,10 +13,10 @@ const Category: React.FC = () => {
 
 const CategoryPage: Page = () => {
     return (
-        <div>
+        <Authorize>
             <Title>Category</Title>
             <Category></Category>
-        </div>
+        </Authorize>
     );
 }
 

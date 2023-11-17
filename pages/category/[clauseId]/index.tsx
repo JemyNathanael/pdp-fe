@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { Title } from '../../../components/Title';
 import { Page } from '../../../types/Page';
 import { WithCategoryLayout } from '@/components/CategoryLayout';
+import { Authorize } from '@/components/Authorize';
 
 // interface pageProps {
 //     params: {
@@ -13,7 +14,7 @@ import { WithCategoryLayout } from '@/components/CategoryLayout';
 //     clauseId: string
 // }
 
-const Clause: FC = () => {
+const Clause: React.FC = () => {
 
     return (
         <div>
@@ -29,10 +30,10 @@ const Clause: FC = () => {
 
 const ClausePage: Page = () => {
     return (
-        <div>
+        <Authorize>
             <Title>Pasal</Title>
             <Clause></Clause>
-        </div>
+        </Authorize>
     );
 }
 

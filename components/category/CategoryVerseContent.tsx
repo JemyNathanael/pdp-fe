@@ -2,6 +2,7 @@ import { Select } from "antd"
 import { CategoryUploadedFileView } from "./CategoryUploadedFileView";
 import { CategoryButton } from "./CategoryButton";
 import { useRouter } from "next/router";
+import { Upload } from 'antd';
 
 interface selectType {
     value: string;
@@ -84,7 +85,9 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ stat
                         </div>
                         <div className='flex flex-col'>
                             <div className='flex-1'>
-                                <CategoryButton text='+ Upload File' mode='outlined' className='px-8'/>
+                                <Upload>
+                                    <CategoryButton text='+ Upload File' mode='outlined' className='px-8'/>
+                                </Upload>
                             </div>
                             {
                                 uploadedFiles &&
