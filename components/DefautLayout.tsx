@@ -1,222 +1,123 @@
-import React, { useState } from "react";
-import Head from 'next/head';
-import { Avatar, Button, ConfigProvider, Drawer, Layout, Menu, MenuProps } from "antd";
-import { faBars, faSignOut, faSignIn, faHome, faCubes, faUser, faUsers, faFlaskVial } from '@fortawesome/free-solid-svg-icons'
+import React, { useEffect, useState } from "react";
+import { Button } from "antd";
+import { faBars, faArrowRightFromBracket, faHouse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import nProgress from "nprogress";
-
-const { Content, Sider } = Layout;
-
-const sidebarBackgroundColor = '#001529';
-const sidebarMenuSelectedItemBackgroundColor = '#1677ff';
 
 const DefaultLayout: React.FC<{
     children: React.ReactNode
 }> = ({ children }) => {
 
-    const [drawerOpen, setDrawerOpen] = useState(false);
     const router = useRouter();
     const { data: session, status } = useSession();
 
-    // menu.key must match the router.pathname, see example below: "/dashboard"
-    const [selected, setSelected] = useState([router.pathname]);
+    const goToManageUserPage = () => {
+        router.push('/ManageUser');
+    }
 
-    // key must also be unique, for obvious reason
-    function getMenu(): MenuProps['items'] {
-        const menu: MenuProps['items'] = [];
-
-        menu.push({
-            key: '/',
-            label: 'Home',
-            icon: <FontAwesomeIcon icon={faHome}></FontAwesomeIcon>,
-            onClick: () => router.push('/')
-        });
-
-        menu.push(
-            {
-                key: '#menu-1',
-                label: 'Menu 1',
-                icon: <FontAwesomeIcon icon={faCubes}></FontAwesomeIcon>,
-                children: [
-                    {
-                        key: '/dashboard',
-                        label: 'Dashboard',
-                        onClick: () => router.push('/dashboard')
-                    },
-                    {
-                        key: '/sub-menu-b',
-                        label: 'Sub Menu B',
-                        onClick: () => router.push('/')
-                    },
-                    {
-                        key: '/sub-menu-c',
-                        label: 'Sub Menu C',
-                        onClick: () => router.push('/')
-                    }
-                ]
-            },
-            {
-                key: '#menu-2',
-                label: 'Menu 2',
-                icon: <FontAwesomeIcon icon={faUsers}></FontAwesomeIcon>,
-                children: [
-                    {
-                        key: '/sub-menu-d',
-                        label: 'Sub Menu D',
-                        onClick: () => router.push('/')
-                    },
-                    {
-                        key: '/sub-menu-e',
-                        label: 'Sub Menu E',
-                        onClick: () => router.push('/')
-                    },
-                    {
-                        key: '/sub-menu-f',
-                        label: 'Sub Menu F',
-                        onClick: () => router.push('/')
-                    }
-                ]
-            },
-            {
-                key: '#menu-3',
-                label: 'Menu 3',
-                icon: <FontAwesomeIcon icon={faFlaskVial}></FontAwesomeIcon>,
-                children: [
-                    {
-                        key: '/sub-menu-g',
-                        label: 'Sub Menu G',
-                        onClick: () => router.push('/')
-                    },
-                    {
-                        key: '/sub-menu-h',
-                        label: 'Sub Menu H',
-                        onClick: () => router.push('/')
-                    },
-                    {
-                        key: '/sub-menu-i',
-                        label: 'Sub Menu I',
-                        onClick: () => router.push('/')
-                    }
-                ]
-            }
-        );
-
+    const handleLogout = () => {
+        console.log("logout");
         if (status === 'authenticated') {
-            menu.push({
-                key: '/sign-out',
-                label: 'Sign out',
-                icon: <FontAwesomeIcon icon={faSignOut}></FontAwesomeIcon>,
-                onClick: () => {
-                    nProgress.start();
-                    // signOut();
-                    // HINT: use this method call if need to end SSO server authentication session:
-                    signOut({
-                        callbackUrl: '/api/end-session'
-                    });
-                }
-            });
-        } else {
-            menu.push({
-                key: '/sign-in',
-                label: 'Sign in',
-                icon: <FontAwesomeIcon icon={faSignIn}></FontAwesomeIcon>,
-                onClick: () => {
-                    nProgress.start();
-                    signIn('oidc');
-                }
+            nProgress.start();
+            signOut({
+                callbackUrl: '/api/end-session',
             });
         }
-
-        return menu;
     }
 
     const displayUserName = session?.user?.name;
     console.log(session?.user);
 
-    function renderAvatar() {
-        if (status === 'authenticated') {
-            return (
-                <div className="flex flex-col items-center mt-6">
-                    <div>
-                        <Avatar size={64} icon={<FontAwesomeIcon icon={faUser}></FontAwesomeIcon>} />
-                    </div>
-                    <div className="my-4 text-white">
-                        Hello, {displayUserName}
-                    </div>
-                </div>
-            );
-        }
+    const userRole = session?.user?.['role'][0];
 
-        return null;
-    }
+    const isAdmin = userRole === "Admin";
+    const [isMobile, setIsMobile] = useState(false);
+    const [isHidden, setIsHidden] = useState(false);
+
+    const handleToggle = () => {
+        setIsHidden(prevState => !prevState);
+    };
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        // Initial check on mount
+        handleResize();
+
+        // Event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup event listener on component unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     return (
-        <ConfigProvider theme={{
-            components: {
-                Layout: {
-                    // Sidebar background color:
-                    // https://github.com/ant-design/ant-design/blob/5.0.0/components/layout/style/index.tsx#L101
-                    colorBgHeader: sidebarBackgroundColor
-                }
-            }
-        }}>
-            <Layout className="min-h-screen">
-                <Head>
-                    <meta key="meta-charset" charSet="utf-8" />
-                    <meta key="meta-viewport" name="viewport" content="width=device-width, initial-scale=1" />
-                    <link key="favicon" rel="icon" href="/favicon.ico" />
-                </Head>
+        <>
+            <nav className="bg-white p-4" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}>
+                <div className="container mx-auto">
+                    <div className="flex items-center justify-between p-2">
+                        <div className="flex items-center cursor-pointer px-5">
+                            <FontAwesomeIcon icon={faHouse} className='text-greyeen text-xl' />
+                            <div className="ml-5 text-2xl text-greyeen cursor-pointer font-bold">LOGO</div>
+                        </div>
+                        <div className="lg:hidden cursor-pointer relative" onClick={handleToggle}>
+                            <FontAwesomeIcon icon={faBars} className="text-greyeen text-xl" />
 
-                <Sider width={240} className="pb-24 hidden lg:block">
-                    <div className="h-12 p-2 m-4 text-white bg-slate-600">Logo</div>
-                    {renderAvatar()}
-                    <ConfigProvider theme={{
-                        components: {
-                            Menu: {
-                                // https://github.com/ant-design/ant-design/blob/5.0.0/components/menu/style/theme.tsx#L48
-                                colorItemBg: sidebarBackgroundColor,
-                                // https://github.com/ant-design/ant-design/blob/5.0.0/components/menu/style/theme.tsx#L133
-                                colorItemBgSelected: sidebarMenuSelectedItemBackgroundColor
-                            }
-                        }
-                    }}>
-                        <Menu theme="dark" mode="vertical" items={getMenu()}
-                            selectedKeys={selected} onSelect={e => setSelected(e.selectedKeys)} />
-                    </ConfigProvider>
-                </Sider>
-                <Drawer placement="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-                    <ConfigProvider theme={{
-                        components: {
-                            Menu: {
-                                // https://github.com/ant-design/ant-design/blob/5.0.0/components/menu/style/theme.tsx#L194
-                                colorActiveBarBorderSize: 0
-                            }
-                        }
-                    }}>
-                        <Menu mode="inline" items={getMenu()}
-                            selectedKeys={selected} onSelect={e => setSelected(e.selectedKeys)} />
-                    </ConfigProvider>
-                </Drawer>
-                <Layout>
-                    <div className='bg-topbar grid grid-cols-3 lg:hidden px-8 py-4 items-center'>
-                        <div>
-                            <Button onClick={() => setDrawerOpen(true)} type="primary">
-                                <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
-                            </Button>
+                            {isHidden && (
+                                <div className="absolute top-0 right-0 mt-10 bg-white border border-greyeen rounded-lg p-4 shadow-md max-w-md">
+                                    <ul className="flex flex-col space-y-2">
+                                        <li>
+                                            <div className="text-black text-sm cursor-pointer font-bold">
+                                                {`Halo, ${displayUserName}`}
+                                            </div>
+                                        </li>
+                                        {isAdmin &&
+                                            <li>
+                                                <Button onClick={goToManageUserPage} className="hover:bg-slate-500 text-greyeen border-none text-sm cursor-pointer font-bold">
+                                                    Manage User
+                                                </Button>
+                                            </li>
+                                        }
+                                        <li>
+                                            <Button onClick={handleLogout} className="hover:bg-slate-500 text-greyeen border-none text-sm cursor-pointer font-bold">
+                                                Logout
+                                            </Button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            )}
                         </div>
-                        <div className="h-12 p-2 text-white bg-slate-600">
-                            Logo
-                        </div>
-                        <div></div>
+
+                        <ul className={`lg:flex space-x-4 items-center ${isMobile || isHidden ? 'hidden' : ''}`}>
+                            <li>
+                                <div className="text-black text-sm cursor-pointer font-bold">{`Halo, ${displayUserName}`}</div>
+                            </li>
+                            {isAdmin &&
+                                <li>
+                                    <Button onClick={goToManageUserPage} className="hover:bg-slate-500 text-greyeen border-2 border-greyeen rounded-full px-3 py-1 cursor-pointer font-bold">
+                                        Manage User
+                                    </Button>
+                                </li>
+                            }
+                            <li>
+                                <Button onClick={handleLogout} className="hover:bg-slate-500 text-greyeen border-2 border-greyeen rounded-full px-3 py-1 cursor-pointer font-bold">
+                                    <FontAwesomeIcon icon={faArrowRightFromBracket} /> Logout
+                                </Button>
+                            </li>
+                        </ul>
                     </div>
-                    <Content className="m-5 p-8 bg-white">
-                        {children}
-                    </Content>
-                </Layout>
-            </Layout>
-        </ConfigProvider>
+                </div>
+            </nav >
+            <div className="mx-auto px-10 py-4">
+                {children}
+            </div>
+        </>
     );
 }
 

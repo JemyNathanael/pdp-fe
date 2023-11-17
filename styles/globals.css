@@ -51,6 +51,32 @@
   display: block;
 }
 
+.css-7nbrit-control{
+   border-color: #e5e7eb !important;
+}
+
+.css-1nlpctl-control{
+    border-color: #e5e7eb !important;
+}
+
+.css-1nlpctl-control:hover{
+    border-color: #e5e7eb !important;
+}
+
+.css-115eup5-control{
+    border-color: #0b0f15 !important;
+}
+
+.addButton {
+    background-color: #4f7471;
+    color: white;
+    margin-right: 30px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 120px;
+  }
 .checklistRow {
     display: table;
     width: 100%; /*Optional*/
