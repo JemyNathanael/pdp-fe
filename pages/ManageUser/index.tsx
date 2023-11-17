@@ -24,7 +24,7 @@ const TabNavigation = () => {
                             className={`w-full ${tabClasses(1)} mr-5`}
                             onClick={() => handleTabClick(1)}
                         >
-                           <p className='text-center text-base'>Overview</p>
+                           <p className='text-center'>Overview</p>
                         </button>
                     </nav>
                 </div>
@@ -34,7 +34,7 @@ const TabNavigation = () => {
                             className={`w-full ${tabClasses(2)}`}
                             onClick={() => handleTabClick(2)}
                         >
-                             <p className='text-center text-base'>Log</p>
+                             <p className='text-center'>Log</p>
                         </button>
                     </nav>
                 </div>

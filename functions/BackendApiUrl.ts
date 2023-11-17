@@ -7,10 +7,9 @@ export const BackendApiUrl = {
     getUser: baseUrl + '/api/User',
 
     logUser: baseUrl + '/api/User/manage-log',
-    deleteUser: baseUrl + '/api/User'
+    deleteUser: baseUrl + '/api/User',
 
     editUserRole: baseUrl + '/api/User/edit-user-role',
-    logUser: baseUrl + '/api/User/manage-log',
     getCategories: baseUrl + '/api/v1/category/get-category'
 
 }

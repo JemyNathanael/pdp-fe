@@ -100,7 +100,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
             return <PopupAddNewUser onGoToHome={() => {
                 setShowPopupSuccess(false)
                 replace({
-                    pathname: '/'
+                    pathname: '/ManageUser'
                 })
             }} />
         }
