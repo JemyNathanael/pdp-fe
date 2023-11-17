@@ -206,9 +206,6 @@ const OverviewUser: React.FC = () => {
         </div>
       </Modal>
 
-
-
-
       <div className="grid grid-cols-2 gap-4">
         <SearchInput onSearch={onSearchHandler} placeholder={"Search by email"} />
         <div className="col-span-1 text-end">
