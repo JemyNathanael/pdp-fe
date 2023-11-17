@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Title } from '../../../../components/Title';
 import { Page } from '../../../../types/Page';
 import { WithCategoryLayout } from '@/components/CategoryLayout';
-import { CategoryVerseContent } from '@/components/CategoryVerseContent';
-import { CategoryButton } from '@/components/CategoryButton';
+import { CategoryVerseContent } from '@/components/category/CategoryVerseContent';
+import { CategoryButton } from '@/components/category/CategoryButton';
 
 interface Checklist {
     status: 'Sesuai Sepenuhnya' | 'Sesuai Sebagian' | 'Tidak Sesuai' | 'Tidak Dapat Diterapkan';

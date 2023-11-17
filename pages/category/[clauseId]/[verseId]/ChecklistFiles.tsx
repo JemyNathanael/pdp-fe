@@ -4,9 +4,9 @@ import { Page } from '../../../../types/Page';
 import { WithCategoryLayout } from '@/components/CategoryLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleLeft } from '@fortawesome/free-regular-svg-icons';
-import { CategoryUploadedFileView } from '@/components/CategoryUploadedFileView';
+import { CategoryUploadedFileView } from '@/components/category/CategoryUploadedFileView';
 import { useRouter } from 'next/router';
-import { CategoryButton } from '@/components/CategoryButton';
+import { CategoryButton } from '@/components/category/CategoryButton';
 
 interface Checklist {
     status: 'Sesuai Sepenuhnya' | 'Sesuai Sebagian' | 'Tidak Sesuai' | 'Tidak Dapat Diterapkan';

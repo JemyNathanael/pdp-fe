@@ -4,7 +4,8 @@ import { ConfigProvider, Layout } from "antd";
 import { faHome, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
-import Collapsible from "./Collapsible";
+import Collapsible from "./category/Collapsible";
+import { useSession } from "next-auth/react";
 
 const { Sider, Content, Header } = Layout;
 
@@ -17,6 +18,8 @@ const CategoryLayout: React.FC<{
     const [openAll, setOpenAll] = useState(false);
     const [toggledFromCollapseOrExpandAll, setToggledFromCollapseOrExpandAll] = useState(false);
     const router = useRouter();
+    const { data: session } = useSession();
+    const displayUserName = session?.user?.name;
      
     const clauses = [
         {
@@ -102,7 +105,7 @@ const CategoryLayout: React.FC<{
                         <div className="p-6 flex flex-1 flex-row-reverse items-center">
                             {logoutButton()}
                             <div className="mr-6 font-semibold text-xs">
-                                Halo, Nama
+                                Halo, {displayUserName}
                             </div>
                         </div>
                     </div>
