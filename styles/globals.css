@@ -50,3 +50,70 @@
 .categoryHome:hover .categoryDescriptionHome {
   display: block;
 }
+
+.checklistRow {
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 10px; /*Optional*/
+}
+
+.checklistColumn {
+    display: table-cell;
+    //background-color: red; /*Optional*/
+}
+
+.roundedRectangleButton {
+  background-color: #537372;
+  border: none;
+  color: white;
+  padding: 3px;
+  padding-right: 20px;
+  padding-left: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 10px;
+  border-radius: 4px;
+  //font-weight: bold;
+  position: absolute;
+  right: 0;
+}
+
+.roundedRectangleBorderButton {
+  background-color: white;
+  border: 2px solid #537372;
+  color: #537372;
+  padding: 3px;
+  padding-right: 20px;
+  padding-left: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 10px;
+  border-radius: 4px;
+  //font-weight: bold;
+}
+
+.file-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.file-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border: 2px solid #537372;
+  border-radius: 5px;
+  width: 150px;
+}
+
+.delete-button {
+  margin-left: auto;
+  cursor: pointer;
+}

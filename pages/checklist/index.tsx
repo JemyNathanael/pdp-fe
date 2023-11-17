@@ -1,0 +1,220 @@
+import React, { useState, useRef } from 'react';
+//import { useRouter } from 'next/router';
+import { v4 as uuidv4 } from 'uuid';
+//import { BackendApiUrl } from '@/functions/BackendApiUrl';
+//import useSwr from 'swr';
+//import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
+import { FaFilePdf, FaFileWord, FaFileImage, FaTimes } from 'react-icons/fa';
+//import { LoadingOverlay } from "@/components/LoadingOverlay";
+
+const ChecklistPage = () => {
+    //const [data, setData] = useState([]);
+    //const router = useRouter();
+    //const swrFetcher = useSwrFetcherWithAccessToken();
+    const [formData, setFormData] = useState({});
+
+    const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+    };
+
+    const data = [
+        { 
+            id: 'guid1', 
+            description: 'Apakah Anda dapat menunjukkan bahwa subjek data pribadi telah menyetujui pemrosesan data mereka?', 
+            uploadStatusId: '1',
+            blobs:[
+                {
+                    id: 'guid1',
+                    fileName: 'File1.pdf',
+                    filePath: '',
+                    contentType: 'pdf'
+                },
+                {
+                    id: 'guid1',
+                    fileName: 'File2.docx',
+                    filePath: '',
+                    contentType: 'docx'
+                },
+                {
+                    id: 'guid1',
+                    fileName: 'File3.png',
+                    filePath: '',
+                    contentType: 'image'
+                }
+            ]
+        },
+        { 
+            id: 'guid2', 
+            description: 'Apakah permintaan persetujuan dapat dibedakan dengan jelas dari hal-hal lain, dengan cara yang dapat dimengerti dan dalam bentuk yang mudah diakses, dan ditulis dalam bahasa yang jelas dan lugas?',
+            uploadStatusId: '2',
+            blobs:[
+                {
+                    id: 'guid1',
+                    fileName: 'File1.pdf',
+                    filePath: '',
+                    contentType: 'pdf'
+                },
+                {
+                    id: 'guid1',
+                    fileName: 'File2.docx',
+                    filePath: '',
+                    contentType: 'docx'
+                },
+                {
+                    id: 'guid1',
+                    fileName: 'File3.png',
+                    filePath: '',
+                    contentType: 'image'
+                }
+            ]
+        }
+        // Add more rows based on your data
+    ];
+
+    const deleteFile = (fileName) => {
+        // Implement your delete file logic here
+        console.log(`Deleting file: ${fileName}`);
+    };
+
+    //const { data, isValidating } = useSwr<ChecklistResponse>(`${BackendApiUrl.getChecklists}?verseId=${getId()}`, swrFetcher);
+
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+    const handleFileChange = () => {
+        if (fileInputRef.current) {
+            const files = Array.from(fileInputRef.current.files || []);
+            setSelectedFiles(files);
+        }
+    };
+
+    // function getId() {
+    //     const { id } = router.query;
+
+    //     if (!id) {
+    //         return '';
+    //     }
+    //     return id.toString();
+    // }
+
+    // if (!data) {
+    //     return <LoadingOverlay isLoading={isValidating} />
+    // }
+
+    return (
+        <div>
+            {data?.map((row) => (
+                <div className='checklistRow' key={row.id}>
+                    <div className='checklistRow' key={row.id}>
+                        <div className='checklistColumn' style={{ width: '20%'}}>
+                            <select defaultValue={row.uploadStatusId} onChange={(e) => handleChange('dropdownField', e.target.value)}>
+                                <option key='0' value='0'>
+                                    Pilih status..
+                                </option>
+                                <option key='1' value='1'>
+                                    Sesuai Sepenuhnya
+                                </option>
+                                <option key='2' value='2'>
+                                    Sesuai Sebagian
+                                </option>
+                                <option key='3' value='3'>
+                                    Tidak Sesuai
+                                </option>
+                                <option key='4' value='4'>
+                                    Tidak Dapat Diterapkan
+                                </option>
+                            </select>
+                        </div>
+                        <div className='checklistColumn' style={{ width: '60%'}}>
+                            <div className='checklistRow'>
+                                <label>{row.description}</label>
+                            </div>
+                            <div className='checklistRow'>
+                                <div className='checklistColumn' style={{ width: '20%'}}>
+                                    <input
+                                        type="file"
+                                        multiple
+                                        ref={fileInputRef}
+                                        onChange={handleFileChange}
+                                        style={{ display: 'none' }}
+                                    />
+                                    <button className='roundedRectangleBorderButton' onClick={() => fileInputRef.current?.click()}>+ Upload File</button>
+                                </div>
+                            </div>
+                            <div className='checklistRow'>
+                                    {row.blobs.length > 0 && (
+                                        <div>
+                                            <div className="file-list">
+                                                {row.blobs.map((blob) => (
+                                                    <div key={blob.id} className="file-item">
+                                                        {/* File type icon */}
+                                                        <FaTimes className="delete-button" onClick={() => deleteFile(blob.fileName)} />
+                                                        {blob.contentType === 'pdf' && <FaFilePdf color="#537372" size={30} />}
+                                                        {blob.contentType === 'docx' && <FaFileWord color="#537372" size={30} />}
+                                                        {blob.contentType === 'image' && <FaFileImage color="#537372" size={30} />}
+                                                        {/* File name */}
+                                                        <p>{blob.fileName}</p>
+                                                        {/* Delete button */}
+                                                        
+                                                    </div>
+                                                ))}
+                                                {selectedFiles.map((file, index) => (
+                                                    <div key={index} className="file-item">
+                                                        {/* File type icon */}
+                                                        <FaTimes className="delete-button" onClick={() => deleteFile(file.name)} />
+                                                        {file.type === 'pdf' && <FaFilePdf color="#537372" size={30} />}
+                                                        {file.type === 'docx' && <FaFileWord color="#537372" size={30} />}
+                                                        {file.type === 'image' && <FaFileImage color="#537372" size={30} />}
+                                                        {/* File name */}
+                                                        <p>{file.name}</p>
+                                                        {/* Delete button */}
+                                                        
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            {/* <ul>
+                                                {selectedFiles.map((file, index) => (
+                                                <li key={index}>
+                                                    <img
+                                                    src={`/icons/${file.type.includes('image') ? 'image' : 'file'}.png`}
+                                                    alt="File Icon"
+                                                    style={{ width: '20px', height: '20px', marginRight: '5px' }}
+                                                    />
+                                                    {file.name}
+                                                </li>
+                                                ))}
+                                            </ul> */}
+                                        </div>
+                                    )}
+                                </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            ))}
+            {/* Add a button to submit the form with formData to your backend */}
+            <button className='roundedRectangleButton' onClick={() => console.log('Submit:', formData)}>Save</button>
+        </div>
+    );
+};
+
+export default ChecklistPage;
+
+export interface ChecklistResponse{
+    checklistList: ChecklistList[];
+    successStatus: boolean;
+}
+
+export interface ChecklistList{
+    id: uuidv4;
+    description: string;
+    uploadStatusId: string;
+    blobs: BlobList[];
+}
+
+export interface BlobList{
+    id: uuidv4;
+    fileName: string;
+    filePath: string;
+    contentType: string;
+}
