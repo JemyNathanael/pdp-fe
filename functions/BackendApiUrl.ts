@@ -10,7 +10,12 @@ export const BackendApiUrl = {
     deleteUser: baseUrl + '/api/User',
 
     editUserRole: baseUrl + '/api/User/edit-user-role',
-    getCategories: baseUrl + '/api/v1/category/get-category'
+    getCategories: baseUrl + '/api/v1/category/get-category',
+    getChapters: baseUrl + '/api/v1/category',
+    createSubCategory: baseUrl + '/api/v1/category',
+    updateSubCategory: baseUrl + '/api/v1/category',
+    deleteSubCategory: baseUrl + '/api/v1/category',
+    getChaptersVerses: baseUrl + '/api/dropdown/chapter-list',
 
 }
 
