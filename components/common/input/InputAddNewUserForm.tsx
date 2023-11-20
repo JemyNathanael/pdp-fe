@@ -1,7 +1,5 @@
-import React, { FC, InputHTMLAttributes, useState } from 'react';
+import React, { FC, InputHTMLAttributes} from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Input } from 'antd';
 
 interface InputAddNewUserFormProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -19,33 +17,19 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
     formErrorMessage,
     field,
 }) => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false); // New state for confirm password
-
-    const isPasswordType = id === 'password' || id === 'confirmPassword';
 
     const inputType = () => {
         if (id === 'email') return 'email';
         if (id === 'name') return 'text';
-        if (isPasswordType) {
-            return isPasswordType && (showPassword || showConfirmPassword) ? 'text' : 'password';
+        if (id === 'password' || id === 'confirmPassword') {
+            return 'password';
         }
         return 'text';
-    };
-
-    const toggleShowPassword = () => {
-        if (id === 'password') {
-            setShowPassword(!showPassword);
-        } else if (id === 'confirmPassword') {
-            setShowConfirmPassword(!showConfirmPassword);
-        }
     };
 
     const borderClass = () => {
         return formErrorMessage ? 'border-alertdanger' : 'border-secondary-100';
     };
-
-    // const autoCompleteValue = isPasswordType ? 'new-password' : 'on';
 
     return (
         <div className="mb-5 md:mb-8">
@@ -64,19 +48,6 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
                             placeholder={placeholder}
                         />
                 }
-
-                {isPasswordType && (
-                    <div
-                        className="absolute top-1/2 right-4 cursor-pointer transform -translate-y-1/2"
-                        onClick={toggleShowPassword}
-                    >
-                        {showPassword || showConfirmPassword ? (
-                            <FontAwesomeIcon icon={faEye} />
-                        ) : (
-                            <FontAwesomeIcon icon={faEyeSlash} />
-                        )}
-                    </div>
-                )}
             </div>
             {formErrorMessage && (
                 <p className="text-md text-red-600 font-normal font-body mt-1.5">{formErrorMessage}</p>
