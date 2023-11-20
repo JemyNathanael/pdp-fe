@@ -10,8 +10,9 @@ export const BackendApiUrl = {
     deleteUser: baseUrl + '/api/User',
 
     editUserRole: baseUrl + '/api/User/edit-user-role',
-    getCategories: baseUrl + '/api/v1/category/get-category'
-
+    getCategories: baseUrl + '/api/v1/category/get-category',
+    getChecklists: baseUrl + '/api/v1/category/get-checklist',
+    getUploadStatus: baseUrl + '/api/Dropdown/upload-status-list'
 }
 
 export function GetUser(
@@ -50,4 +51,13 @@ export function GetLog(
         param.append('search', search);
     }
     return BackendApiUrl.logUser + '?' + param.toString();
+}
+
+export function GetChecklistList(verseId: string)
+{
+    const param = new URLSearchParams();
+   
+    param.append('verseId', verseId.toString());
+    
+    return BackendApiUrl.getChecklists + '?' + param.toString();
 }
