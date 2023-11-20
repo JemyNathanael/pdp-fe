@@ -2,6 +2,7 @@ import React, { FC, InputHTMLAttributes, useState } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { Input } from 'antd';
 
 interface InputAddNewUserFormProps extends InputHTMLAttributes<HTMLInputElement> {
     id: string;
@@ -44,19 +45,26 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
         return formErrorMessage ? 'border-alertdanger' : 'border-secondary-100';
     };
 
-    const autoCompleteValue = isPasswordType ? 'new-password' : 'on';
+    // const autoCompleteValue = isPasswordType ? 'new-password' : 'on';
 
     return (
         <div className="mb-5 md:mb-8">
             <label className="text-lg text-secondary-100 font-body font-bold">{label}</label>
             <div className="relative">
-                <input
-                    className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
-                    type={inputType()}
-                    {...field}
-                    placeholder={placeholder}
-                    autoComplete={autoCompleteValue}
-                />
+                {
+                    inputType() == "password" ?
+                        <Input.Password
+                            className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
+                            {...field}
+                            placeholder={placeholder}
+                        /> :
+                        <Input
+                            className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
+                            {...field}
+                            placeholder={placeholder}
+                        />
+                }
+
                 {isPasswordType && (
                     <div
                         className="absolute top-1/2 right-4 cursor-pointer transform -translate-y-1/2"
