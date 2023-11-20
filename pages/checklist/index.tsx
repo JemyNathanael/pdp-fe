@@ -21,11 +21,6 @@ const ChecklistPage = () => {
         setFormData({ ...formData, [fieldName]: value });
     };
 
-    interface UploadStatusModel{
-        id: number,
-        name: string
-}
-
     const data = [
         {
             id: 'guid1',
@@ -86,7 +81,7 @@ const ChecklistPage = () => {
     };
 
     //const { data, isValidating } = useSwr<ChecklistResponse>(`${BackendApiUrl.getChecklists}?verseId=${getId()}`, swrFetcher);
-    const {uploadStatusDropdown} = useSwr<UploadStatusModel[]>(BackendApiUrl.getUploadStatus, swrFetcher);
+    const uploadStatusDropdown = useSwr<UploadStatusModel[]>(BackendApiUrl.getUploadStatus, swrFetcher);
 
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -123,14 +118,14 @@ const ChecklistPage = () => {
                     <div className='checklistRow' key={row.id}>
                         <div className='checklistColumn' style={{ width: '20%' }}>
                             <select defaultValue={row.uploadStatusId} onChange={(e) => handleChange('dropdownField', e.target.value)}>
-                            <option key='0' value=''>
+                                <option key='0' value=''>
                                     Pilih status..
-                            </option>
-                            {uploadStatusDropdown.map((option) => (
-                            <option key={option.id} value={option.id}>
-                                {option.name}
-                            </option>
-                            ))}
+                                </option>
+                                {uploadStatusDropdown.data?.map((option) => (
+                                    <option key={option.id} value={option.id}>
+                                        {option.status}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                         <div className='checklistColumn' style={{ width: '60%' }}>
@@ -237,4 +232,9 @@ export interface BlobList {
     fileName: string;
     filePath: string;
     contentType: string;
+}
+
+export interface UploadStatusModel {
+    id: number,
+    status: string
 }
