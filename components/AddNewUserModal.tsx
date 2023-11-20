@@ -48,6 +48,13 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
     const { fetchPOST } = useFetchWithAccessToken();
     const [showPopupSuccess, setShowPopupSuccess] = useState(false);
     const { handleSubmit, reset, control, formState: { errors, isValid } } = useForm<AddNewUserFormProps>({
+        defaultValues: {
+            email: undefined,
+            confirmPassword: undefined,
+            name: undefined,
+            password: undefined,
+            role: undefined
+        },
         resolver: zodResolver(schema),
         mode: 'onChange',
     });
