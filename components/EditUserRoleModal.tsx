@@ -56,7 +56,7 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
     const swrFetcher = useSwrFetcherWithAccessToken();
     const [roleOptions, setRoleOptions] = useState<SelectOptions<string>[]>([]);
 
-    const {data} = useSWR<DataItem[]>(BackendApiUrl.getRoleList, swrFetcher);
+    const {data,  mutate: mutateRoleList } = useSWR<DataItem[]>(BackendApiUrl.getRoleList, swrFetcher);
 
     useEffect(() => {
         const dataSource = () => {
@@ -82,16 +82,16 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
         if(data) {
             setSuccessModalVisible(true);
             onCancel();
+            window.location.reload();
         }
     };
 
     const handleSuccessModalClose = () => {
         setSuccessModalVisible(false);
         onCancel();
+         mutateRoleList(); 
         mutate(GetUser('', 10, 1 ));
     };
-
-  
 
     return (
         <>
@@ -102,7 +102,13 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
             width={750}
             className=''
             footer={[
-            <button key="submit" type="submit" onClick={() => form.submit()} className="bg-[#4F7471] text-white px-4 py-2 rounded mb-2">
+            <button key="submit" type="submit" onClick={() => form.submit()} className={`bg-[#4F7471] text-white px-4 py-2 rounded mb-2 ${
+                // Disable the button if the current role and the selected role are the same
+                roleOptions.some((item) => item.value === form.getFieldValue('role') && item.disabled)
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ''
+            }`}
+        >
                 Update
             </button>,
             ]}
