@@ -8,8 +8,10 @@ import { Modal, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
-
 import useSWR, { mutate } from 'swr';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/router";
 
 interface DataItem {
   id: string;
@@ -47,11 +49,29 @@ interface RecordProps {
   role: string;
 }
 
+interface PopupDeleteProps {
+  onGoToHome: () => void;
+}
+
+const PopupDelete: React.FC<PopupDeleteProps> = ({ onGoToHome }) => {
+  return (
+      <div className="fixed inset-0 flex items-center justify-center bg-opacity-10 bg-secondary-100 backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
+          <div className="flex flex-col p-6 sm:p-12 border items-center justify-center">
+              <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#4f7471", fontSize: "64px", marginBottom: "8px" }} />
+              <div className="w-full h-4 sm:h-8" />
+              <h3 className="text-xl sm:text-2xl text-accent-100 font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Deletion was successful</h3>
+          </div>
+      </div>
+  );
+};
+
 const OverviewUser: React.FC = () => {
+  const { replace } = useRouter();
   const [search, setSearch] = useState('');
   const { fetchDELETE } = useFetchWithAccessToken();
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<DeleteUserModel>();
+  const [isDeleteSuccess, setIsDeleteSuccess] = useState<boolean>(false);
   const [page, setPages] = useState<number>(1);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -160,6 +180,7 @@ const OverviewUser: React.FC = () => {
 
     if (response.data) {
       setDeleteModal(false);
+      setIsDeleteSuccess(true);
       mutate(GetUser(
         filter.search,
         filter.itemsPerPage,
@@ -173,6 +194,7 @@ const OverviewUser: React.FC = () => {
 
   function goBackPage() {
     setDeleteModal(false)
+    setIsDeleteSuccess(false);
   }
 
   const handleAdd = () => {
@@ -191,6 +213,17 @@ const OverviewUser: React.FC = () => {
     handleCancel();
   }
 
+  const renderPopupSuccess = () => {
+    if (isDeleteSuccess) {
+        return <PopupDelete onGoToHome={() => {
+            setIsDeleteSuccess(false)
+            replace({
+                pathname: '/ManageUser'
+            })
+        }} />
+    }
+    return null;
+}
 
   return (
     <div id="overview">
@@ -268,8 +301,8 @@ const OverviewUser: React.FC = () => {
         onCancel={handleCancel}
         onSave={handleSave}
       />
-
-
+      
+    {renderPopupSuccess()}
       <footer className="font-semibold text-[#4F7471] text-center mt-5 md:mt-36">Copyright @ PT. Accelist Lentera Indonesia</footer>
     </div>
   );
