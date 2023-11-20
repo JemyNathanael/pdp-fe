@@ -11,7 +11,8 @@ export const BackendApiUrl = {
 
     editUserRole: baseUrl + '/api/User/edit-user-role',
     getCategories: baseUrl + '/api/v1/category/get-category',
-    getChecklists: baseUrl + '/api/v1/category/get-checklist'
+    getChecklists: baseUrl + '/api/v1/category/get-checklist',
+    getUploadStatus: baseUrl + '/api/Dropdown/upload-status-list'
 }
 
 export function GetUser(

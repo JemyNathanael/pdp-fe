@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 //import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
-//import { BackendApiUrl } from '@/functions/BackendApiUrl';
-//import useSwr from 'swr';
-//import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
+import { BackendApiUrl } from '@/functions/BackendApiUrl';
+import useSwr from 'swr';
+import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import { FaFilePdf, FaFileWord, FaFileImage, FaTimes } from 'react-icons/fa';
 import { WithDefaultLayout } from '@/components/DefautLayout';
 import { ConfigProvider, FloatButton } from 'antd';
@@ -14,12 +14,17 @@ import { faArrowsRotate, faBars, faMinus, faPlus } from '@fortawesome/free-solid
 const ChecklistPage = () => {
     //const [data, setData] = useState([]);
     //const router = useRouter();
-    //const swrFetcher = useSwrFetcherWithAccessToken();
+    const swrFetcher = useSwrFetcherWithAccessToken();
     const [formData, setFormData] = useState({});
 
     const handleChange = (fieldName, value) => {
         setFormData({ ...formData, [fieldName]: value });
     };
+
+    interface UploadStatusModel{
+        id: number,
+        name: string
+}
 
     const data = [
         {
@@ -81,6 +86,7 @@ const ChecklistPage = () => {
     };
 
     //const { data, isValidating } = useSwr<ChecklistResponse>(`${BackendApiUrl.getChecklists}?verseId=${getId()}`, swrFetcher);
+    const {uploadStatusDropdown} = useSwr<UploadStatusModel[]>(BackendApiUrl.getUploadStatus, swrFetcher);
 
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -117,21 +123,14 @@ const ChecklistPage = () => {
                     <div className='checklistRow' key={row.id}>
                         <div className='checklistColumn' style={{ width: '20%' }}>
                             <select defaultValue={row.uploadStatusId} onChange={(e) => handleChange('dropdownField', e.target.value)}>
-                                <option key='0' value='0'>
+                            <option key='0' value=''>
                                     Pilih status..
-                                </option>
-                                <option key='1' value='1'>
-                                    Sesuai Sepenuhnya
-                                </option>
-                                <option key='2' value='2'>
-                                    Sesuai Sebagian
-                                </option>
-                                <option key='3' value='3'>
-                                    Tidak Sesuai
-                                </option>
-                                <option key='4' value='4'>
-                                    Tidak Dapat Diterapkan
-                                </option>
+                            </option>
+                            {uploadStatusDropdown.map((option) => (
+                            <option key={option.id} value={option.id}>
+                                {option.name}
+                            </option>
+                            ))}
                             </select>
                         </div>
                         <div className='checklistColumn' style={{ width: '60%' }}>
