@@ -7,37 +7,51 @@ import { useRouter } from "next/router";
 import Collapsible from "./category/Collapsible";
 import { signOut, useSession } from "next-auth/react";
 import nProgress from "nprogress";
+import { useSwrFetcherWithAccessToken } from "@/functions/useSwrFetcherWithAccessToken";
+import { GetCategoryDetail } from "@/functions/BackendApiUrl";
+import useSWR from 'swr';
+import { Authorize } from "./Authorize";
 
 const { Sider, Content, Header } = Layout;
 
-const clauses = [
-    {
-        title: 'Pasal 22',
-        routePath: '/category/22',
-        children: [
-            {
-                title: 'Ayat 1',
-                routePath: '/category/22/1'
-            },
-            {
-                title: 'Ayat 2',
-                routePath: '/category/22/2'
-            }
-        ]
-    },
-    {
-        title: 'Pasal 5',
-        routePath: '/category/5',
-        children: [
-            {
-                title: 'Ayat 1',
-                routePath: '/category/5/1'
-            }
-        ]
-    },
-];
-
 const sidebarBackgroundColor = '#4F7471';
+
+interface Verse {
+    id: string;
+    title: string;
+    description: string;
+    chapterId: string;
+    chapter: string;
+    checklistId: string[];
+    isUploadFile: boolean;
+    uploadStatusId: number;
+    createdAt: Date;
+    createdBy: string;
+    updatedAt: Date;
+    updatedBy: string;
+}
+
+interface Chapter {
+    id: string;
+    title: string;
+    description: string;
+    isUploadFile: boolean;
+    verses: Verse[];
+}
+
+interface CategoryDetailModel {
+    title: string;
+    chapters: Chapter[];
+}
+
+interface SidebarMenuModel {
+    title: string;
+    routePath: string;
+}
+
+interface CategorySidebarItemsModel extends SidebarMenuModel {
+    children: SidebarMenuModel[]
+}
 
 const CategoryLayout: React.FC<{
     children: React.ReactNode
@@ -45,21 +59,53 @@ const CategoryLayout: React.FC<{
 
     const [openAll, setOpenAll] = useState(false);
     const [toggledFromCollapseOrExpandAll, setToggledFromCollapseOrExpandAll] = useState(false);
-    const [clausesExpandedState, setClausesExpandedState] = useState<boolean[]>()
+    const [chaptersExpandedState, setChaptersExpandedState] = useState<boolean[]>()
+    
+    const [chapters, setChapters] = useState<CategorySidebarItemsModel[]>() 
+    
     const router = useRouter();
+    const categoryId = router.query['categoryId']?.toString() ?? '';
+
     const { data: session } = useSession();
     const displayUserName = session?.user?.name;
-    
+
+    const swrFetcher = useSwrFetcherWithAccessToken();
+    const { data } = useSWR<CategoryDetailModel>(GetCategoryDetail(categoryId), swrFetcher);
+
     useEffect(() => {
-        const itemsCollapseStateMap = clauses.map(() => false);
-        setClausesExpandedState(itemsCollapseStateMap);
-    }, [])
+        if(data){
+            const chaptersItem: CategorySidebarItemsModel[] = data?.chapters.map((chapter) => {
+                // map each verses to make a child menu from each chapters
+                const currentChapterVerses: SidebarMenuModel[] = chapter.verses.map((verse) => {
+                    return {
+                        title: verse.title,
+                        routePath: `/${router.query['categoryId']}/${chapter.id}/${verse.id}`
+                    }
+                })
+    
+                return {
+                    title: chapter.title,
+                    routePath: `/${router.query['categoryId']}/${chapter.id}`,
+                    children: currentChapterVerses,
+                }
+            })
+
+            setChapters(chaptersItem);
+        }
+    }, [data, router.query])
+
+    useEffect(() => {
+        if(chapters) {
+            const itemsCollapseStateMap = chapters.map(() => false);
+            setChaptersExpandedState(itemsCollapseStateMap);
+        }
+    }, [chapters])
 
     function changeCollapseStatusByIndex(index: number, state: boolean) {
-        const tempStateMap = clausesExpandedState;
+        const tempStateMap = chaptersExpandedState;
         if (tempStateMap) {
             tempStateMap[index] = state;
-            setClausesExpandedState(tempStateMap);
+            setChaptersExpandedState(tempStateMap);
         }
     }
 
@@ -69,9 +115,8 @@ const CategoryLayout: React.FC<{
 
     function handleExpandOrCollapseAll() {
         setToggledFromCollapseOrExpandAll(true);
-        console.log(clausesExpandedState);
-        if(clausesExpandedState) {
-            const isAllExpanded = clausesExpandedState.every(state => state === true);
+        if(chaptersExpandedState) {
+            const isAllExpanded = chaptersExpandedState.every(state => state === true);
             if (isAllExpanded) {
                 setOpenAll(false);
             } else {
@@ -113,8 +158,8 @@ const CategoryLayout: React.FC<{
 
                 <Header className="bg-white px-0 flex items-center">
                     <div className="flex flex-1 items-center">
-                        <button className="p-6 border-r-2 border-r-gray-200">
-                            <FontAwesomeIcon icon={faHome} color="#4F7471" className="fa-xl" onClick={() => router.push('/')}></FontAwesomeIcon>
+                        <button className="p-6 border-r-2 border-r-gray-200" onClick={() => router.push('/')}>
+                            <FontAwesomeIcon icon={faHome} color="#4F7471" className="fa-xl"></FontAwesomeIcon>
                         </button>
                         <div className="p-6 flex-1 text-[#4F7471] font-bold text-xl">
                             LOGO
@@ -130,17 +175,17 @@ const CategoryLayout: React.FC<{
                 
                 <Layout>
                     <Sider width={300} className="pb-24 hidden lg:block">
-                        <div className="p-2 px-4 m-4 text-white font-bold">
-                            Placholder Title
-                        </div>
+                        <p className="p-2 px-4 m-4 text-white font-bold">
+                            {data?.title}
+                        </p>
                         <div className="m-4">
-                            {
-                                clauses.map((clause, i) =>
+                            { chapters &&
+                                chapters.map((chapter, i) =>
                                     <Collapsible
                                     open={openAll}
-                                    title={clause.title}
-                                    routePath={clause.routePath}
-                                    childrenItem={clause.children}
+                                    title={chapter.title}
+                                    routePath={chapter.routePath}
+                                    childrenItem={chapter.children}
                                     changeCollapseStatus={changeCollapseStatusByIndex}
                                     resetToggle={resetToggleFromButtonState}
                                     toggledFlag={toggledFromCollapseOrExpandAll}
@@ -165,4 +210,9 @@ const CategoryLayout: React.FC<{
     );
 }
 
-export const WithCategoryLayout = (page: React.ReactElement) => <CategoryLayout>{page}</CategoryLayout>;
+export const WithCategoryLayout = (page: React.ReactElement) => 
+<Authorize>
+    <CategoryLayout>
+        {page}
+    </CategoryLayout>
+</Authorize>;

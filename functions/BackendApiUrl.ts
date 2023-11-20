@@ -8,7 +8,6 @@ export const BackendApiUrl = {
     editUserRole: baseUrl + '/api/User/edit-user-role',
     logUser: baseUrl + '/api/User/manage-log',
     getCategories: baseUrl + '/api/v1/category/get-category'
-
 }
 
 export function GetUser(
@@ -47,4 +46,10 @@ export function GetLog(
         param.append('search', search);
     }
     return BackendApiUrl.logUser + '?' + param.toString();
+}
+
+export function GetCategoryDetail(categoryId: string) {
+    const url = baseUrl + `/api/v1/category/${categoryId}`;
+
+    return url;
 }

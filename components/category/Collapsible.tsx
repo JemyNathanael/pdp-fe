@@ -65,7 +65,6 @@ const Collapsible: React.FC<IProps> = ({ open, title, childrenItem, routePath, c
 
   const handleFilterOpening = () => {
     setIsOpen((prev) => !prev);
-    console.log(isOpen);
     changeCollapseStatus(currentIndex, !isOpen);
   };
 

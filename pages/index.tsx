@@ -9,8 +9,10 @@ import { Authorize } from '@/components/Authorize';
 import useSWR from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
+import { useRouter } from 'next/router';
 
 interface CategoryHomeApiModel {
+    id: string,
     title: string,
     description: string
 }
@@ -31,10 +33,16 @@ const Home: React.FC = () => {
     const { data: session, status } = useSession();
     const displayUserName = session?.user?.name;
 
+    const router = useRouter();
+
     const swrFetcher = useSwrFetcherWithAccessToken();
 
     const { data, error, isValidating } = useSWR<CategoryHomeApiModel[]>(BackendApiUrl.getCategories, swrFetcher);
 
+    const onClickCategory = (categoryId: string) => {
+        router.push(`/${categoryId}`)
+    }
+    
     useEffect(() => {
         if (!data) {
             if (error) {
@@ -52,11 +60,13 @@ const Home: React.FC = () => {
                 title = data[i]?.title ?? ''
                 categoryListTemp.push({
                     first: {
+                        id: data[i]?.id ?? '',
                         title: title,
                         description: data[i]?.description ?? '',
                         icon: getRelatedIcon(title)
                     },
                     second: {
+                        id: data[i]?.id ?? '',
                         title: '',
                         description: '',
                         icon: faLaptop
@@ -70,11 +80,13 @@ const Home: React.FC = () => {
                     const prevFirstCol = categoryListTemp[categoryListTemp.length - 1]?.first
                     categoryListTemp[categoryListTemp.length - 1] = {
                         first: {
+                            id: prevFirstCol?.id ?? '',
                             title: prevFirstCol?.title ?? '',
                             description: prevFirstCol?.description ?? '',
                             icon: prevFirstCol?.icon ?? faCalendar
                         },
                         second: {
+                            id: data[i]?.id ?? '',
                             title: title,
                             description: data[i]?.description ?? '',
                             icon: getRelatedIcon(title)
@@ -175,9 +187,9 @@ const Home: React.FC = () => {
                 {
                     categoryList.map((Q, idx) => {
                         return (
-                            <div key={'category#' + idx} style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
+                            <div key={'category#' + idx} style={{ display: 'flex', justifyContent: 'center', margin: '20px' }} className='cursor-pointer'>
 
-                                <div className='categoryHome'>
+                                <div className='categoryHome' onClick={() => onClickCategory(Q.first.id)}>
                                     <div className='categoryTitleHome'>
                                         <FontAwesomeIcon icon={Q.first.icon} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
                                         <br />
@@ -201,7 +213,7 @@ const Home: React.FC = () => {
                                     !Q.second.title && !Q.second.description ?
                                         <div></div>
                                         :
-                                        <div className='categoryHome'>
+                                        <div className='categoryHome' onClick={() => onClickCategory(Q.second.id)}>
                                             <div className='categoryTitleHome'>
                                                 <FontAwesomeIcon icon={Q.second.icon} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
                                                 <br />
