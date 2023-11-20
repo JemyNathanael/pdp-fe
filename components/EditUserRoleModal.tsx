@@ -56,7 +56,9 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
     const swrFetcher = useSwrFetcherWithAccessToken();
     const [roleOptions, setRoleOptions] = useState<SelectOptions<string>[]>([]);
 
-    const { data } = useSWR<DataItem[]>(BackendApiUrl.getRoleList, swrFetcher);
+
+    const {data,  mutate: mutateRoleList } = useSWR<DataItem[]>(BackendApiUrl.getRoleList, swrFetcher);
+
 
     useEffect(() => {
         const dataSource = () => {
@@ -82,42 +84,47 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
         if (data) {
             setSuccessModalVisible(true);
             onCancel();
+            window.location.reload();
         }
     };
 
     const handleSuccessModalClose = () => {
         setSuccessModalVisible(false);
         onCancel();
-        mutate(GetUser('', 10, 1));
+         mutateRoleList(); 
+        mutate(GetUser('', 10, 1 ));
     };
-
-
 
     return (
         <>
-            <Modal
-                open={visible}
-                onCancel={onCancel}
-                centered
-                width={750}
-                className=''
-                footer={[
-                    <button key="submit" type="submit" onClick={() => form.submit()} className="bg-[#4F7471] text-white px-4 py-2 rounded mb-2">
-                        Update
-                    </button>,
-                ]}
-            >
-                <h3 className='text-xl sm:text-2xl text-center font-body font-bold mt-6'>{`Change Role of "${record?.fullName}"`}</h3>
-                <div className='p-5'>
-                    <h4 className='text-xl sm:text-2xl font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8'>
-                        Current Role: <u className='text-[#4F7471]'>{record?.role}</u>
-                    </h4>
-                    <h4 className='text-xl sm:text-2xl font-body font-bold mb-2 sm:mb-3'>Please Select a New Role </h4>
-                    <Form form={form} onFinish={onFinish} layout="vertical" initialValues={record}>
-                        <Form.Item label="" name="role">
-                            <Select
-                                options={roleOptions}
-                                className='text-slate-500'>
+        <Modal
+            open={visible}
+            onCancel={onCancel}
+            centered
+            width={750}
+            className=''
+            footer={[
+            <button key="submit" type="submit" onClick={() => form.submit()} className={`bg-[#4F7471] text-white px-4 py-2 rounded mb-2 ${
+                roleOptions.some((item) => item.value === form.getFieldValue('role') && item.disabled)
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ''
+            }`}
+        >
+                Update
+            </button>,
+            ]}
+        >
+            <h3 className='text-xl sm:text-2xl text-center font-body font-bold mt-6'>{`Change Role of "${record?.fullName}"`}</h3>
+            <div className='p-5'>
+                <h4 className='text-xl sm:text-2xl font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8'>
+                    Current Role: <u className='text-[#4F7471]'>{record?.role}</u>
+                </h4>
+                <h4 className='text-xl sm:text-2xl font-body font-bold mb-2 sm:mb-3'>Please Select a New Role </h4>
+                <Form form={form} onFinish={onFinish} layout="vertical" initialValues={record}>
+                    <Form.Item label="" name="role">
+                        <Select
+                            options={roleOptions}
+                            className='text-slate-500'>
                                 {roleOptions.map((item) => (
                                     <Select.Option key={item.value} value={item.value} disabled={item.disabled}>
                                         {item.label}
