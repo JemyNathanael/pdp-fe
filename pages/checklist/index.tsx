@@ -8,7 +8,7 @@ import { FaFilePdf, FaFileWord, FaFileImage, FaTimes } from 'react-icons/fa';
 import { WithDefaultLayout } from '@/components/DefautLayout';
 import { ConfigProvider, FloatButton } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowsRotate, faBars, faList, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsRotate, faBars, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 //import { LoadingOverlay } from "@/components/LoadingOverlay";
 
 const ChecklistPage = () => {
