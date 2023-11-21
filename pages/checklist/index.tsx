@@ -6,7 +6,8 @@ import useSwr from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import { FaFilePdf, FaFileWord, FaFileImage, FaTimes } from 'react-icons/fa';
 import { WithDefaultLayout } from '@/components/DefautLayout';
-import { ConfigProvider, FloatButton, Menu, Dropdown } from 'antd';
+import { ConfigProvider, FloatButton, Dropdown, Space } from 'antd';
+import type { MenuProps } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsRotate, faBars, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
@@ -106,32 +107,21 @@ const ChecklistPage = () => {
     // if (!data) {
     //     return <LoadingOverlay isLoading={isValidating} />
     // }
-    const handleMenuClick = (e) => {
-        switch (e.key) {
-          case 'update':
-            // Implement logic for updating checklist
-            console.log('Updating checklist');
-            break;
-          case 'add':
-            // Implement logic for adding checklist
-            console.log('Adding checklist');
-            break;
-          case 'delete':
-            // Implement logic for deleting checklist
-            console.log('Deleting checklist');
-            break;
-          default:
-            break;
-        }
-    };
 
-    const settingsMenu = (
-        <Menu onClick={handleMenuClick}>
-          <Menu.Item key="update">Update Checklist</Menu.Item>
-          <Menu.Item key="add">Add Checklist</Menu.Item>
-          <Menu.Item key="delete">Delete</Menu.Item>
-        </Menu>
-      );
+    const items : MenuProps['items'] = [
+        {
+          key: 'update',
+          label: 'Update Checklist',
+        },
+        {
+          key: 'add',
+          label: 'Add Checklist',
+        },
+        {
+          key: 'delete',
+          label: 'Delete',
+        },
+    ]
 
     return (
         <ConfigProvider
@@ -156,16 +146,26 @@ const ChecklistPage = () => {
                             </select>
                         </div>
                         <div className='checklistColumn' style={{ width: '60%' }}>
-                        <div className='checklistRow'>
-                            <div className="flex items-center justify-between">
-                                <label className='mr-8'>{row.description}</label>
-                                <Dropdown overlay={settingsMenu} placement="bottomRight">
-                                <div style={{ cursor: 'pointer', fontWeight: 'bold', color: 'black' }}>
-                                    <FontAwesomeIcon icon={faEllipsisV} />
+                            <div className='checklistRow'>
+                                <div className="flex items-center justify-between">
+                                    <Dropdown menu={{items}} trigger={['contextMenu']}>
+                                        <div className='py-1'>
+                                            <label className='mr-8'>{row.description}</label>
+                                        </div>
+                                    </Dropdown>
+
+                                    <Dropdown menu={{ items }} trigger={['click']}>
+                                        <a onClick={(e) => e.preventDefault()}>
+                                            <Space>
+                                                <div className="cursor-pointer font-bold text-black">
+                                                    <FontAwesomeIcon icon={faEllipsisV} />
+                                                </div>
+                                            </Space>
+                                        </a>
+                                    </Dropdown>
+
                                 </div>
-                                </Dropdown>
                             </div>
-                        </div>
 
                             <div className='checklistRow'>
                                 <div className='checklistColumn' style={{ width: '20%' }}>
