@@ -10,6 +10,7 @@ import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAcces
 import useSWR from 'swr';
 import { BackendApiUrl, GetChecklistList } from '@/functions/BackendApiUrl';
 import { DefaultOptionType } from 'antd/es/select';
+import { useSession } from 'next-auth/react';
 
 interface ChecklistList {
     id: string;
@@ -38,6 +39,12 @@ const VersePage: Page = () => {
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data: checklistData } = useSWR<ChecklistModel>(GetChecklistList(verseId), swrFetcher);
     const { data: dropdownUploadStatusData } = useSWR<UploadStatusDropdownModel[]>(BackendApiUrl.getUploadStatus, swrFetcher);
+
+    const canEditUploadStatusRole = ['Admin', 'Auditor'];
+    const { data: session } = useSession();
+    const role = session?.user?.['role'][0];
+
+    const isRoleGrantedEditUploadStatus = canEditUploadStatusRole.includes(role) ? true : false;
 
     useEffect(() => {
         // map upload status dropdown from API to DefaultOptionType from ant design
@@ -94,6 +101,7 @@ const VersePage: Page = () => {
                             removeFileFromChecklist={removeFileFromChecklist}
                             checklistIndex={i}
                             dropdownOptions={uploadStatusDropdown}
+                            canUpdateStatus={isRoleGrantedEditUploadStatus}
                             />
                         </div>
                     )

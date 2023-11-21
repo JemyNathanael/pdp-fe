@@ -12,10 +12,11 @@ interface CategoryVerseContentProps {
     blobList: string[];
     checklistIndex: number;
     dropdownOptions: DefaultOptionType[];
+    canUpdateStatus: boolean;
     removeFileFromChecklist: (checklistIndex: number, fileIndex: number) => void;
 }
 
-export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions }) => {
+export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus }) => {
     const router = useRouter();
 
     const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>()  
@@ -45,6 +46,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ uplo
                     defaultValue={uploadStatus}
                     options={selectOptions}
                     onChange={(selection) => handleStatusChange(selection)}
+                    disabled={!canUpdateStatus}
                 />
             </div>
 
