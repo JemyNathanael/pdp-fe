@@ -73,7 +73,7 @@ const CategoryLayout: React.FC<{
     const { data } = useSWR<CategoryDetailModel>(GetCategoryDetail(categoryId), swrFetcher);
 
     useEffect(() => {
-        if(data){
+        if(data) {
             const chaptersItem: CategorySidebarItemsModel[] = data?.chapters.map((chapter) => {
                 // map each verses to make a child menu from each chapters
                 const currentChapterVerses: SidebarMenuModel[] = chapter.verses.map((verse) => {

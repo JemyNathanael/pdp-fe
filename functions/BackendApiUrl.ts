@@ -9,8 +9,8 @@ export const BackendApiUrl = {
     logUser: baseUrl + '/api/User/manage-log',
     getCategories: baseUrl + '/api/v1/category/get-category',
     deleteUser: baseUrl + '/api/User',
-    getChecklists: baseUrl + '/api/v1/category/get-checklist',
-    getUploadStatus: baseUrl + '/api/Dropdown/upload-status-list'
+    getChecklists: baseUrl + '/api/v1/checklist/get-checklist',
+    getUploadStatus: baseUrl + '/api/Dropdown/upload-status-list',
 }
 
 export function GetUser(

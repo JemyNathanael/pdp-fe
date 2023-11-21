@@ -3,42 +3,27 @@ import { CategoryUploadedFileView } from "./CategoryUploadedFileView";
 import { CategoryButton } from "./CategoryButton";
 import { useRouter } from "next/router";
 import { Upload } from 'antd';
-
-interface selectType {
-    value: string;
-    label: string;
-}
+import { DefaultOptionType } from "antd/es/select";
+import { useEffect, useState } from "react";
 
 interface CategoryVerseContentProps {
-    status: 'Sesuai Sepenuhnya' | 'Sesuai Sebagian' | 'Tidak Sesuai' | 'Tidak Dapat Diterapkan';
+    uploadStatus: number;
     title: string;
-    uploadedFiles?: string[];
-    checklistIndex: number
-    removeFileFromChecklist: (checklistIndex: number, fileIndex: number) => void
+    blobList: string[];
+    checklistIndex: number;
+    dropdownOptions: DefaultOptionType[];
+    removeFileFromChecklist: (checklistIndex: number, fileIndex: number) => void;
 }
 
-const selectOptions: selectType[] = [
-    {
-        label: 'Sesuai Sepenuhnya',
-        value: 'Sesuai Sepenuhnya'
-    },
-    {
-        label: 'Sesuai Sebagian',
-        value: 'Sesuai Sebagian'
-    },
-    
-    {
-        label: 'Tidak Sesuai',
-        value: 'Tidak Sesuai'
-    },
-    {
-        label: 'Tidak Dapat Diterapkan',
-        value: 'Tidak Dapat Diterapkan'
-    },
-]
-
-export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ status, title, uploadedFiles, checklistIndex, removeFileFromChecklist }) => {
+export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions }) => {
     const router = useRouter();
+
+    const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>()  
+
+    useEffect(() => {
+        setSelectOptions(dropdownOptions)
+    }, [dropdownOptions])
+    
 
     function removeFileByIndex(fileIndex: number) {
         removeFileFromChecklist(checklistIndex, fileIndex)
@@ -48,13 +33,18 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ stat
         router.push(router.asPath + '/ChecklistFiles');
     }
 
+    function handleStatusChange(selection) {
+        console.log(selection)
+    }
+
     return (
         <div className='flex'>
             <div className='flex flex-col'>
                 <Select
                     className='w-52'
-                    defaultValue={status}
-                    options={selectOptions} 
+                    defaultValue={uploadStatus}
+                    options={selectOptions}
+                    onChange={(selection) => handleStatusChange(selection)}
                 />
             </div>
 
@@ -65,8 +55,8 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ stat
                     </div>
                     <div className='flex mt-6'>
                         <div className='flex flex-1'>
-                            { uploadedFiles &&
-                                uploadedFiles.map((file, i) => {
+                            { blobList.length !== 0 &&
+                                blobList.map((file, i) => {
                                     if (i < 3) {
                                         return (
                                             <div className='mr-8' key={i}>
@@ -90,7 +80,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ stat
                                 </Upload>
                             </div>
                             {
-                                uploadedFiles &&
+                                blobList.length !== 0 &&
                                 <div className='flex flex-row-reverse'>
                                     <button className='text-[#4F7471] underline text-xs font-semibold' onClick={navigateToChecklistPage}>
                                         view all files

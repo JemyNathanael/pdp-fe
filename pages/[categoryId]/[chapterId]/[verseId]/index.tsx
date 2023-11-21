@@ -5,32 +5,53 @@ import { WithCategoryLayout } from '@/components/CategoryLayout';
 import { CategoryVerseContent } from '@/components/category/CategoryVerseContent';
 import { CategoryButton } from '@/components/category/CategoryButton';
 import { Authorize } from '@/components/Authorize';
+import { useRouter } from 'next/router';
+import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
+import useSWR from 'swr';
+import { BackendApiUrl, GetChecklistList } from '@/functions/BackendApiUrl';
+import { DefaultOptionType } from 'antd/es/select';
 
-interface Checklist {
-    status: 'Sesuai Sepenuhnya' | 'Sesuai Sebagian' | 'Tidak Sesuai' | 'Tidak Dapat Diterapkan';
-    title: string;
-    uploadedFiles?: string[];
+interface ChecklistList {
+    id: string;
+    description: string;
+    uploadStatusId: number;
+    blobList: string[];
 }
 
-const dummyChecklist: Checklist[] = [
-    {
-        status: 'Sesuai Sepenuhnya',
-        title: 'Apakah Anda dapat menunjukkan bahwa subjek data pribadi telah menyetujui pemrosesan data mereka?',
-        uploadedFiles: ['file-1.pdf', 'file-2.png', 'file-3.docx', 'file-4.pdf', 'file-5.xlsx']
-    }, 
-    {
-        status: 'Sesuai Sepenuhnya',
-        title: 'Apakah permintaan persetujuan dapat dibedakan dengan jelas dari hal-hal lain, dengan cara yang dapat dimengerti dan dalam bentuk yang mudah diakses, dan ditulis dalam bahasa yang jelas dan lugas?',
-    }, 
-] 
+interface ChecklistModel {
+    successStatus: boolean;
+    checklistList: ChecklistList[];
+}
+
+interface UploadStatusDropdownModel {
+    id: number;
+    status: string;
+}
 
 const VersePage: Page = () => {
 
-    const [checklist, setChecklist] = useState<Checklist[]>()
+    const router = useRouter();
+    const verseId = router.query['verseId']?.toString() ?? '';
+    const [checklist, setChecklist] = useState<ChecklistList[]>()
+    const [uploadStatusDropdown, setUploadStatusDropdown] = useState<DefaultOptionType[]>()
+
+    const swrFetcher = useSwrFetcherWithAccessToken();
+    const { data: checklistData } = useSWR<ChecklistModel>(GetChecklistList(verseId), swrFetcher);
+    const { data: dropdownUploadStatusData } = useSWR<UploadStatusDropdownModel[]>(BackendApiUrl.getUploadStatus, swrFetcher);
 
     useEffect(() => {
-      setChecklist(dummyChecklist);
-    }, [])
+        // map upload status dropdown from API to DefaultOptionType from ant design
+        const uploadStatusDropdownMap = dropdownUploadStatusData?.map((currentStatus) => {
+            const tempDropdown: DefaultOptionType = {
+                label: currentStatus.status,
+                value: currentStatus.id
+            }
+            return tempDropdown;
+        })
+
+        setUploadStatusDropdown(uploadStatusDropdownMap);
+        setChecklist(checklistData?.checklistList);
+    }, [checklistData?.checklistList, dropdownUploadStatusData])
     
     // May need adjustment after integration
     function removeFileFromChecklist(checklistIndex: number, fileIndex: number) {
@@ -38,7 +59,7 @@ const VersePage: Page = () => {
             // Iterate every checklist, store it in tmpChecklist
             const tempChecklist = checklist.map((checklist, cIndex) => {
                 // on every checklist iteration, filter out the removed file
-                const tempFiles = checklist.uploadedFiles?.filter((files, fIndex) => {
+                const tempFiles = checklist.blobList?.filter((files, fIndex) => {
                     if(cIndex !== checklistIndex || fIndex !== fileIndex) {
                         return true;
                     } else {
@@ -46,10 +67,11 @@ const VersePage: Page = () => {
                     }
                 })
                 // return the new checklist with the filtered out files
-                const newChecklist: Checklist = {
-                    status: checklist.status,
-                    title: checklist.title,
-                    uploadedFiles: tempFiles,
+                const newChecklist: ChecklistList = {
+                    id: checklist.id,
+                    description: checklist.description,
+                    uploadStatusId: checklist.uploadStatusId,
+                    blobList: tempFiles,
                 }
                 return newChecklist
             })
@@ -61,19 +83,22 @@ const VersePage: Page = () => {
     return (
         <Authorize>
             <Title>Ayat</Title>
-            {   checklist && 
-                checklist.map((checklist, i) => 
-                    <div key={i} className='mb-16'>
-                        <CategoryVerseContent 
-                        title={checklist.title}
-                        status={checklist.status}
-                        uploadedFiles={checklist.uploadedFiles}
-                        removeFileFromChecklist={removeFileFromChecklist}
-                        checklistIndex={i}
-                        />
-                    </div>
-                )
-            }
+            <div className='mb-10 bg-red-50'>
+                {   (checklist && uploadStatusDropdown) && 
+                    checklist.map((checklist, i) => 
+                        <div key={i} className='mb-16'>
+                            <CategoryVerseContent
+                            title={checklist.description}
+                            uploadStatus={checklist.uploadStatusId}
+                            blobList={checklist.blobList}
+                            removeFileFromChecklist={removeFileFromChecklist}
+                            checklistIndex={i}
+                            dropdownOptions={uploadStatusDropdown}
+                            />
+                        </div>
+                    )
+                }
+            </div>
             <div className='flex flex-row-reverse mr-5'>
                 <CategoryButton text='Save' className='px-10'/>
             </div>
