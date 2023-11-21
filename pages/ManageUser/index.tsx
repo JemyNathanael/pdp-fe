@@ -24,7 +24,7 @@ const TabNavigation = () => {
                             className={`w-full ${tabClasses(1)} mr-5`}
                             onClick={() => handleTabClick(1)}
                         >
-                           <p className='text-center text-base'>Overview</p>
+                           <p className='text-center'>Overview</p>
                         </button>
                     </nav>
                 </div>
@@ -34,12 +34,12 @@ const TabNavigation = () => {
                             className={`w-full ${tabClasses(2)}`}
                             onClick={() => handleTabClick(2)}
                         >
-                             <p className='text-center text-base'>Log</p>
+                             <p className='text-center'>Log</p>
                         </button>
                     </nav>
                 </div>
             </div>
-            <hr  className='border-neutral-300' />
+            <hr className='border-neutral-300' />
             <div>
                 <div className="py-4 w-100">
                     <div className="h-full overflow-y-auto p-4">
@@ -63,10 +63,11 @@ const TabNavigation = () => {
 const ManageUser: Page = () => {
     return (
         <div>
-            <h1 className='text-xl font-semibold mb-5'>MANAGE USER</h1>
+            <h1 className='text-2xl font-bold my-5'>Manage User</h1>
             <TabNavigation />
-        </div>
+        </div >
     );
 }
+
 ManageUser.layout = WithDefaultLayout
 export default ManageUser;

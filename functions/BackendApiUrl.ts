@@ -7,7 +7,10 @@ export const BackendApiUrl = {
     getUser: baseUrl + '/api/User',
     editUserRole: baseUrl + '/api/User/edit-user-role',
     logUser: baseUrl + '/api/User/manage-log',
-    getCategories: baseUrl + '/api/v1/category/get-category'
+    getCategories: baseUrl + '/api/v1/category/get-category',
+    deleteUser: baseUrl + '/api/User',
+    getChecklists: baseUrl + '/api/v1/category/get-checklist',
+    getUploadStatus: baseUrl + '/api/Dropdown/upload-status-list'
 }
 
 export function GetUser(
@@ -52,4 +55,12 @@ export function GetCategoryDetail(categoryId: string) {
     const url = baseUrl + `/api/v1/category/${categoryId}`;
 
     return url;
+}
+
+export function GetChecklistList(verseId: string){
+    const param = new URLSearchParams();
+   
+    param.append('verseId', verseId.toString());
+    
+    return BackendApiUrl.getChecklists + '?' + param.toString();
 }
