@@ -11,6 +11,12 @@ export const BackendApiUrl = {
     deleteUser: baseUrl + '/api/User',
     getChecklists: baseUrl + '/api/v1/checklist/get-checklist',
     getUploadStatus: baseUrl + '/api/Dropdown/upload-status-list',
+    getChapters: baseUrl + '/api/v1/category',
+    createSubCategory: baseUrl + '/api/v1/category',
+    updateSubCategory: baseUrl + '/api/v1/category',
+    deleteSubCategory: baseUrl + '/api/v1/category',
+    getChaptersVerses: baseUrl + '/api/dropdown/chapter-list',
+
 }
 
 export function GetUser(
