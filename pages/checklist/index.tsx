@@ -10,6 +10,7 @@ import { ConfigProvider, FloatButton, Menu, Dropdown } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsRotate, faBars, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import UpdateChecklistModal from '@/components/UpdateChecklistModal';
 //import { LoadingOverlay } from "@/components/LoadingOverlay";
 
 const ChecklistPage = () => {
@@ -17,6 +18,8 @@ const ChecklistPage = () => {
     //const router = useRouter();
     const swrFetcher = useSwrFetcherWithAccessToken();
     const [formData, setFormData] = useState({});
+
+    const [updateModal, setUpdateModal] = useState(false);
 
     const handleChange = (fieldName, value) => {
         setFormData({ ...formData, [fieldName]: value });
@@ -108,30 +111,31 @@ const ChecklistPage = () => {
     // }
     const handleMenuClick = (e) => {
         switch (e.key) {
-          case 'update':
-            // Implement logic for updating checklist
-            console.log('Updating checklist');
-            break;
-          case 'add':
-            // Implement logic for adding checklist
-            console.log('Adding checklist');
-            break;
-          case 'delete':
-            // Implement logic for deleting checklist
-            console.log('Deleting checklist');
-            break;
-          default:
-            break;
+            case 'update':
+                // Implement logic for updating checklist
+                setUpdateModal(true);
+                console.log('Updating checklist');
+                break;
+            case 'add':
+                // Implement logic for adding checklist
+                console.log('Adding checklist');
+                break;
+            case 'delete':
+                // Implement logic for deleting checklist
+                console.log('Deleting checklist');
+                break;
+            default:
+                break;
         }
     };
 
     const settingsMenu = (
         <Menu onClick={handleMenuClick}>
-          <Menu.Item key="update">Update Checklist</Menu.Item>
-          <Menu.Item key="add">Add Checklist</Menu.Item>
-          <Menu.Item key="delete">Delete</Menu.Item>
+            <Menu.Item key="update">Update Checklist</Menu.Item>
+            <Menu.Item key="add">Add Checklist</Menu.Item>
+            <Menu.Item key="delete">Delete</Menu.Item>
         </Menu>
-      );
+    );
 
     return (
         <ConfigProvider
@@ -140,6 +144,9 @@ const ChecklistPage = () => {
                     colorPrimary: '#4F7471',
                 }
             }}>
+            {updateModal &&
+                <UpdateChecklistModal checkId='a8337eeb-77a2-4159-a7aa-864bae7e0dd9' onCancel={() => setUpdateModal(false)} />
+            }
             {data?.map((row) => (
                 <div className='checklistRow' key={row.id}>
                     <div className='checklistRow' key={row.id}>
@@ -156,16 +163,16 @@ const ChecklistPage = () => {
                             </select>
                         </div>
                         <div className='checklistColumn' style={{ width: '60%' }}>
-                        <div className='checklistRow'>
-                            <div className="flex items-center justify-between">
-                                <label className='mr-8'>{row.description}</label>
-                                <Dropdown overlay={settingsMenu} placement="bottomRight">
-                                <div style={{ cursor: 'pointer', fontWeight: 'bold', color: 'black' }}>
-                                    <FontAwesomeIcon icon={faEllipsisV} />
+                            <div className='checklistRow'>
+                                <div className="flex items-center justify-between">
+                                    <label className='mr-8'>{row.description}</label>
+                                    <Dropdown overlay={settingsMenu} placement="bottomRight">
+                                        <div style={{ cursor: 'pointer', fontWeight: 'bold', color: 'black' }}>
+                                            <FontAwesomeIcon icon={faEllipsisV} />
+                                        </div>
+                                    </Dropdown>
                                 </div>
-                                </Dropdown>
                             </div>
-                        </div>
 
                             <div className='checklistRow'>
                                 <div className='checklistColumn' style={{ width: '20%' }}>
@@ -242,7 +249,7 @@ const ChecklistPage = () => {
                 <FloatButton type='primary' icon={<FontAwesomeIcon icon={faPlus} />} tooltip="Add Pasal" />
                 <FloatButton type='primary' icon={<FontAwesomeIcon icon={faMinus} />} tooltip="Delete" />
             </FloatButton.Group>
-            <button className='roundedRectangleButton' onClick={() => console.log('Submit:', formData)}>Save</button>
+            {/* <button className='roundedRectangleButton' onClick={() => console.log('Submit:', formData)}>Save</button> */}
         </ConfigProvider>
     );
 };
