@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Select } from 'antd';
+import { Modal, Select } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
@@ -50,16 +50,15 @@ const SuccessUpdateModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
 };
 
 const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel, record }) => {
-    const [form] = Form.useForm();
     const [successModalVisible, setSuccessModalVisible] = useState(false);
     const { fetchPUT } = useFetchWithAccessToken();
     const swrFetcher = useSwrFetcherWithAccessToken();
     const [roleOptions, setRoleOptions] = useState<SelectOptions<string>[]>([]);
+    const [selectedRole, setSelectedRole] = useState<string>(record?.role || '');
 
 
     const {data,  mutate: mutateRoleList } = useSWR<DataItem[]>(BackendApiUrl.getRoleList, swrFetcher);
-
-
+    
     useEffect(() => {
         const dataSource = () => {
             if (!data) {
@@ -73,12 +72,16 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
             return options;
         };
         setRoleOptions(dataSource());
+        setSelectedRole(record?.role);
     }, [data, record]);
-
-    const onFinish = async (formData: UpdateUserRoleResponse) => {
+    
+    const onFinish = async () => {
+        if(record?.role === selectedRole) {
+            return;
+        }
         const payload = {
-            ...formData,
-            id: record.id
+            id: record.id,
+            role: selectedRole
         };
         const { data } = await fetchPUT<UpdateUserRoleResponse>(BackendApiUrl.editUserRole, payload);
         if (data) {
@@ -104,12 +107,13 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
             width={750}
             className=''
             footer={[
-            <button key="submit" type="submit" onClick={() => form.submit()} className={`bg-[#4F7471] text-white px-4 py-2 rounded mb-2 ${
-                roleOptions.some((item) => item.value === form.getFieldValue('role') && item.disabled)
+            <button key="submit" type="submit" onClick={onFinish} className={`bg-[#4F7471] text-white px-4 py-2 rounded mb-2 
+            ${
+                (record?.role === selectedRole)
                     ? 'opacity-50 cursor-not-allowed'
                     : ''
             }`}
-        >
+            >
                 Update
             </button>,
             ]}
@@ -120,24 +124,23 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
                     Current Role: <u className='text-[#4F7471]'>{record?.role}</u>
                 </h4>
                 <h4 className='text-xl sm:text-2xl font-body font-bold mb-2 sm:mb-3'>Please Select a New Role </h4>
-                <Form form={form} onFinish={onFinish} layout="vertical" initialValues={record}>
-                    <Form.Item label="" name="role">
-                        <Select
-                            options={roleOptions}
-                            className='text-slate-500'>
-                                {roleOptions.map((item) => (
-                                    <Select.Option key={item.value} value={item.value} disabled={item.disabled}>
-                                        {item.label}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Form>
-                </div>
-            </Modal>
-            {successModalVisible &&
-                (<SuccessUpdateModal onGoToHome={handleSuccessModalClose} />
-                )}
+                <Select
+                    options={roleOptions}
+                    className='text-slate-500 w-full'
+                    value={selectedRole}
+                    onChange={(value) => setSelectedRole(value)}
+                >
+                    {roleOptions.map((item) => (
+                        <Select.Option key={item.value} value={item.value} disabled={item.disabled}>
+                            {item.label}
+                        </Select.Option>
+                    ))}
+                </Select>
+            </div>
+        </Modal>
+        {successModalVisible &&
+            (<SuccessUpdateModal onGoToHome={handleSuccessModalClose} />
+        )}
         </>
 
     );
