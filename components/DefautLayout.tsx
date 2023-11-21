@@ -60,7 +60,7 @@ const DefaultLayout: React.FC<{
     return (
         <>
             <nav className="bg-white p-4" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}>
-                <div className="container mx-auto">
+                <div className="items-center justify-between">
                     <div className="flex items-center justify-between p-2">
                         <div className="flex items-center cursor-pointer px-5">
                             <FontAwesomeIcon icon={faHouse} className='text-greyeen text-xl' />
