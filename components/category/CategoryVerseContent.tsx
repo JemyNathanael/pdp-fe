@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { Upload } from 'antd';
 import { DefaultOptionType } from "antd/es/select";
 import { useEffect, useState } from "react";
+import { CategoryVerseFloatingButton } from "./CategoryVerseFloatingButton";
 
 interface CategoryVerseContentProps {
     uploadStatus: number;
@@ -18,7 +19,7 @@ interface CategoryVerseContentProps {
 
 export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus }) => {
     const router = useRouter();
-
+    const categoryId = router.query['categoryId']?.toString() ?? '';
     const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>()  
 
     useEffect(() => {
@@ -96,7 +97,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ uplo
                     *Format Files: PDF, PNG, Word, and Excel
                 </p>
             </div>
-            
+            <CategoryVerseFloatingButton categoryId={categoryId} />
         </div>
     )
 }
