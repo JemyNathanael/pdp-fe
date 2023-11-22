@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { CategoryVerseFloatingButton } from "./CategoryVerseFloatingButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
-import UpdateVerseModal from "./UpdateVerseModal";
+import UpdateChecklistModal from "./UpdateChecklistModal";
 
 interface CategoryVerseContentProps {
     id: string,
@@ -66,7 +66,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, 
 
     return (
         <>
-            <UpdateVerseModal visible={updateModal} checkId={id} onCancel={handleCancel} />
+            <UpdateChecklistModal visible={updateModal} checkId={id} onCancel={handleCancel} />
             <div className='flex'>
                 <div className='flex flex-col'>
                     <Select
@@ -140,7 +140,9 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, 
                         *Format Files: PDF, PNG, Word, and Excel
                     </p>
                 </div>
-                <CategoryVerseFloatingButton categoryId={categoryId} />
+                <div className="">
+                    <CategoryVerseFloatingButton categoryId={categoryId} />
+                </div>
             </div>
         </>
     )

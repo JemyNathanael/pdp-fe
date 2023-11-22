@@ -43,7 +43,7 @@ const schema = z.object({
     description: z.string({ required_error: 'Description can\'t be empty' }).min(1, 'Description can\'t be empty'),
 });
 
-const UpdateVerseModal: React.FC<EditUserRoleModalProps> = ({ onCancel, checkId, visible }) => {
+const UpdateChecklistModal: React.FC<EditUserRoleModalProps> = ({ onCancel, checkId, visible }) => {
     const [successModalVisible, setSuccessModalVisible] = useState(false);
     const { fetchPUT } = useFetchWithAccessToken();
 
@@ -114,4 +114,4 @@ const UpdateVerseModal: React.FC<EditUserRoleModalProps> = ({ onCancel, checkId,
     );
 };
 
-export default UpdateVerseModal;
+export default UpdateChecklistModal;
