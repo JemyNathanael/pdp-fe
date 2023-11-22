@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 import { CategoryVerseFloatingButton } from "./CategoryVerseFloatingButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
-import UpdateVerseModal from "./UpdateVerseModal";
 import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
 import { BackendApiUrl } from "@/functions/BackendApiUrl";
+import UpdateChecklistModal from "./UpdateChecklistModal";
 
 interface CategoryVerseContentProps {
     checklistId: string,
@@ -80,7 +80,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
     return (
         <>
-            <UpdateVerseModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
+            <UpdateChecklistModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
             <div className='flex'>
                 <div className='flex flex-col'>
                     <Select
@@ -154,7 +154,9 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                         *Format Files: PDF, PNG, Word, and Excel
                     </p>
                 </div>
-                <CategoryVerseFloatingButton categoryId={categoryId} />
+                <div className="">
+                    <CategoryVerseFloatingButton categoryId={categoryId} />
+                </div>
             </div>
         </>
     )
