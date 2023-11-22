@@ -9,9 +9,11 @@ import { CategoryVerseFloatingButton } from "./CategoryVerseFloatingButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import UpdateVerseModal from "./UpdateVerseModal";
+import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
+import { BackendApiUrl } from "@/functions/BackendApiUrl";
 
 interface CategoryVerseContentProps {
-    id: string,
+    checklistId: string,
     uploadStatus: number;
     title: string;
     blobList: string[];
@@ -21,8 +23,15 @@ interface CategoryVerseContentProps {
     removeFileFromChecklist: (checklistIndex: number, fileIndex: number) => void;
 }
 
-export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus }) => {
+interface UpdateUploadStatusModel {
+    ChecklistId: string;
+    UploadStatusId: number;
+}
+
+export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus }) => {
     const router = useRouter();
+    const { fetchPUT } = useFetchWithAccessToken();
+
     const categoryId = router.query['categoryId']?.toString() ?? '';
     const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>();
     const [updateModal, setUpdateModal] = useState(false);
@@ -40,8 +49,13 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, 
         router.push(router.asPath + '/ChecklistFiles');
     }
 
-    function handleStatusChange(selection) {
-        console.log(selection)
+    async function handleStatusChange(uploadStatusId: number) {
+        const payload: UpdateUploadStatusModel = {
+            ChecklistId: checklistId,
+            UploadStatusId: uploadStatusId
+        };
+
+        await fetchPUT(BackendApiUrl.updateChecklistUploadStatus, payload);
     }
 
     const items: MenuProps['items'] = [
@@ -66,7 +80,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, 
 
     return (
         <>
-            <UpdateVerseModal visible={updateModal} checkId={id} onCancel={handleCancel} />
+            <UpdateVerseModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
             <div className='flex'>
                 <div className='flex flex-col'>
                     <Select

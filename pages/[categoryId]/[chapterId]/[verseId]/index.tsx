@@ -95,7 +95,7 @@ const VersePage: Page = () => {
                     checklist.map((checklist, i) =>
                         <div key={i} className='mb-16'>
                             <CategoryVerseContent
-                                id={checklist.id}
+                                checklistId={checklist.id}
                                 title={checklist.description}
                                 uploadStatus={checklist.uploadStatusId}
                                 blobList={checklist.blobList}
