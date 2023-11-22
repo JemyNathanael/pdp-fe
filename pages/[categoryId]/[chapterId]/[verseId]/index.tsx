@@ -59,15 +59,15 @@ const VersePage: Page = () => {
         setUploadStatusDropdown(uploadStatusDropdownMap);
         setChecklist(checklistData?.checklistList);
     }, [checklistData?.checklistList, dropdownUploadStatusData])
-    
+
     // May need adjustment after integration
     function removeFileFromChecklist(checklistIndex: number, fileIndex: number) {
-        if(checklist) {
+        if (checklist) {
             // Iterate every checklist, store it in tmpChecklist
             const tempChecklist = checklist.map((checklist, cIndex) => {
                 // on every checklist iteration, filter out the removed file
                 const tempFiles = checklist.blobList?.filter((files, fIndex) => {
-                    if(cIndex !== checklistIndex || fIndex !== fileIndex) {
+                    if (cIndex !== checklistIndex || fIndex !== fileIndex) {
                         return true;
                     } else {
                         return false;
@@ -83,7 +83,7 @@ const VersePage: Page = () => {
                 return newChecklist
             })
             // set the checklist state with the new checklist
-            setChecklist(tempChecklist);  
+            setChecklist(tempChecklist);
         }
     }
 
@@ -91,24 +91,25 @@ const VersePage: Page = () => {
         <Authorize>
             <Title>Ayat</Title>
             <div className='mb-10 bg-red-50'>
-                {   (checklist && uploadStatusDropdown) && 
-                    checklist.map((checklist, i) => 
+                {(checklist && uploadStatusDropdown) &&
+                    checklist.map((checklist, i) =>
                         <div key={i} className='mb-16'>
                             <CategoryVerseContent
-                            title={checklist.description}
-                            uploadStatus={checklist.uploadStatusId}
-                            blobList={checklist.blobList}
-                            removeFileFromChecklist={removeFileFromChecklist}
-                            checklistIndex={i}
-                            dropdownOptions={uploadStatusDropdown}
-                            canUpdateStatus={isRoleGrantedEditUploadStatus}
+                                id={checklist.id}
+                                title={checklist.description}
+                                uploadStatus={checklist.uploadStatusId}
+                                blobList={checklist.blobList}
+                                removeFileFromChecklist={removeFileFromChecklist}
+                                checklistIndex={i}
+                                dropdownOptions={uploadStatusDropdown}
+                                canUpdateStatus={isRoleGrantedEditUploadStatus}
                             />
                         </div>
                     )
                 }
             </div>
             <div className='flex flex-row-reverse mr-5'>
-                <CategoryButton text='Save' className='px-10'/>
+                <CategoryButton text='Save' className='px-10' />
             </div>
         </Authorize>
     );

@@ -65,7 +65,7 @@ export function GetCategoryDetail(categoryId: string) {
     return url;
 }
 
-export function GetChecklistList(verseId: string){
+export function GetChecklistList(verseId: string) {
     const param = new URLSearchParams();
 
     param.append('verseId', verseId.toString());

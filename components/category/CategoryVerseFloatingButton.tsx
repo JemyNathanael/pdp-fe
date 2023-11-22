@@ -1,49 +1,65 @@
 import React, { useState } from 'react';
-import { SyncOutlined, MenuOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
-import { FloatButton } from 'antd';
+import { ConfigProvider, FloatButton } from 'antd';
 import AddSubCategoryModal from './AddSubCategoryModal';
 import UpdateSubCategoryModal from './UpdateSubCategoryModal';
 import DeleteSubCategoryModal from './DeleteSubCategoryModal';
+import { faArrowsRotate, faBars, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface CategoryVerseFloatingButtonProps {
     categoryId: string
 }
 
 export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonProps> = ({ categoryId }) => {
-    
+
     const [isAddSubCategoryModalOpen, setIsAddSubCategoryModalOpen] = useState(false);
     const [isUpdateSubCategoryModalOpen, setIsUpdateSubCategoryModalOpen] = useState(false);
     const [isDeleteSubCategoryModalOpen, setIsDeleteSubCategoryModalOpen] = useState(false);
+    const [backdropVisible, setBackdropVisible] = useState<boolean>(false);
+
+    const handleBackdrop = () => {
+        setBackdropVisible(!backdropVisible);
+    }
 
     return (
-        <div>
+        <ConfigProvider
+            theme={{
+                token: {
+                    colorPrimary: "#4F7471"
+                }
+            }}>
             <FloatButton.Group
-                trigger='hover'
+                trigger='click'
                 type='primary'
                 style={{ right: 50 }}
-                icon={<MenuOutlined />}
+                icon={<FontAwesomeIcon icon={faBars} />}
+                onClick={handleBackdrop}
             >
                 <>
                     <span style={{
                         position: 'absolute',
-                        width: '200px',
+                        width: '143px',
                         right: '0',
                         top: '6px',
+                        fontWeight: 'bolder',
+                        color: 'white'
                     }}>
-                        Update Sub - Category
+                        Update Pasal
                     </span>
-                    <FloatButton icon={<SyncOutlined />} onClick={() => setIsUpdateSubCategoryModalOpen(true)} />
+                    <FloatButton type="primary" icon={<FontAwesomeIcon icon={faArrowsRotate} />} onClick={() => setIsUpdateSubCategoryModalOpen(true)} />
                 </>
                 <>
                     <span style={{
                         position: 'absolute',
-                        width: '180px',
+                        width: '123px',
                         right: '0',
                         top: '62px',
+                        fontWeight: 'bolder',
+                        color: 'white'
                     }}>
-                        Add Sub - Category
+                        Add Pasal
                     </span>
-                    <FloatButton icon={<PlusOutlined />} onClick={() => setIsAddSubCategoryModalOpen(true)} />
+                    <FloatButton type="primary" icon={<FontAwesomeIcon icon={faPlus} />} onClick={() => setIsAddSubCategoryModalOpen(true)} />
                 </>
                 <>
                     <span style={{
@@ -51,16 +67,25 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
                         width: '100px',
                         right: '0',
                         top: '120px',
+                        fontWeight: 'bold',
+                        color: 'white'
                     }}>
                         Delete
                     </span>
-                    <FloatButton icon={<MinusOutlined />} onClick={() => setIsDeleteSubCategoryModalOpen(true)} />
+                    <FloatButton type="primary" icon={<FontAwesomeIcon icon={faMinus} />} onClick={() => setIsDeleteSubCategoryModalOpen(true)} />
                 </>
             </FloatButton.Group>
+
+            {backdropVisible && (
+                <div
+                    className="h-screen w-screen fixed backdrop-blur bg-black/20"
+                    onClick={handleBackdrop}
+                ></div>
+            )}
 
             <AddSubCategoryModal isModalOpen={isAddSubCategoryModalOpen} setIsModalOpen={setIsAddSubCategoryModalOpen} categoryId={categoryId} />
             <UpdateSubCategoryModal isModalOpen={isUpdateSubCategoryModalOpen} setIsModalOpen={setIsUpdateSubCategoryModalOpen} />
             <DeleteSubCategoryModal isModalOpen={isDeleteSubCategoryModalOpen} setIsModalOpen={setIsDeleteSubCategoryModalOpen} />
-        </div>    
+        </ConfigProvider >
     );
 }
