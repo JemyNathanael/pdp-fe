@@ -77,7 +77,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const handleCancel = () => {
         setUpdateModal(false);
     };
-    console.log("🔥⛄🔥 ", categoryId);
 
     return (
         <>
