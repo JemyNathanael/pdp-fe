@@ -25,7 +25,7 @@ const Chapter: React.FC = () => {
     const router = useRouter();
 
     const swrFetcher = useSwrFetcherWithAccessToken();
-    const categoryId = router.query['id']?.toString() ?? '';
+    const categoryId = router.query['categoryId']?.toString() ?? '';
     const chapterId = router.query['chapterId']?.toString() ?? '';
     const { data } = useSWR<ChapterModel>(GetCategoryDetail(categoryId), swrFetcher);
     const currentChapter = data?.chapters.find((chapter) => chapter.id === chapterId);
