@@ -9,7 +9,7 @@ import { CategoryVerseFloatingButton } from "./CategoryVerseFloatingButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 
-import UpdateVerseModal from "./UpdateVerseModal";
+import UpdateCheklistModal from "./UpdateChecklistModal";
 import AddChecklistModal from "../AddChecklistModal";
 
 import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
@@ -89,7 +89,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
     return (
         <>
-            <UpdateVerseModal visible={updateModal} checkId={id} onCancel={handleCancel} />
+            <UpdateCheklistModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
             <AddChecklistModal onCancel={handleCancel} visible={addModal} verseId={verseId} />
             <div className='flex'>
                 <div className='flex flex-col'>
@@ -147,7 +147,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                             </div>
                             <div className='flex flex-col'>
                                 <div className='flex-1'>
-                                    {canUpdateStatus && 
+                                    {canUpdateStatus &&
                                         <Upload>
                                             <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
                                         </Upload>
