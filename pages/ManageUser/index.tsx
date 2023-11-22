@@ -3,6 +3,7 @@ import { Page } from '@/types/Page';
 import React, { useState } from 'react'
 import OverviewUser from './overviewUser';
 import LogUser from './logUser';
+import { Authorize } from '@/components/Authorize';
 
 const TabNavigation = () => {
     const [activeTab, setActiveTab] = useState(1);
@@ -24,7 +25,7 @@ const TabNavigation = () => {
                             className={`w-full ${tabClasses(1)} mr-5`}
                             onClick={() => handleTabClick(1)}
                         >
-                           <p className='text-center'>Overview</p>
+                            <p className='text-center'>Overview</p>
                         </button>
                     </nav>
                 </div>
@@ -34,7 +35,7 @@ const TabNavigation = () => {
                             className={`w-full ${tabClasses(2)}`}
                             onClick={() => handleTabClick(2)}
                         >
-                             <p className='text-center'>Log</p>
+                            <p className='text-center'>Log</p>
                         </button>
                     </nav>
                 </div>
@@ -62,10 +63,12 @@ const TabNavigation = () => {
 
 const ManageUser: Page = () => {
     return (
-        <div>
-            <h1 className='text-2xl font-bold my-5'>Manage User</h1>
-            <TabNavigation />
-        </div >
+        <Authorize>
+            <div>
+                <h1 className='text-2xl font-bold my-5'>Manage User</h1>
+                <TabNavigation />
+            </div >
+        </Authorize>
     );
 }
 

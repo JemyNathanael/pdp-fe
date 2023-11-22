@@ -6,11 +6,12 @@ import useSwr from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import { FaFilePdf, FaFileWord, FaFileImage, FaTimes } from 'react-icons/fa';
 import { WithDefaultLayout } from '@/components/DefautLayout';
-import { ConfigProvider, FloatButton, Dropdown, Space } from 'antd';
-import type { MenuProps } from 'antd';
+import { ConfigProvider, FloatButton, Dropdown, Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsRotate, faBars, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import UpdateChecklistModal from '@/components/UpdateChecklistModal';
+import { Authorize } from '@/components/Authorize';
 //import { LoadingOverlay } from "@/components/LoadingOverlay";
 
 const ChecklistPage = () => {
@@ -18,6 +19,8 @@ const ChecklistPage = () => {
     //const router = useRouter();
     const swrFetcher = useSwrFetcherWithAccessToken();
     const [formData, setFormData] = useState({});
+
+    const [updateModal, setUpdateModal] = useState(false);
 
     const handleChange = (fieldName, value) => {
         setFormData({ ...formData, [fieldName]: value });
@@ -107,110 +110,116 @@ const ChecklistPage = () => {
     // if (!data) {
     //     return <LoadingOverlay isLoading={isValidating} />
     // }
+    const handleMenuClick = (e) => {
+        switch (e.key) {
+            case 'update':
+                // Implement logic for updating checklist
+                setUpdateModal(true);
+                console.log('Updating checklist');
+                break;
+            case 'add':
+                // Implement logic for adding checklist
+                console.log('Adding checklist');
+                break;
+            case 'delete':
+                // Implement logic for deleting checklist
+                console.log('Deleting checklist');
+                break;
+            default:
+                break;
+        }
+    };
 
-    const items : MenuProps['items'] = [
-        {
-          key: 'update',
-          label: 'Update Checklist',
-        },
-        {
-          key: 'add',
-          label: 'Add Checklist',
-        },
-        {
-          key: 'delete',
-          label: 'Delete',
-        },
-    ]
+    const settingsMenu = (
+        <Menu onClick={handleMenuClick}>
+            <Menu.Item key="update">Update Checklist</Menu.Item>
+            <Menu.Item key="add">Add Checklist</Menu.Item>
+            <Menu.Item key="delete">Delete</Menu.Item>
+        </Menu>
+    );
 
     return (
-        <ConfigProvider
-            theme={{
-                token: {
-                    colorPrimary: '#4F7471',
+        <Authorize>
+            <ConfigProvider
+                theme={{
+                    token: {
+                        colorPrimary: '#4F7471',
+                    }
+                }}>
+                {updateModal &&
+                    <UpdateChecklistModal checkId='a8337eeb-77a2-4159-a7aa-864bae7e0dd9' onCancel={() => setUpdateModal(false)} />
                 }
-            }}>
-            {data?.map((row) => (
-                <div className='checklistRow' key={row.id}>
+                {data?.map((row) => (
                     <div className='checklistRow' key={row.id}>
-                        <div className='checklistColumn' style={{ width: '20%' }}>
-                            <select defaultValue={row.uploadStatusId} onChange={(e) => handleChange('dropdownField', e.target.value)}>
-                                <option key='0' value=''>
-                                    Pilih status..
-                                </option>
-                                {uploadStatusDropdown.data?.map((option) => (
-                                    <option key={option.id} value={option.id}>
-                                        {option.status}
+                        <div className='checklistRow' key={row.id}>
+                            <div className='checklistColumn' style={{ width: '20%' }}>
+                                <select defaultValue={row.uploadStatusId} onChange={(e) => handleChange('dropdownField', e.target.value)}>
+                                    <option key='0' value=''>
+                                        Pilih status..
                                     </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className='checklistColumn' style={{ width: '60%' }}>
-                            <div className='checklistRow'>
-                                <div className="flex items-center justify-between">
-                                    <Dropdown menu={{items}} trigger={['contextMenu']}>
-                                        <div className='py-1'>
-                                            <label className='mr-8'>{row.description}</label>
-                                        </div>
-                                    </Dropdown>
-
-                                    <Dropdown menu={{ items }} trigger={['click']}>
-                                        <a onClick={(e) => e.preventDefault()}>
-                                            <Space>
-                                                <div className="cursor-pointer font-bold text-black">
-                                                    <FontAwesomeIcon icon={faEllipsisV} />
-                                                </div>
-                                            </Space>
-                                        </a>
-                                    </Dropdown>
-
-                                </div>
+                                    {uploadStatusDropdown.data?.map((option) => (
+                                        <option key={option.id} value={option.id}>
+                                            {option.status}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
-
-                            <div className='checklistRow'>
-                                <div className='checklistColumn' style={{ width: '20%' }}>
-                                    <input
-                                        type="file"
-                                        multiple
-                                        ref={fileInputRef}
-                                        onChange={handleFileChange}
-                                        style={{ display: 'none' }}
-                                    />
-                                    <button className='roundedRectangleBorderButton' onClick={() => fileInputRef.current?.click()}>+ Upload File</button>
+                            <div className='checklistColumn' style={{ width: '60%' }}>
+                                <div className='checklistRow'>
+                                    <div className="flex items-center justify-between">
+                                        <label className='mr-8'>{row.description}</label>
+                                        <Dropdown overlay={settingsMenu} placement="bottomRight">
+                                            <div style={{ cursor: 'pointer', fontWeight: 'bold', color: 'black' }}>
+                                                <FontAwesomeIcon icon={faEllipsisV} />
+                                            </div>
+                                        </Dropdown>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='checklistRow'>
-                                {row.blobs.length > 0 && (
-                                    <div>
-                                        <div className="file-list">
-                                            {row.blobs.map((blob) => (
-                                                <div key={blob.id} className="file-item">
-                                                    {/* File type icon */}
-                                                    <FaTimes className="delete-button" onClick={() => deleteFile(blob.fileName)} />
-                                                    {blob.contentType === 'pdf' && <FaFilePdf color="#537372" size={30} />}
-                                                    {blob.contentType === 'docx' && <FaFileWord color="#537372" size={30} />}
-                                                    {blob.contentType === 'image' && <FaFileImage color="#537372" size={30} />}
-                                                    {/* File name */}
-                                                    <p>{blob.fileName}</p>
-                                                    {/* Delete button */}
 
-                                                </div>
-                                            ))}
-                                            {selectedFiles.map((file, index) => (
-                                                <div key={index} className="file-item">
-                                                    {/* File type icon */}
-                                                    <FaTimes className="delete-button" onClick={() => deleteFile(file.name)} />
-                                                    {file.type === 'pdf' && <FaFilePdf color="#537372" size={30} />}
-                                                    {file.type === 'docx' && <FaFileWord color="#537372" size={30} />}
-                                                    {file.type === 'image' && <FaFileImage color="#537372" size={30} />}
-                                                    {/* File name */}
-                                                    <p>{file.name}</p>
-                                                    {/* Delete button */}
+                                <div className='checklistRow'>
+                                    <div className='checklistColumn' style={{ width: '20%' }}>
+                                        <input
+                                            type="file"
+                                            multiple
+                                            ref={fileInputRef}
+                                            onChange={handleFileChange}
+                                            style={{ display: 'none' }}
+                                        />
+                                        <button className='roundedRectangleBorderButton' onClick={() => fileInputRef.current?.click()}>+ Upload File</button>
+                                    </div>
+                                </div>
+                                <div className='checklistRow'>
+                                    {row.blobs.length > 0 && (
+                                        <div>
+                                            <div className="file-list">
+                                                {row.blobs.map((blob) => (
+                                                    <div key={blob.id} className="file-item">
+                                                        {/* File type icon */}
+                                                        <FaTimes className="delete-button" onClick={() => deleteFile(blob.fileName)} />
+                                                        {blob.contentType === 'pdf' && <FaFilePdf color="#537372" size={30} />}
+                                                        {blob.contentType === 'docx' && <FaFileWord color="#537372" size={30} />}
+                                                        {blob.contentType === 'image' && <FaFileImage color="#537372" size={30} />}
+                                                        {/* File name */}
+                                                        <p>{blob.fileName}</p>
+                                                        {/* Delete button */}
 
-                                                </div>
-                                            ))}
-                                        </div>
-                                        {/* <ul>
+                                                    </div>
+                                                ))}
+                                                {selectedFiles.map((file, index) => (
+                                                    <div key={index} className="file-item">
+                                                        {/* File type icon */}
+                                                        <FaTimes className="delete-button" onClick={() => deleteFile(file.name)} />
+                                                        {file.type === 'pdf' && <FaFilePdf color="#537372" size={30} />}
+                                                        {file.type === 'docx' && <FaFileWord color="#537372" size={30} />}
+                                                        {file.type === 'image' && <FaFileImage color="#537372" size={30} />}
+                                                        {/* File name */}
+                                                        <p>{file.name}</p>
+                                                        {/* Delete button */}
+
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            {/* <ul>
                                                 {selectedFiles.map((file, index) => (
                                                 <li key={index}>
                                                     <img
@@ -222,28 +231,29 @@ const ChecklistPage = () => {
                                                 </li>
                                                 ))}
                                             </ul> */}
-                                    </div>
-                                )}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                </div>
-            ))}
-            {/* Add a button to submit the form with formData to your backend */}
-            <div className=""></div>
-            <FloatButton.Group
-                trigger="click"
-                type="primary"
-                className='m-5'
-                icon={<FontAwesomeIcon icon={faBars} />}
-            >
-                <FloatButton type='primary' icon={<FontAwesomeIcon icon={faArrowsRotate} />} tooltip="Update Pasal" />
-                <FloatButton type='primary' icon={<FontAwesomeIcon icon={faPlus} />} tooltip="Add Pasal" />
-                <FloatButton type='primary' icon={<FontAwesomeIcon icon={faMinus} />} tooltip="Delete" />
-            </FloatButton.Group>
-            <button className='roundedRectangleButton' onClick={() => console.log('Submit:', formData)}>Save</button>
-        </ConfigProvider>
+                    </div>
+                ))}
+                {/* Add a button to submit the form with formData to your backend */}
+                <div className=""></div>
+                <FloatButton.Group
+                    trigger="click"
+                    type="primary"
+                    className='m-5'
+                    icon={<FontAwesomeIcon icon={faBars} />}
+                >
+                    <FloatButton type='primary' icon={<FontAwesomeIcon icon={faArrowsRotate} />} tooltip="Update Pasal" />
+                    <FloatButton type='primary' icon={<FontAwesomeIcon icon={faPlus} />} tooltip="Add Pasal" />
+                    <FloatButton type='primary' icon={<FontAwesomeIcon icon={faMinus} />} tooltip="Delete" />
+                </FloatButton.Group>
+                {/* <button className='roundedRectangleButton' onClick={() => console.log('Submit:', formData)}>Save</button> */}
+            </ConfigProvider>
+        </Authorize>
     );
 };
 
