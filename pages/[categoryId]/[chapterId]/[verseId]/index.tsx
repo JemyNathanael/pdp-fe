@@ -108,9 +108,11 @@ const VersePage: Page = () => {
                     )
                 }
             </div>
-            <div className='flex flex-row-reverse mr-5'>
-                <CategoryButton text='Save' className='px-10' />
-            </div>
+            {isRoleGrantedEditUploadStatus && 
+                <div className='flex flex-row-reverse mr-5'>
+                    <CategoryButton text='Save' className='px-10' />
+                </div>
+            }
         </Authorize>
     );
 }

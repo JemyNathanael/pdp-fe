@@ -77,6 +77,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const handleCancel = () => {
         setUpdateModal(false);
     };
+    console.log("🔥⛄🔥 ", categoryId);
 
     return (
         <>
@@ -95,23 +96,24 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                 <div className='flex-1'>
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
-                            <Dropdown menu={{ items }} trigger={['contextMenu']}>
+                            <Dropdown menu={{ items }} trigger={canUpdateStatus ? ['contextMenu'] : []}>
                                 <div className='py-1'>
                                     <label className='mr-8'>{title}</label>
                                 </div>
                             </Dropdown>
-
-                            <div className="flex-1 text-right">
-                                <Dropdown menu={{ items }} trigger={['click']}>
-                                    <a onClick={(e) => e.preventDefault()}>
-                                        <Space>
-                                            <div className="cursor-pointer font-bold text-black">
-                                                <FontAwesomeIcon icon={faEllipsisV} />
-                                            </div>
-                                        </Space>
-                                    </a>
-                                </Dropdown>
-                            </div>
+                            {canUpdateStatus &&
+                                <div className="flex-1 text-right">
+                                    <Dropdown menu={{ items }} trigger={['click']}>
+                                        <a onClick={(e) => e.preventDefault()}>
+                                            <Space>
+                                                <div className="cursor-pointer font-bold text-black">
+                                                    <FontAwesomeIcon icon={faEllipsisV} />
+                                                </div>
+                                            </Space>
+                                        </a>
+                                    </Dropdown>
+                                </div>
+                            }
                         </div>
                         <div className='flex mt-6'>
                             <div className='flex flex-1'>
@@ -119,6 +121,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                     blobList.map((file, i) => {
                                         if (i < 3) {
                                             return (
+
                                                 <div className='mr-8' key={i}>
                                                     <CategoryUploadedFileView
                                                         currentIndex={i}
@@ -135,9 +138,12 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                             </div>
                             <div className='flex flex-col'>
                                 <div className='flex-1'>
-                                    <Upload>
-                                        <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
-                                    </Upload>
+                                    {canUpdateStatus && 
+                                        <Upload>
+                                            <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
+                                        </Upload>
+                                    }
+
                                 </div>
                                 {
                                     blobList.length !== 0 &&
@@ -154,9 +160,9 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                         *Format Files: PDF, PNG, Word, and Excel
                     </p>
                 </div>
-                <div className="">
+                {canUpdateStatus &&
                     <CategoryVerseFloatingButton categoryId={categoryId} />
-                </div>
+                }
             </div>
         </>
     )
