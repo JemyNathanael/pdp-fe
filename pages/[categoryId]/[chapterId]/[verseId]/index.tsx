@@ -95,7 +95,7 @@ const VersePage: Page = () => {
                     checklist.map((checklist, i) =>
                         <div key={i} className='mb-16'>
                             <CategoryVerseContent
-                                id={checklist.id}
+                                checklistId={checklist.id}
                                 title={checklist.description}
                                 uploadStatus={checklist.uploadStatusId}
                                 blobList={checklist.blobList}
@@ -108,9 +108,11 @@ const VersePage: Page = () => {
                     )
                 }
             </div>
-            <div className='flex flex-row-reverse mr-5'>
-                <CategoryButton text='Save' className='px-10' />
-            </div>
+            {isRoleGrantedEditUploadStatus && 
+                <div className='flex flex-row-reverse mr-5'>
+                    <CategoryButton text='Save' className='px-10' />
+                </div>
+            }
         </Authorize>
     );
 }

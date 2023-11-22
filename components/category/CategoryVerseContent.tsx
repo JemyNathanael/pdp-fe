@@ -8,11 +8,17 @@ import { useEffect, useState } from "react";
 import { CategoryVerseFloatingButton } from "./CategoryVerseFloatingButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+
 import UpdateVerseModal from "./UpdateVerseModal";
 import AddChecklistModal from "../AddChecklistModal";
 
+import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
+import { BackendApiUrl } from "@/functions/BackendApiUrl";
+
+
+
 interface CategoryVerseContentProps {
-    id: string,
+    checklistId: string,
     uploadStatus: number;
     title: string;
     blobList: string[];
@@ -22,8 +28,15 @@ interface CategoryVerseContentProps {
     removeFileFromChecklist: (checklistIndex: number, fileIndex: number) => void;
 }
 
-export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus }) => {
+interface UpdateUploadStatusModel {
+    ChecklistId: string;
+    UploadStatusId: number;
+}
+
+export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus }) => {
     const router = useRouter();
+    const { fetchPUT } = useFetchWithAccessToken();
+
     const categoryId = router.query['categoryId']?.toString() ?? '';
     const verseId = router.query['verseId']?.toString();
     const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>();
@@ -43,8 +56,13 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, 
         router.push(router.asPath + '/ChecklistFiles');
     }
 
-    function handleStatusChange(selection) {
-        console.log(selection)
+    async function handleStatusChange(uploadStatusId: number) {
+        const payload: UpdateUploadStatusModel = {
+            ChecklistId: checklistId,
+            UploadStatusId: uploadStatusId
+        };
+
+        await fetchPUT(BackendApiUrl.updateChecklistUploadStatus, payload);
     }
 
     const items: MenuProps['items'] = [
@@ -87,23 +105,24 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, 
                 <div className='flex-1'>
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
-                            <Dropdown menu={{ items }} trigger={['contextMenu']}>
+                            <Dropdown menu={{ items }} trigger={canUpdateStatus ? ['contextMenu'] : []}>
                                 <div className='py-1'>
                                     <label className='mr-8'>{title}</label>
                                 </div>
                             </Dropdown>
-
-                            <div className="flex-1 text-right">
-                                <Dropdown menu={{ items }} trigger={['click']}>
-                                    <a onClick={(e) => e.preventDefault()}>
-                                        <Space>
-                                            <div className="cursor-pointer font-bold text-black">
-                                                <FontAwesomeIcon icon={faEllipsisV} />
-                                            </div>
-                                        </Space>
-                                    </a>
-                                </Dropdown>
-                            </div>
+                            {canUpdateStatus &&
+                                <div className="flex-1 text-right">
+                                    <Dropdown menu={{ items }} trigger={['click']}>
+                                        <a onClick={(e) => e.preventDefault()}>
+                                            <Space>
+                                                <div className="cursor-pointer font-bold text-black">
+                                                    <FontAwesomeIcon icon={faEllipsisV} />
+                                                </div>
+                                            </Space>
+                                        </a>
+                                    </Dropdown>
+                                </div>
+                            }
                         </div>
                         <div className='flex mt-6'>
                             <div className='flex flex-1'>
@@ -111,6 +130,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, 
                                     blobList.map((file, i) => {
                                         if (i < 3) {
                                             return (
+
                                                 <div className='mr-8' key={i}>
                                                     <CategoryUploadedFileView
                                                         currentIndex={i}
@@ -127,9 +147,12 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, 
                             </div>
                             <div className='flex flex-col'>
                                 <div className='flex-1'>
-                                    <Upload>
-                                        <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
-                                    </Upload>
+                                    {canUpdateStatus && 
+                                        <Upload>
+                                            <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
+                                        </Upload>
+                                    }
+
                                 </div>
                                 {
                                     blobList.length !== 0 &&
@@ -146,7 +169,9 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, 
                         *Format Files: PDF, PNG, Word, and Excel
                     </p>
                 </div>
-                <CategoryVerseFloatingButton categoryId={categoryId} />
+                {canUpdateStatus &&
+                    <CategoryVerseFloatingButton categoryId={categoryId} />
+                }
             </div>
         </>
     )

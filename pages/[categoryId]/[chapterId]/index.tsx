@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import useSWR from 'swr';
 import { GetCategoryDetail } from '@/functions/BackendApiUrl';
+import { CategoryVerseFloatingButton } from '@/components/category/CategoryVerseFloatingButton';
+import { useSession } from 'next-auth/react';
 
 interface ChapterDetailModel {
     id: string;
@@ -27,6 +29,13 @@ const Chapter: React.FC = () => {
     const chapterId = router.query['chapterId']?.toString() ?? '';
     const { data } = useSWR<ChapterModel>(GetCategoryDetail(categoryId), swrFetcher);
     const currentChapter = data?.chapters.find((chapter) => chapter.id === chapterId);
+
+    const { data: session } = useSession();
+
+    const role = session?.user?.['role'][0];
+    const canEditUploadStatusRole = ['Admin', 'Auditor'];
+    const isRoleGrantedEditUploadStatus = canEditUploadStatusRole.includes(role) ? true : false;
+
     return (
         <div>
             <div className="text-3xl font-semibold mb-5">
@@ -35,6 +44,9 @@ const Chapter: React.FC = () => {
             <p>
                 {currentChapter?.description}
             </p>
+            {isRoleGrantedEditUploadStatus && 
+                <CategoryVerseFloatingButton categoryId={categoryId} />
+            }
         </div>
     );
 };
