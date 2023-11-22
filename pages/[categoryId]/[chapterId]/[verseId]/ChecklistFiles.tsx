@@ -8,7 +8,7 @@ import { CategoryUploadedFileView } from '@/components/category/CategoryUploaded
 import { useRouter } from 'next/router';
 import { CategoryButton } from '@/components/category/CategoryButton';
 import { Authorize } from '@/components/Authorize';
-import Upload, { UploadProps } from 'antd/es/upload/Upload';
+import { Upload, UploadProps } from 'antd';
 
 interface Checklist {
     status: 'Sesuai Sepenuhnya' | 'Sesuai Sebagian' | 'Tidak Sesuai' | 'Tidak Dapat Diterapkan';
