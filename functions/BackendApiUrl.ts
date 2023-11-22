@@ -13,6 +13,7 @@ export const BackendApiUrl = {
     getUploadStatus: baseUrl + '/api/Dropdown/upload-status-list',
 
     updateChecklist: baseUrl + '/api/v1/Checklist/update-checklist',
+    addChecklist : baseUrl + '/api/v1/Checklist/',
     getChapters: baseUrl + '/api/v1/category',
     createSubCategory: baseUrl + '/api/v1/category',
     updateSubCategory: baseUrl + '/api/v1/category',

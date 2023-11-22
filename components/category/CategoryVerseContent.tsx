@@ -9,6 +9,7 @@ import { CategoryVerseFloatingButton } from "./CategoryVerseFloatingButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import UpdateVerseModal from "./UpdateVerseModal";
+import AddChecklistModal from "../AddChecklistModal";
 
 interface CategoryVerseContentProps {
     id: string,
@@ -24,8 +25,10 @@ interface CategoryVerseContentProps {
 export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus }) => {
     const router = useRouter();
     const categoryId = router.query['categoryId']?.toString() ?? '';
+    const verseId = router.query['verseId']?.toString();
     const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>();
     const [updateModal, setUpdateModal] = useState(false);
+    const [addModal, setAddModal] = useState<boolean>(false)
 
     useEffect(() => {
         setSelectOptions(dropdownOptions)
@@ -53,6 +56,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, 
         {
             key: 'add',
             label: 'Add Checklist',
+            onClick: () => setAddModal(true)
         },
         {
             key: 'delete',
@@ -62,11 +66,13 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ id, 
 
     const handleCancel = () => {
         setUpdateModal(false);
+        setAddModal(false);
     };
 
     return (
         <>
             <UpdateVerseModal visible={updateModal} checkId={id} onCancel={handleCancel} />
+            <AddChecklistModal onCancel={handleCancel} visible={addModal} verseId={verseId} />
             <div className='flex'>
                 <div className='flex flex-col'>
                     <Select
