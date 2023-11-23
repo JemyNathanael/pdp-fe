@@ -3,10 +3,12 @@ import { Modal, Input } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
-import { BackendApiUrl } from '@/functions/BackendApiUrl';
+import { BackendApiUrl, GetChecklistList } from '@/functions/BackendApiUrl';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { mutate } from 'swr';
+import { useRouter } from 'next/router';
 
 interface EditUserRoleModalProps {
     visible: boolean;
@@ -46,6 +48,8 @@ const schema = z.object({
 const UpdateChecklistModal: React.FC<EditUserRoleModalProps> = ({ onCancel, checkId, visible }) => {
     const [successModalVisible, setSuccessModalVisible] = useState(false);
     const { fetchPUT } = useFetchWithAccessToken();
+    const router = useRouter();
+    const verseId = router.query['verseId']?.toString() ?? '';
 
     const { handleSubmit, control, formState: { errors } } = useForm<UpdateChecklist>({
         resolver: zodResolver(schema),
@@ -58,11 +62,10 @@ const UpdateChecklistModal: React.FC<EditUserRoleModalProps> = ({ onCancel, chec
         };
         const { data } = await fetchPUT<UpdateChecklistResponse>(BackendApiUrl.updateChecklist, payload);
 
-        console.log(data);
         if (data) {
-            console.log('test');
             visible = false;
             setSuccessModalVisible(true);
+            mutate(GetChecklistList(verseId));
             onCancel();
         }
     };
