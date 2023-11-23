@@ -11,6 +11,7 @@ interface DeleteChecklistModalProps {
     onCancel: () => void;
     visible: boolean;
     checkId: string;
+    onConfirm: () => void;
 }
 
 interface SuccessModalProps {
