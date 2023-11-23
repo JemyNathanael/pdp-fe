@@ -11,10 +11,10 @@ import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 
 import UpdateCheklistModal from "./UpdateChecklistModal";
 import AddChecklistModal from "../AddChecklistModal";
+import DeleteChecklistModal from "./DeleteChecklistModal";
 
 import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
 import { BackendApiUrl } from "@/functions/BackendApiUrl";
-
 
 
 interface CategoryVerseContentProps {
@@ -42,6 +42,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>();
     const [updateModal, setUpdateModal] = useState(false);
     const [addModal, setAddModal] = useState<boolean>(false)
+    const [deleteModal, setDeleteModal] = useState<boolean>(false)
 
     useEffect(() => {
         setSelectOptions(dropdownOptions)
@@ -79,18 +80,25 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         {
             key: 'delete',
             label: 'Delete',
+            onClick: () =>setDeleteModal(true)
         },
     ]
 
     const handleCancel = () => {
         setUpdateModal(false);
         setAddModal(false);
+        setDeleteModal(false);
     };
+
+    const handleDelete = () =>{
+        setDeleteModal(false);
+    }
 
     return (
         <>
             <UpdateCheklistModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
             <AddChecklistModal onCancel={handleCancel} visible={addModal} verseId={verseId} />
+            <DeleteChecklistModal onCancel={handleCancel} visible={deleteModal} onConfirm={handleDelete} checkId={checklistId} />
             <div className='flex'>
                 <div className='flex flex-col'>
                     <Select
