@@ -3,13 +3,13 @@ import { Modal, Form, Input } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
-import { BackendApiUrl, GetUser } from '@/functions/BackendApiUrl';
+import { BackendApiUrl, GetChecklistList, GetUser } from '@/functions/BackendApiUrl';
 import { mutate } from 'swr';
 
 interface AddUserRoleModalProps {
     onCancel: () => void;
     visible: boolean;
-    verseId:string | string[] | undefined;
+    verseId:string;
 }
 
 interface SuccessModalProps {
@@ -45,6 +45,7 @@ const AddChecklistModal: React.FC<AddUserRoleModalProps> = ({ onCancel, visible,
         if (data) {
             visible = false
             setSuccessModalVisible(true);
+            mutate(GetChecklistList(payload.VerseId?.toString()))
             onCancel();
         }
     };

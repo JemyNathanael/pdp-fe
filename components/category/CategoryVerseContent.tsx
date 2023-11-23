@@ -38,7 +38,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const { fetchPUT } = useFetchWithAccessToken();
 
     const categoryId = router.query['categoryId']?.toString() ?? '';
-    const verseId = router.query['verseId']?.toString();
+    const verseId = router.query['verseId']?.toString() ?? '';
     const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>();
     const [updateModal, setUpdateModal] = useState(false);
     const [addModal, setAddModal] = useState<boolean>(false)
