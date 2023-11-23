@@ -8,9 +8,14 @@ import { useEffect, useState } from "react";
 import { CategoryVerseFloatingButton } from "./CategoryVerseFloatingButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+
+import UpdateCheklistModal from "./UpdateChecklistModal";
+import AddChecklistModal from "../AddChecklistModal";
+
 import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
 import { BackendApiUrl } from "@/functions/BackendApiUrl";
-import UpdateChecklistModal from "./UpdateChecklistModal";
+
+
 
 interface CategoryVerseContentProps {
     checklistId: string,
@@ -33,8 +38,10 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const { fetchPUT } = useFetchWithAccessToken();
 
     const categoryId = router.query['categoryId']?.toString() ?? '';
+    const verseId = router.query['verseId']?.toString();
     const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>();
     const [updateModal, setUpdateModal] = useState(false);
+    const [addModal, setAddModal] = useState<boolean>(false)
 
     useEffect(() => {
         setSelectOptions(dropdownOptions)
@@ -67,6 +74,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         {
             key: 'add',
             label: 'Add Checklist',
+            onClick: () => setAddModal(true)
         },
         {
             key: 'delete',
@@ -76,11 +84,13 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
     const handleCancel = () => {
         setUpdateModal(false);
+        setAddModal(false);
     };
 
     return (
         <>
-            <UpdateChecklistModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
+            <UpdateCheklistModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
+            <AddChecklistModal onCancel={handleCancel} visible={addModal} verseId={verseId} />
             <div className='flex'>
                 <div className='flex flex-col'>
                     <Select
@@ -137,7 +147,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                             </div>
                             <div className='flex flex-col'>
                                 <div className='flex-1'>
-                                    {canUpdateStatus && 
+                                    {canUpdateStatus &&
                                         <Upload>
                                             <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
                                         </Upload>
