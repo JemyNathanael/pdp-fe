@@ -80,7 +80,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         {
             key: 'delete',
             label: 'Delete',
-            onClick: () =>setDeleteModal(true)
+            onClick: () => setDeleteModal(true)
         },
     ]
 
@@ -90,7 +90,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         setDeleteModal(false);
     };
 
-    const handleDelete = () =>{
+    const handleDelete = () => {
         setDeleteModal(false);
     }
 
@@ -98,7 +98,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         <>
             <UpdateCheklistModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
             <AddChecklistModal onCancel={handleCancel} visible={addModal} verseId={verseId} />
-            <DeleteChecklistModal onCancel={handleCancel} visible={deleteModal} onConfirm={handleDelete} checkId={checklistId} />
+            <DeleteChecklistModal onCancel={handleDelete} visible={deleteModal} checkId={checklistId} />
             <div className='flex'>
                 <div className='flex flex-col'>
                     <Select

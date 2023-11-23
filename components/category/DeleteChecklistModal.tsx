@@ -11,7 +11,6 @@ interface DeleteChecklistModalProps {
     onCancel: () => void;
     visible: boolean;
     checkId: string;
-    onConfirm: ()=>void;
 }
 
 interface SuccessModalProps {
@@ -33,20 +32,14 @@ const SuccessDeleteModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
 
 const DeleteChecklistModal: React.FC<DeleteChecklistModalProps> = ({ visible, onCancel, checkId }) => {
     const [successModalVisible, setSuccessModalVisible] = useState(false);
+
     const { fetchDELETE } = useFetchWithAccessToken();
     const router = useRouter();
     const verseId = router.query['verseId']?.toString() ?? '';
 
-    // const deleteChecklist = async () => {
-    //    await fetchDELETE(`${BackendApiUrl.addChecklist}/${checkId}`);
-    // };
-    
-    
     const handleConfirm = async () => {
-        const response = await fetchDELETE(`${BackendApiUrl.addChecklist}/${checkId}`);
-        if(response.data){
-            visible = false;
-            console.log("Handle confirm", visible);
+        const { data } = await fetchDELETE(`${BackendApiUrl.addChecklist}/${checkId}`);
+        if (data) {
             setSuccessModalVisible(true);
             mutate(GetChecklistList(verseId));
             onCancel();
@@ -55,7 +48,6 @@ const DeleteChecklistModal: React.FC<DeleteChecklistModalProps> = ({ visible, on
 
     const handleSuccessModalClose = () => {
         setSuccessModalVisible(false);
-        console.log("Handle succes modal close", successModalVisible);
         onCancel();
     };
 
@@ -72,7 +64,6 @@ const DeleteChecklistModal: React.FC<DeleteChecklistModalProps> = ({ visible, on
                 }
                 open={visible}
                 centered
-                closable={false}
                 onCancel={onCancel}
                 footer={[
                     <div key={3} className="flex justify-center space-x-4">
