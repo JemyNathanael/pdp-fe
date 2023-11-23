@@ -42,15 +42,15 @@ const TabNavigation = () => {
             </div>
             <hr className='border-neutral-300' />
             <div>
-                <div className="py-4 w-100">
-                    <div className="h-full overflow-y-auto p-4">
+                <div className="py-4 w-full">
+                    <div className="h-full overflow-y-auto py-4">
                         {activeTab === 1 &&
-                            <div className="w-75 rounded-lg p-3 my-3 mx-auto">
+                            <div className="w-75 rounded-lg my-3 mx-auto">
                                 <OverviewUser></OverviewUser>
                             </div>
                         }
                         {activeTab === 2 &&
-                            <div className="w-75 rounded-lg p-3 my-3 mx-auto">
+                            <div className="w-75 rounded-lg my-3 mx-auto">
                                 <LogUser></LogUser>
                             </div>
                         }
