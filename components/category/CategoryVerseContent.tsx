@@ -35,7 +35,7 @@ interface UpdateUploadStatusModel {
 
 export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus }) => {
     const router = useRouter();
-    const { fetchPUT } = useFetchWithAccessToken();
+    const { fetchPUT, fetchPOST } = useFetchWithAccessToken();
 
     const categoryId = router.query['categoryId']?.toString() ?? '';
     const verseId = router.query['verseId']?.toString();
@@ -63,6 +63,19 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         };
 
         await fetchPUT(BackendApiUrl.updateChecklistUploadStatus, payload);
+    }
+    
+    const handleFileUpload = async (info) => {
+        if(info.file.status == 'done'){
+            const payload = {
+                Id: info.file.response.fileId,
+                FilePath: info.file.response.filePath,
+                FileName: info.file.response.fileName,
+                ContentType: info.file.response.contentType,
+                ChecklistId: checklistId
+            }
+            await fetchPOST(BackendApiUrl.uploadFileInformation, payload);
+        }
     }
 
     const items: MenuProps['items'] = [
@@ -148,7 +161,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                             <div className='flex flex-col'>
                                 <div className='flex-1'>
                                     {canUpdateStatus &&
-                                        <Upload>
+                                        <Upload name="File" action={BackendApiUrl.uploadFile} onChange={handleFileUpload}>
                                             <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
                                         </Upload>
                                     }
