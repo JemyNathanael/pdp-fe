@@ -243,7 +243,10 @@ const Home: React.FC = () => {
                 marginLeft: '24px',
                 marginRight: '24px',
                 fontSize: '14px',
-                fontWeight: '600'
+                fontWeight: '600',
+                position:"fixed",
+                bottom:16,
+                left:0
             }}>Copyright @ PT. Accelist Lentera Indonesia</footer>
 
         </div>
