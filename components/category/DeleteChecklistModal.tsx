@@ -3,7 +3,9 @@ import { Modal } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
-import { BackendApiUrl } from '@/functions/BackendApiUrl';
+import { BackendApiUrl, GetChecklistList } from '@/functions/BackendApiUrl';
+import { useRouter } from 'next/router';
+import { mutate } from 'swr';
 
 interface DeleteChecklistModalProps {
     onCancel: () => void;
@@ -23,7 +25,7 @@ const SuccessDeleteModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
             <div className="flex flex-col p-6 sm:p-12 border items-center justify-center">
                 <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#4f7471", fontSize: "64px", marginBottom: "8px" }} />
                 <div className="w-full h-4 sm:h-8" />
-                <h3 className="text-xl sm:text-2xl text-accent-100 font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Successfully Added Checklist!</h3>
+                <h3 className="text-xl sm:text-2xl text-accent-100 font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Successfully Deleted Checklist!</h3>
             </div>
         </div>
     );
@@ -32,20 +34,28 @@ const SuccessDeleteModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
 const DeleteChecklistModal: React.FC<DeleteChecklistModalProps> = ({ visible, onCancel, checkId }) => {
     const [successModalVisible, setSuccessModalVisible] = useState(false);
     const { fetchDELETE } = useFetchWithAccessToken();
+    const router = useRouter();
+    const verseId = router.query['verseId']?.toString() ?? '';
 
-    const deleteChecklist = async () => {
-       await fetchDELETE(`${BackendApiUrl.addChecklist}/${checkId}`);
-
-    };
+    // const deleteChecklist = async () => {
+    //    await fetchDELETE(`${BackendApiUrl.addChecklist}/${checkId}`);
+    // };
     
-
+    
     const handleConfirm = async () => {
-        await deleteChecklist();
-        onCancel();
+        const response = await fetchDELETE(`${BackendApiUrl.addChecklist}/${checkId}`);
+        if(response.data){
+            visible = false;
+            console.log("Handle confirm", visible);
+            setSuccessModalVisible(true);
+            mutate(GetChecklistList(verseId));
+            onCancel();
+        }
     };
 
     const handleSuccessModalClose = () => {
         setSuccessModalVisible(false);
+        console.log("Handle succes modal close", successModalVisible);
         onCancel();
     };
 
@@ -60,7 +70,7 @@ const DeleteChecklistModal: React.FC<DeleteChecklistModalProps> = ({ visible, on
                         <p className="mt-3 text-xl font-semibold">Are you sure?</p>
                     </div>
                 }
-                visible={visible}
+                open={visible}
                 centered
                 closable={false}
                 onCancel={onCancel}
