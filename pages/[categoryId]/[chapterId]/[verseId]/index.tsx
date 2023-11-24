@@ -16,7 +16,14 @@ interface ChecklistList {
     id: string;
     description: string;
     uploadStatusId: number;
-    blobList: string[];
+    blobList: BlobListModel[];
+}
+
+export interface BlobListModel{
+    id: string;
+    fileName: string;
+    filePath: string;
+    contentType: string;
 }
 
 interface ChecklistModel {

@@ -14,6 +14,7 @@ import AddChecklistModal from "../AddChecklistModal";
 
 import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
 import { BackendApiUrl } from "@/functions/BackendApiUrl";
+import { BlobListModel } from "@/pages/[categoryId]/[chapterId]/[verseId]";
 
 
 
@@ -21,7 +22,7 @@ interface CategoryVerseContentProps {
     checklistId: string,
     uploadStatus: number;
     title: string;
-    blobList: string[];
+    blobList: BlobListModel[];
     checklistIndex: number;
     dropdownOptions: DefaultOptionType[];
     canUpdateStatus: boolean;
@@ -75,6 +76,8 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                 ChecklistId: checklistId
             }
             await fetchPOST(BackendApiUrl.uploadFileInformation, payload);
+
+            location.reload();
         }
     }
 
@@ -147,7 +150,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                                 <div className='mr-8' key={i}>
                                                     <CategoryUploadedFileView
                                                         currentIndex={i}
-                                                        filename={file}
+                                                        filename={file.fileName}
                                                         removeFileByIndex={() => removeFileByIndex(i)}
                                                     />
                                                 </div>
