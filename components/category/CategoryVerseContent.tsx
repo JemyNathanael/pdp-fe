@@ -14,7 +14,7 @@ import AddChecklistModal from "../AddChecklistModal";
 
 import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
 import { BackendApiUrl } from "@/functions/BackendApiUrl";
-import DeleteChecklistModl from "./DeleteChecklistModl";
+import DeleteChecklistModal from "./DeleteChecklistModal";
 
 interface CategoryVerseContentProps {
     checklistId: string,
@@ -93,12 +93,12 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         <>
             {
                 deleteModal &&
-                <DeleteChecklistModl checkId={checklistId} onCancel={handleCancel} verseId={verseId ? verseId : ''} />
+                <DeleteChecklistModal checkId={checklistId} onCancel={handleCancel} verseId={verseId ? verseId : ''} />
             }
 
             <UpdateCheklistModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
             <AddChecklistModal onCancel={handleCancel} visible={addModal} verseId={verseId} />
-            {/* <DeleteChecklistModal onCancel={handleDelete} visible={deleteModal} onConfirm={handleDelete} checkId={checklistId} /> */}
+
             <div className='flex'>
                 <div className='flex flex-col'>
                     <Select

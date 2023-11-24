@@ -18,7 +18,6 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
     const [backdropVisible, setBackdropVisible] = useState<boolean>(false);
 
     const handleBackdrop = () => {
-        console.log("test");
         setBackdropVisible(!backdropVisible);
     }
 
