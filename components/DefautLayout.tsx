@@ -18,7 +18,6 @@ const DefaultLayout: React.FC<{
     }
 
     const handleLogout = () => {
-        console.log("logout");
         if (status === 'authenticated') {
             nProgress.start();
             signOut({
@@ -28,7 +27,6 @@ const DefaultLayout: React.FC<{
     }
 
     const displayUserName = session?.user?.name;
-    console.log(session?.user);
 
     const userRole = session?.user?.['role'][0];
 

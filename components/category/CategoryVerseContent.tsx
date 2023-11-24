@@ -14,8 +14,7 @@ import AddChecklistModal from "../AddChecklistModal";
 
 import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
 import { BackendApiUrl } from "@/functions/BackendApiUrl";
-
-
+import DeleteChecklistModal from "./DeleteChecklistModal";
 
 interface CategoryVerseContentProps {
     checklistId: string,
@@ -42,6 +41,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>();
     const [updateModal, setUpdateModal] = useState(false);
     const [addModal, setAddModal] = useState<boolean>(false)
+    const [deleteModal, setDeleteModal] = useState<boolean>(false)
 
     useEffect(() => {
         setSelectOptions(dropdownOptions)
@@ -92,18 +92,26 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         {
             key: 'delete',
             label: 'Delete',
+            onClick: () => setDeleteModal(true)
         },
     ]
 
     const handleCancel = () => {
         setUpdateModal(false);
         setAddModal(false);
+        setDeleteModal(false);
     };
 
     return (
         <>
+            {
+                deleteModal &&
+                <DeleteChecklistModal checkId={checklistId} onCancel={handleCancel} verseId={verseId ? verseId : ''} />
+            }
+
             <UpdateCheklistModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
             <AddChecklistModal onCancel={handleCancel} visible={addModal} verseId={verseId} />
+
             <div className='flex'>
                 <div className='flex flex-col'>
                     <Select
