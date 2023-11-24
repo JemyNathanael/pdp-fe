@@ -9,24 +9,41 @@ import { useRouter } from 'next/router';
 import { CategoryButton } from '@/components/category/CategoryButton';
 import { Authorize } from '@/components/Authorize';
 import { Upload, UploadProps } from 'antd';
+import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
+import useSWR from 'swr';
+import { GetChecklistList } from '@/functions/BackendApiUrl';
 
-interface Checklist {
-    status: 'Sesuai Sepenuhnya' | 'Sesuai Sebagian' | 'Tidak Sesuai' | 'Tidak Dapat Diterapkan';
-    title: string;
-    uploadedFiles: string[];
+
+export interface BlobListModel{
+    id: string;
+    fileName: string;
+    filePath: string;
+    contentType: string;
 }
 
-const dummyChecklist: Checklist = {
-    status: 'Sesuai Sepenuhnya',
-    title: 'Apakah Anda dapat menunjukkan bahwa subjek data pribadi telah menyetujui pemrosesan data mereka?',
-    uploadedFiles: ['file-1.pdf', 'file-2.png', 'file-3.docx', 'file-4.pdf', 'file-6.xlsx', 'file-7.xlsx', 'file-8.xlsx', 'file-9.xlsx', 'file-10.xlsx', 'file-11.xlsx', 'file-5.docx']
+interface ChecklistList {
+    id: string;
+    description: string;
+    uploadStatusId: number;
+    blobList: BlobListModel[];
 }
+
+interface ChecklistModel {
+    successStatus: boolean;
+    checklistList: ChecklistList[];
+}
+
 
 const ChecklistFiles: React.FC = () => {
     const router = useRouter();
 
     const [files, setFiles] = useState<string[]>();
-
+    
+    const verseId = router.query['verseId']?.toString() ?? '';
+    const swrFetcher = useSwrFetcherWithAccessToken();
+    const { data: checklistData } = useSWR<ChecklistModel>(GetChecklistList(verseId), swrFetcher);
+    const listData = checklistData?.checklistList[0]?.blobList.map(item => item.fileName);
+    const titleData = checklistData?.checklistList[0]?.description;
     function navigateBackToVerse() {
         router.back();
     }
@@ -58,8 +75,8 @@ const ChecklistFiles: React.FC = () => {
     };
 
     useEffect(() => {
-        setFiles(dummyChecklist.uploadedFiles)
-    }, []);
+        setFiles(listData)
+    }, [listData]);
 
     return (
         <div className='flex flex-1'>
@@ -71,7 +88,7 @@ const ChecklistFiles: React.FC = () => {
 
             <div className='flex-1'>
                 <p className='text-base mb-10'>
-                    {dummyChecklist.title}
+                    {titleData}
                 </p>
                 <div className='flex flex-wrap gap-16'>
                     {   files &&
