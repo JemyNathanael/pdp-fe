@@ -11,10 +11,10 @@ import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 
 import UpdateCheklistModal from "./UpdateChecklistModal";
 import AddChecklistModal from "../AddChecklistModal";
-import DeleteChecklistModal from "./DeleteChecklistModal";
 
 import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
 import { BackendApiUrl } from "@/functions/BackendApiUrl";
+import DeleteChecklistModl from "./DeleteChecklistModl";
 
 interface CategoryVerseContentProps {
     checklistId: string,
@@ -89,15 +89,16 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         setDeleteModal(false);
     };
 
-    const handleDelete = () => {
-        setDeleteModal(false);
-    }
-
     return (
         <>
+            {
+                deleteModal &&
+                <DeleteChecklistModl checkId={checklistId} onCancel={handleCancel} verseId={verseId ? verseId : ''} />
+            }
+
             <UpdateCheklistModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
             <AddChecklistModal onCancel={handleCancel} visible={addModal} verseId={verseId} />
-            <DeleteChecklistModal onCancel={handleDelete} visible={deleteModal} onConfirm={handleDelete} checkId={checklistId} />
+            {/* <DeleteChecklistModal onCancel={handleDelete} visible={deleteModal} onConfirm={handleDelete} checkId={checklistId} /> */}
             <div className='flex'>
                 <div className='flex flex-col'>
                     <Select
