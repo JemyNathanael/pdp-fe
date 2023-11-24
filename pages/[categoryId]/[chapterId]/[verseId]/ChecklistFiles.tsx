@@ -41,7 +41,7 @@ const ChecklistFiles: React.FC = () => {
     const handleChange: UploadProps['onChange'] = (info) => {
         const newFileList = info.fileList;
         const newFileListNames = newFileList.map((file) => file.name);
-        console.log(newFileListNames);
+
         setFiles((prev) => {
                 if (prev?.length){
                     return [...prev, ...newFileListNames];

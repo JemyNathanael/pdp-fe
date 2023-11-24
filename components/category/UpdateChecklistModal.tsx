@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { mutate } from 'swr';
 import { useRouter } from 'next/router';
 
-interface EditUserRoleModalProps {
+interface EditChecklistModalProps {
     visible: boolean;
     onCancel: () => void;
     checkId: string;
@@ -45,7 +45,7 @@ const schema = z.object({
     description: z.string({ required_error: 'Description can\'t be empty' }).min(1, 'Description can\'t be empty'),
 });
 
-const UpdateChecklistModal: React.FC<EditUserRoleModalProps> = ({ onCancel, checkId, visible }) => {
+const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, checkId, visible }) => {
     const [successModalVisible, setSuccessModalVisible] = useState(false);
     const { fetchPUT } = useFetchWithAccessToken();
     const router = useRouter();

@@ -3,20 +3,20 @@ import { Modal, Form, Input } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
-import { BackendApiUrl, GetUser } from '@/functions/BackendApiUrl';
+import { BackendApiUrl, GetChecklistList, GetUser } from '@/functions/BackendApiUrl';
 import { mutate } from 'swr';
 
-interface AddUserRoleModalProps {
+interface AddChecklistModalProps {
     onCancel: () => void;
     visible: boolean;
-    verseId:string | string[] | undefined;
+    verseId:string;
 }
 
 interface SuccessModalProps {
     onGoToHome: () => void;
 }
 
-interface AddUserRoleResponse {
+interface AddChecklistResponse {
     response: string;
 }
 
@@ -32,19 +32,20 @@ const SuccessAddModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
     );
 };
 
-const AddChecklistModal: React.FC<AddUserRoleModalProps> = ({ onCancel, visible, verseId }) => {
+const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ onCancel, visible, verseId }) => {
     const [successModalVisible, setSuccessModalVisible] = useState(false);
     const { fetchPOST } = useFetchWithAccessToken();
 
-    const onFinish = async (formData: AddUserRoleResponse) => {
+    const onFinish = async (formData: AddChecklistResponse) => {
         const payload = {
             ...formData,
             VerseId: verseId
         };
-        const { data } = await fetchPOST<AddUserRoleResponse>(BackendApiUrl.addChecklist, payload);
+        const { data } = await fetchPOST<AddChecklistResponse>(BackendApiUrl.addChecklist, payload);
         if (data) {
             visible = false
             setSuccessModalVisible(true);
+            mutate(GetChecklistList(payload.VerseId?.toString()))
             onCancel();
         }
     };
