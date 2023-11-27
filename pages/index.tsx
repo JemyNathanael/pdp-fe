@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Title } from '../components/Title';
 import { Page } from '../types/Page';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition, faArrowRightFromBracket, faCalendar, faHandshake, faLaptop, faPeopleArrows, faPeopleGroup, faServer, faSigning } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faArrowRightFromBracket, faCalendar, faHandshake, faLaptop, faPeopleArrows, faPeopleGroup, faServer, faSigning, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import nProgress from 'nprogress';
 import { Authorize } from '@/components/Authorize';
@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 interface CategoryHomeApiModel {
     id: string,
     title: string,
-    description: string
+    // description: string
 }
 
 interface CategoryHomeModel extends CategoryHomeApiModel {
@@ -42,7 +42,7 @@ const Home: React.FC = () => {
     const onClickCategory = (categoryId: string) => {
         router.push(`/${categoryId}`)
     }
-    
+
     useEffect(() => {
         if (!data) {
             if (error) {
@@ -62,13 +62,13 @@ const Home: React.FC = () => {
                     first: {
                         id: data[i]?.id ?? '',
                         title: title,
-                        description: data[i]?.description ?? '',
+                        // description: data[i]?.description ?? '',
                         icon: getRelatedIcon(title)
                     },
                     second: {
                         id: data[i]?.id ?? '',
                         title: '',
-                        description: '',
+                        // description: '',
                         icon: faLaptop
                     }
                 })
@@ -82,13 +82,13 @@ const Home: React.FC = () => {
                         first: {
                             id: prevFirstCol?.id ?? '',
                             title: prevFirstCol?.title ?? '',
-                            description: prevFirstCol?.description ?? '',
+                            // description: prevFirstCol?.description ?? '',
                             icon: prevFirstCol?.icon ?? faCalendar
                         },
                         second: {
                             id: data[i]?.id ?? '',
                             title: title,
-                            description: data[i]?.description ?? '',
+                            // description: data[i]?.description ?? '',
                             icon: getRelatedIcon(title)
                         }
                     }
@@ -112,6 +112,8 @@ const Home: React.FC = () => {
             return faPeopleGroup
         } else if (title.includes('hak')) {
             return faServer
+        } else if (title.includes('retensi')) {
+            return faCalendarDays
         } else {
             return faCalendar
         }
@@ -123,7 +125,6 @@ const Home: React.FC = () => {
 
     return (
         <div>
-
             <nav style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -140,7 +141,6 @@ const Home: React.FC = () => {
                         :
                         <div></div>
                 }
-
                 {
                     status === 'authenticated' ?
                         <div>
@@ -184,7 +184,7 @@ const Home: React.FC = () => {
             </nav>
 
             <div>
-                {
+                {/* {
                     categoryList.map((Q, idx) => {
                         return (
                             <div key={'category#' + idx} style={{ display: 'flex', justifyContent: 'center', margin: '20px' }} className='cursor-pointer'>
@@ -236,6 +236,33 @@ const Home: React.FC = () => {
                             </div>
                         )
                     })
+                } */}
+
+                {
+                    categoryList.map((Q, idx) => {
+                        return (
+                            <div key={'category#' + idx} style={{ display: 'flex', justifyContent: 'center', margin: '20px' }} className='cursor-pointer'>
+                                <div className='categoryHome' onClick={() => onClickCategory(Q.first.id)}>
+                                    <div className='categoryTitleHome'>
+                                        <FontAwesomeIcon icon={Q.first.icon} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
+                                        <br />
+                                        {Q.first.title}
+                                    </div>
+                                </div>
+                                {
+                                    Q.second.title && (
+                                        <div className='categoryHome' onClick={() => onClickCategory(Q.second.id)}>
+                                            <div className='categoryTitleHome'>
+                                                <FontAwesomeIcon icon={Q.second.icon} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
+                                                <br />
+                                                {Q.second.title}
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        );
+                    })
                 }
             </div>
 
@@ -244,9 +271,9 @@ const Home: React.FC = () => {
                 marginRight: '24px',
                 fontSize: '14px',
                 fontWeight: '600',
-                position:"fixed",
-                bottom:16,
-                left:0
+                position: "fixed",
+                bottom: 16,
+                left: 0
             }}>Copyright @ PT. Accelist Lentera Indonesia</footer>
 
         </div>
