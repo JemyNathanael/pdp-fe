@@ -13,9 +13,10 @@ import UpdateCheklistModal from "./UpdateChecklistModal";
 import AddChecklistModal from "../AddChecklistModal";
 
 import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
-import { BackendApiUrl } from "@/functions/BackendApiUrl";
+import { BackendApiUrl, GetChecklistList } from "@/functions/BackendApiUrl";
 import { BlobListModel } from "@/pages/[categoryId]/[chapterId]/[verseId]";
 import DeleteChecklistModal from "./DeleteChecklistModal";
+import { mutate } from "swr";
 
 interface CategoryVerseContentProps {
     checklistId: string,
@@ -77,7 +78,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
             }
             await fetchPOST(BackendApiUrl.uploadFileInformation, payload);
 
-            location.reload();
+            mutate(GetChecklistList(verseId))
         }
     }
 

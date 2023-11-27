@@ -97,7 +97,7 @@ const VersePage: Page = () => {
     return (
         <Authorize>
             <Title>Ayat</Title>
-            <div className='mb-10 bg-red-50'>
+            <div className='mb-10'>
                 {(checklist && uploadStatusDropdown) &&
                     checklist.map((checklist, i) =>
                         <div key={i} className='mb-16'>
