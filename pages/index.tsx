@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Title } from '../components/Title';
 import { Page } from '../types/Page';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,87 +17,20 @@ interface CategoryHomeApiModel {
     // description: string
 }
 
-interface CategoryHomeModel extends CategoryHomeApiModel {
-    icon: IconDefinition
-}
-
-interface CategoryHomeListModel {
-    first: CategoryHomeModel,
-    second: CategoryHomeModel
-}
-
 const Home: React.FC = () => {
-
-    const [categoryList, setCategoryList] = useState<CategoryHomeListModel[]>([])
-
     const { data: session, status } = useSession();
     const displayUserName = session?.user?.name;
+    const role = session?.user?.['role'][0];
 
     const router = useRouter();
 
     const swrFetcher = useSwrFetcherWithAccessToken();
 
-    const { data, error, isValidating } = useSWR<CategoryHomeApiModel[]>(BackendApiUrl.getCategories, swrFetcher);
+    const { data, isValidating } = useSWR<CategoryHomeApiModel[]>(BackendApiUrl.getCategories, swrFetcher);
 
     const onClickCategory = (categoryId: string) => {
         router.push(`/${categoryId}`)
     }
-
-    useEffect(() => {
-        if (!data) {
-            if (error) {
-                console.error(error)
-            }
-            return
-        }
-
-        setCategoryList([])
-        const categoryListTemp: CategoryHomeListModel[] = []
-        let title = ''
-        for (let i = 0; i < data.length; i++) {
-            // First column
-            if (i % 2 === 0) {
-                title = data[i]?.title ?? ''
-                categoryListTemp.push({
-                    first: {
-                        id: data[i]?.id ?? '',
-                        title: title,
-                        // description: data[i]?.description ?? '',
-                        icon: getRelatedIcon(title)
-                    },
-                    second: {
-                        id: data[i]?.id ?? '',
-                        title: '',
-                        // description: '',
-                        icon: faLaptop
-                    }
-                })
-            }
-            // Second column
-            else {
-                title = data[i]?.title ?? ''
-                if (categoryListTemp.length >= 1) {
-                    const prevFirstCol = categoryListTemp[categoryListTemp.length - 1]?.first
-                    categoryListTemp[categoryListTemp.length - 1] = {
-                        first: {
-                            id: prevFirstCol?.id ?? '',
-                            title: prevFirstCol?.title ?? '',
-                            // description: prevFirstCol?.description ?? '',
-                            icon: prevFirstCol?.icon ?? faCalendar
-                        },
-                        second: {
-                            id: data[i]?.id ?? '',
-                            title: title,
-                            // description: data[i]?.description ?? '',
-                            icon: getRelatedIcon(title)
-                        }
-                    }
-                }
-            }
-        }
-
-        setCategoryList(categoryListTemp)
-    }, [data, error])
 
     function getRelatedIcon(title: string): IconDefinition {
         title = title.toLowerCase()
@@ -142,6 +75,22 @@ const Home: React.FC = () => {
                         <div></div>
                 }
                 {
+                    role === "Admin" &&
+                    <div className='mr-2'>
+                        <button onClick={() => router.push('/ManageUser')}>
+                            <div style={{
+                                border: 'solid white 2px',
+                                padding: '4px 12px',
+                                borderRadius: '16px',
+                                fontSize: '18px',
+                                fontWeight: '600'
+                            }}>
+                                Manage User
+                            </div>
+                        </button>
+                    </div>
+                }
+                {
                     status === 'authenticated' ?
                         <div>
                             <button onClick={() => {
@@ -184,86 +133,27 @@ const Home: React.FC = () => {
             </nav>
 
             <div>
-                {/* {
-                    categoryList.map((Q, idx) => {
-                        return (
-                            <div key={'category#' + idx} style={{ display: 'flex', justifyContent: 'center', margin: '20px' }} className='cursor-pointer'>
-
-                                <div className='categoryHome' onClick={() => onClickCategory(Q.first.id)}>
-                                    <div className='categoryTitleHome'>
-                                        <FontAwesomeIcon icon={Q.first.icon} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
-                                        <br />
-                                        {Q.first.title}
-                                    </div>
-                                    <div className='categoryDescriptionHome'>
-                                        <div style={{
-                                            padding: '16px',
-                                            position: 'relative',
-                                            top: '50%',
-                                            left: '50%',
-                                            transform: 'translate3d(-50%,-50%,0)',
-                                        }}>
-                                            {Q.first.description}
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                {
-                                    !Q.second.title && !Q.second.description ?
-                                        <div></div>
-                                        :
-                                        <div className='categoryHome' onClick={() => onClickCategory(Q.second.id)}>
-                                            <div className='categoryTitleHome'>
-                                                <FontAwesomeIcon icon={Q.second.icon} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
-                                                <br />
-                                                {Q.second.title}
-                                            </div>
-                                            <div className='categoryDescriptionHome'>
-                                                <div style={{
-                                                    padding: '16px',
-                                                    position: 'relative',
-                                                    top: '50%',
-                                                    left: '50%',
-                                                    transform: 'translate3d(-50%,-50%,0)',
-                                                }}>
-                                                    {Q.second.description}
+                <div className="flex justify-center">
+                    <div className="grid grid-cols-12">
+                        {
+                            data?.map((Q, index) => {
+                                return (
+                                    <div key={'category#' + index} className='col-span-12 md:col-span-6 lg:col-span-4'>
+                                        <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }} className='cursor-pointer'>
+                                            <div className='categoryHome' onClick={() => onClickCategory(Q.id)}>
+                                                <div className='categoryTitleHome'>
+                                                    <FontAwesomeIcon icon={getRelatedIcon(Q.title)} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
+                                                    <br />
+                                                    {Q.title}
                                                 </div>
                                             </div>
                                         </div>
-                                }
-
-                            </div>
-                        )
-                    })
-                } */}
-
-                {
-                    categoryList.map((Q, idx) => {
-                        return (
-                            <div key={'category#' + idx} style={{ display: 'flex', justifyContent: 'center', margin: '20px' }} className='cursor-pointer'>
-                                <div className='categoryHome' onClick={() => onClickCategory(Q.first.id)}>
-                                    <div className='categoryTitleHome'>
-                                        <FontAwesomeIcon icon={Q.first.icon} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
-                                        <br />
-                                        {Q.first.title}
                                     </div>
-                                </div>
-                                {
-                                    Q.second.title && (
-                                        <div className='categoryHome' onClick={() => onClickCategory(Q.second.id)}>
-                                            <div className='categoryTitleHome'>
-                                                <FontAwesomeIcon icon={Q.second.icon} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
-                                                <br />
-                                                {Q.second.title}
-                                            </div>
-                                        </div>
-                                    )
-                                }
-                            </div>
-                        );
-                    })
-                }
+                                );
+                            })
+                        }
+                    </div >
+                </div>
             </div>
 
             <footer style={{
