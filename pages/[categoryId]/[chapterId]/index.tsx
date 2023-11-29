@@ -18,7 +18,7 @@ interface ChapterDetailModel {
 
 interface ChapterModel {
     title: string;
-    chapters: ChapterDetailModel[];
+    firstSubCategories: ChapterDetailModel[];
 }
 
 const Chapter: React.FC = () => {
@@ -28,7 +28,7 @@ const Chapter: React.FC = () => {
     const categoryId = router.query['categoryId']?.toString() ?? '';
     const chapterId = router.query['chapterId']?.toString() ?? '';
     const { data } = useSWR<ChapterModel>(GetCategoryDetail(categoryId), swrFetcher);
-    const currentChapter = data?.chapters.find((chapter) => chapter.id === chapterId);
+    const currentChapter = data?.firstSubCategories.find((chapter) => chapter.id === chapterId);
 
     const { data: session } = useSession();
 
@@ -44,7 +44,7 @@ const Chapter: React.FC = () => {
             <p>
                 {currentChapter?.description}
             </p>
-            {isRoleGrantedEditUploadStatus && 
+            {isRoleGrantedEditUploadStatus &&
                 <CategoryVerseFloatingButton categoryId={categoryId} />
             }
         </div>

@@ -36,12 +36,12 @@ interface Chapter {
     title: string;
     description: string;
     isUploadFile: boolean;
-    verses: Verse[];
+    secondSubCategories: Verse[];
 }
 
 interface CategoryDetailModel {
     title: string;
-    chapters: Chapter[];
+    firstSubCategories: Chapter[];
 }
 
 interface SidebarMenuModel {
@@ -60,9 +60,9 @@ const CategoryLayout: React.FC<{
     const [openAll, setOpenAll] = useState(false);
     const [toggledFromCollapseOrExpandAll, setToggledFromCollapseOrExpandAll] = useState(false);
     const [chaptersExpandedState, setChaptersExpandedState] = useState<boolean[]>()
-    
-    const [chapters, setChapters] = useState<CategorySidebarItemsModel[]>() 
-    
+
+    const [firstSubCategories, setFirstSubCategories] = useState<CategorySidebarItemsModel[]>()
+
     const router = useRouter();
     const categoryId = router.query['categoryId']?.toString() ?? '';
 
@@ -73,16 +73,16 @@ const CategoryLayout: React.FC<{
     const { data } = useSWR<CategoryDetailModel>(GetCategoryDetail(categoryId), swrFetcher);
 
     useEffect(() => {
-        if(data) {
-            const chaptersItem: CategorySidebarItemsModel[] = data?.chapters.map((chapter) => {
+        if (data) {
+            const firstSubCategoriesItem: CategorySidebarItemsModel[] = data?.firstSubCategories.map((chapter) => {
                 // map each verses to make a child menu from each chapters
-                const currentChapterVerses: SidebarMenuModel[] = chapter.verses.map((verse) => {
+                const currentChapterVerses: SidebarMenuModel[] = chapter.secondSubCategories.map((verse) => {
                     return {
                         title: verse.title,
                         routePath: `/${router.query['categoryId']}/${chapter.id}/${verse.id}`
                     }
                 })
-    
+
                 return {
                     title: chapter.title,
                     routePath: `/${router.query['categoryId']}/${chapter.id}`,
@@ -90,16 +90,16 @@ const CategoryLayout: React.FC<{
                 }
             })
 
-            setChapters(chaptersItem);
+            setFirstSubCategories(firstSubCategoriesItem);
         }
     }, [data, router.query])
 
     useEffect(() => {
-        if(chapters) {
-            const itemsCollapseStateMap = chapters.map(() => false);
+        if (firstSubCategories) {
+            const itemsCollapseStateMap = firstSubCategories.map(() => false);
             setChaptersExpandedState(itemsCollapseStateMap);
         }
-    }, [chapters])
+    }, [firstSubCategories])
 
     function changeCollapseStatusByIndex(index: number, state: boolean) {
         const tempStateMap = chaptersExpandedState;
@@ -115,7 +115,7 @@ const CategoryLayout: React.FC<{
 
     function handleExpandOrCollapseAll() {
         setToggledFromCollapseOrExpandAll(true);
-        if(chaptersExpandedState) {
+        if (chaptersExpandedState) {
             const isAllExpanded = chaptersExpandedState.every(state => state === true);
             if (isAllExpanded) {
                 setOpenAll(false);
@@ -127,9 +127,9 @@ const CategoryLayout: React.FC<{
 
     function onClickLogout() {
         nProgress.start();
-            signOut({
-                callbackUrl: '/api/end-session'
-            });
+        signOut({
+            callbackUrl: '/api/end-session'
+        });
     }
 
     const logoutButton = () => (
@@ -172,26 +172,26 @@ const CategoryLayout: React.FC<{
                         </div>
                     </div>
                 </Header>
-                
+
                 <Layout>
                     <Sider width={300} className="pb-24 hidden lg:block">
                         <p className="p-2 px-4 m-4 text-white font-bold">
                             {data?.title}
                         </p>
                         <div className="m-4">
-                            { chapters &&
-                                chapters.map((chapter, i) =>
+                            {firstSubCategories &&
+                                firstSubCategories.map((firstSub, i) =>
                                     <Collapsible
-                                    open={openAll}
-                                    title={chapter.title}
-                                    routePath={chapter.routePath}
-                                    childrenItem={chapter.children}
-                                    changeCollapseStatus={changeCollapseStatusByIndex}
-                                    resetToggle={resetToggleFromButtonState}
-                                    toggledFlag={toggledFromCollapseOrExpandAll}
-                                    currentIndex={i}
-                                    key={i}
-                                    /> 
+                                        open={openAll}
+                                        title={firstSub.title}
+                                        routePath={firstSub.routePath}
+                                        childrenItem={firstSub.children}
+                                        changeCollapseStatus={changeCollapseStatusByIndex}
+                                        resetToggle={resetToggleFromButtonState}
+                                        toggledFlag={toggledFromCollapseOrExpandAll}
+                                        currentIndex={i}
+                                        key={i}
+                                    />
                                 )
                             }
                         </div>
@@ -199,7 +199,7 @@ const CategoryLayout: React.FC<{
                             Expand / Collapse all
                         </button>
                     </Sider>
-            
+
                     <Content className="p-7">
                         {children}
                     </Content>
@@ -210,9 +210,9 @@ const CategoryLayout: React.FC<{
     );
 }
 
-export const WithCategoryLayout = (page: React.ReactElement) => 
-<Authorize>
-    <CategoryLayout>
-        {page}
-    </CategoryLayout>
-</Authorize>;
+export const WithCategoryLayout = (page: React.ReactElement) =>
+    <Authorize>
+        <CategoryLayout>
+            {page}
+        </CategoryLayout>
+    </Authorize>;

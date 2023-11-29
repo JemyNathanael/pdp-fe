@@ -39,26 +39,26 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
                     <>
                         <span style={{
                             position: 'absolute',
-                            width: '143px',
+                            width: '200px',
                             right: '0',
                             top: '6px',
                             fontWeight: 'bolder',
                             color: 'white'
                         }}>
-                            Update Pasal
+                            Update Sub-Category
                         </span>
                         <FloatButton type="primary" icon={<FontAwesomeIcon icon={faArrowsRotate} />} onClick={() => setIsUpdateSubCategoryModalOpen(true)} />
                     </>
                     <>
                         <span style={{
                             position: 'absolute',
-                            width: '123px',
+                            width: '180px',
                             right: '0',
                             top: '62px',
                             fontWeight: 'bolder',
                             color: 'white'
                         }}>
-                            Add Pasal
+                            Add Sub-Category
                         </span>
                         <FloatButton type="primary" icon={<FontAwesomeIcon icon={faPlus} />} onClick={() => setIsAddSubCategoryModalOpen(true)} />
                     </>
