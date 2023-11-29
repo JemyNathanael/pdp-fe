@@ -43,13 +43,13 @@
   font-weight: bold;
 }
 
-.categoryHome:hover .categoryTitleHome {
+/* .categoryHome:hover .categoryTitleHome {
   display: none;
 }
 
 .categoryHome:hover .categoryDescriptionHome {
   display: block;
-}
+} */
 
 .css-7nbrit-control{
    border-color: #e5e7eb !important;
