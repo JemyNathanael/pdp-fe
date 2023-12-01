@@ -21,7 +21,9 @@ export const BackendApiUrl = {
     deleteSubCategory: baseUrl + '/api/v1/category',
     getChaptersVerses: baseUrl + '/api/dropdown/chapter-list',
     uploadFile: baseUrl + '/api/v1/Blob/upload-file',
-    uploadFileInformation: baseUrl + '/api/v1/Blob/upload-file-information'
+    uploadFileInformation: baseUrl + '/api/v1/Blob/upload-file-information',
+    presignedPutObject:baseUrl + '/api/v1/Blob/presigned-put-object',
+    saveFile:baseUrl + '/api/v1/Checklist/save-file'
 }
 
 export function GetUser(

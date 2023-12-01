@@ -11,6 +11,7 @@ import useSWR from 'swr';
 import { BackendApiUrl, GetChecklistList } from '@/functions/BackendApiUrl';
 import { DefaultOptionType } from 'antd/es/select';
 import { useSession } from 'next-auth/react';
+import { RcFile } from 'antd/es/upload';
 
 interface ChecklistList {
     id: string;
@@ -19,11 +20,12 @@ interface ChecklistList {
     blobList: BlobListModel[];
 }
 
-export interface BlobListModel{
+export interface BlobListModel {
     id: string;
     fileName: string;
-    filePath: string;
+    filePath?: string | undefined;
     contentType: string;
+    originFileObj?: RcFile | undefined
 }
 
 interface ChecklistModel {
@@ -35,6 +37,8 @@ interface UploadStatusDropdownModel {
     id: number;
     status: string;
 }
+
+
 
 const VersePage: Page = () => {
 
@@ -94,6 +98,8 @@ const VersePage: Page = () => {
         }
     }
 
+    const [isSaving, setIsSaving] = useState<boolean>(false);
+
     return (
         <Authorize>
             <Title>Ayat</Title>
@@ -110,14 +116,15 @@ const VersePage: Page = () => {
                                 checklistIndex={i}
                                 dropdownOptions={uploadStatusDropdown}
                                 canUpdateStatus={isRoleGrantedEditUploadStatus}
+                                isSaving={isSaving}
                             />
                         </div>
                     )
                 }
             </div>
-            {isRoleGrantedEditUploadStatus && 
+            {isRoleGrantedEditUploadStatus &&
                 <div className='flex flex-row-reverse mr-5'>
-                    <CategoryButton text='Save' className='px-10' />
+                    <CategoryButton text='Save' className='px-10' onClick={() => setIsSaving(true)} />
                 </div>
             }
         </Authorize>
