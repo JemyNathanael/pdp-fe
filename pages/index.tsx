@@ -138,9 +138,9 @@ const Home: React.FC = () => {
                         {
                             data?.map((Q, index) => {
                                 return (
-                                    <div key={'category#' + index} className='col-span-12 md:col-span-6 lg:col-span-4'>
+                                    <div key={'category#' + index} className='col-span-12 lg:col-span-6 xl:col-span-4'>
                                         <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }} className='cursor-pointer'>
-                                            <div className='categoryHome' onClick={() => onClickCategory(Q.id)}>
+                                            <div className='border border-white border-solid rounded-md min-w-[400px] text-center m-4 min-h-[200px] relative max-w-[400px]' onClick={() => onClickCategory(Q.id)}>
                                                 <div className='categoryTitleHome'>
                                                     <FontAwesomeIcon icon={getRelatedIcon(Q.title)} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
                                                     <br />
