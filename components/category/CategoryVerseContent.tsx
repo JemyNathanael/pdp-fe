@@ -96,7 +96,12 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
 
     function removeFileByIndex(fileIndex: number) {
-        removeFileFromChecklist(checklistIndex, fileIndex)
+
+        const updatedTempData = tempData.filter((_, index) => index !== fileIndex);
+
+        setTempData(updatedTempData);
+
+        removeFileFromChecklist(checklistIndex, fileIndex);
     }
 
     function navigateToChecklistPage() {
@@ -136,15 +141,18 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         setDeleteModal(false);
     };
 
-    const handleChange = (file: RcFile, tempData) => {
+    const handleChange = (file: RcFile, tempData: BlobListModel[]) => {
         const fileId = uuidv4();
 
-        setTempData([...tempData, {
+        const newFile = {
             id: fileId,
             fileName: file.name,
             originFileObj: file,
-            contentType: file.type
-        }]);
+            contentType: file.type,
+        };
+
+        setTempData([...tempData, newFile]);
+        return tempData.length;
     }
 
     return (
