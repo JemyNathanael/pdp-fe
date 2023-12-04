@@ -4,6 +4,7 @@ import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAcces
 import useSWR from 'swr';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
+import { CloseOutlined } from '@ant-design/icons';
 
 interface ChapterModel {
     id: string
@@ -136,12 +137,12 @@ const DeleteSubCategoryModal: React.FC<{
                 open={props.isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                closeIcon={[]}
+                closeIcon={<CloseOutlined />}
                 footer={[]}
             >
 
                 <Result
-                    style={{ margin: '0', padding: '0', marginTop: '16px' }}
+                    style={{ margin: '0', padding: '0', marginTop: '16px'}}
                 />
 
                 {
@@ -171,7 +172,7 @@ const DeleteSubCategoryModal: React.FC<{
                             <p style={{
                                 fontSize: '22px',
                                 fontWeight: 'bold'
-                            }}>Category Name</p>
+                            }}>Sub-Category Name</p>
 
                             <div style={{ paddingTop: '2px' }}>
                                 <Form.Item<DeleteSubCategoryType>
@@ -205,7 +206,7 @@ const DeleteSubCategoryModal: React.FC<{
                                     />
                                 </Form.Item>
                             </div>
-                            <p style={{ color: 'red', marginTop: '-18px' }}>You can only choose one category to delete!</p>
+                            <p style={{ color: 'red', marginTop: '-18px' }}>You can only choose one sub-category or cheklist to delete!</p>
                         </div>
                     }
 
@@ -228,11 +229,11 @@ const DeleteSubCategoryModal: React.FC<{
                         <Button key="submit" type="default" htmlType='submit' loading={loading}
                             size='large'
                             danger
-                            style={{ width: '100px' }}>
+                            style={{ width: '100px',backgroundColor:'#FF0000', color:'white' }}>
                             Delete
                         </Button>
                     </Form.Item>
-
+                    
                 </Form>
 
             </Modal>
@@ -247,7 +248,7 @@ const DeleteSubCategoryModal: React.FC<{
                 <Result
                     status={formResult.status}
                     title={formResult.message}
-                    style={{ fontSize: '32px', fontWeight: 'bold' }}
+                    style={{ fontSize: '32px', fontWeight: 'bold',  color: 'red'}}
                 />
 
             </Modal>

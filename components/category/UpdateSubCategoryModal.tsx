@@ -276,7 +276,7 @@ const UpdateSubCategoryModal: React.FC<{
                     <Form.Item style={{ textAlign: 'right' }}>
                         <Button key="submit" type="default" htmlType='submit' loading={loading}
                             size='large'
-                            style={{}}>
+                            style={{backgroundColor:'#416a67', color:'white'}}>
                             Update
                         </Button>
                     </Form.Item>
