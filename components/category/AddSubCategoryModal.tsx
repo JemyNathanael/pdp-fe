@@ -114,13 +114,14 @@ const AddSubCategoryModal: React.FC<{
             }
 
             setFormResult({
-                message: 'Successfully Added Sub - Category!',
+                message: 'Successfully Added \n Sub - Category!',
                 status: 'success'
-            })
+            });
+            
 
         } catch (e) {
             setFormResult({
-                message: 'Failed to Add Sub - Category!',
+                message: 'Failed to Add \n Sub - Category!',
                 status: 'error'
             })
         }
@@ -164,7 +165,7 @@ const AddSubCategoryModal: React.FC<{
                         <p style={{
                             fontSize: '24px',
                             fontWeight: 'bold'
-                        }}>Dijadikan Ayat?</p>
+                        }}>Dijadikan Checklist?</p>
 
                         <div style={{ marginLeft: '48px', paddingTop: '6px', flexGrow: 1 }}>
                             <Form.Item<AddSubCategoryType>
@@ -286,7 +287,7 @@ const AddSubCategoryModal: React.FC<{
                     <Form.Item style={{ textAlign: 'right' }}>
                         <Button key="submit" type="default" htmlType='submit' loading={loading}
                             size='large'
-                            style={{}}>
+                            style={{backgroundColor:'#416a67', color:'white'}}>
                             Add
                         </Button>
                     </Form.Item>
@@ -305,9 +306,15 @@ const AddSubCategoryModal: React.FC<{
             >
                 <Result
                     status={formResult.status}
-                    title={formResult.message}
+                    title={formResult.message.split('\n').map((line, index) => (
+                        <React.Fragment key={index}>
+                            {line}
+                            {index < formResult.message.split('\n').length - 1 && <br />}
+                        </React.Fragment>
+                    ))}
                     style={{ fontSize: '32px', fontWeight: 'bold' }}
                 />
+
 
             </Modal>
         </div>

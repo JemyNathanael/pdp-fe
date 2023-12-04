@@ -143,3 +143,11 @@
   margin-left: auto;
   cursor: pointer;
 }
+
+.css-dev-only-do-not-override-1dex64i.ant-result-info .ant-result-icon>.anticon{
+ color: red;
+}
+
+.css-dev-only-do-not-override-1dex64i.ant-result-success .ant-result-icon>.anticon {
+  color:#416a67;
+}
