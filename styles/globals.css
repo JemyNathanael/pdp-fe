@@ -148,6 +148,6 @@
  color: red;
 }
 
-:where(.css-dev-only-do-not-override-1dex64i).ant-result-success .ant-result-icon>.anticon {
+.css-dev-only-do-not-override-1dex64i.ant-result-success .ant-result-icon>.anticon {
   color:#416a67;
 }
