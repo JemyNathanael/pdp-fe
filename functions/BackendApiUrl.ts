@@ -16,10 +16,13 @@ export const BackendApiUrl = {
     addChecklist: baseUrl + '/api/v1/Checklist',
     deleteChecklist: baseUrl + '/api/v1/Checklist',
     getChapters: baseUrl + '/api/v1/category',
+    
     createSubCategory: baseUrl + '/api/v1/category',
     updateSubCategory: baseUrl + '/api/v1/category',
     deleteSubCategory: baseUrl + '/api/v1/category',
-    getChaptersVerses: baseUrl + '/api/dropdown/chapter-list',
+    getSubCategory: baseUrl + '/api/v1/category',
+    getSubCategoryList: baseUrl + '/api/Dropdown/sub-category-list',
+
     uploadFile: baseUrl + '/api/v1/Blob/upload-file',
     uploadFileInformation: baseUrl + '/api/v1/Blob/upload-file-information',
     presignedPutObject:baseUrl + '/api/v1/Blob/presigned-put-object',

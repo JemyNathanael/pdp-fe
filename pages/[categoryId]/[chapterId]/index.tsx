@@ -9,11 +9,18 @@ import useSWR from 'swr';
 import { GetCategoryDetail } from '@/functions/BackendApiUrl';
 import { CategoryVerseFloatingButton } from '@/components/category/CategoryVerseFloatingButton';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 interface ChapterDetailModel {
     id: string;
     title: string;
-    description: string;
+    secondSubCategories?: ChildProps[];
+    createdAt: Date;
+}
+
+interface ChildProps {
+    id: string;
+    title: string;
 }
 
 interface ChapterModel {
@@ -23,12 +30,14 @@ interface ChapterModel {
 
 const Chapter: React.FC = () => {
     const router = useRouter();
+    const currentPath = router.asPath
 
     const swrFetcher = useSwrFetcherWithAccessToken();
     const categoryId = router.query['categoryId']?.toString() ?? '';
     const chapterId = router.query['chapterId']?.toString() ?? '';
     const { data } = useSWR<ChapterModel>(GetCategoryDetail(categoryId), swrFetcher);
     const currentChapter = data?.firstSubCategories.find((chapter) => chapter.id === chapterId);
+    const checklist = currentChapter?.secondSubCategories;
 
     const { data: session } = useSession();
 
@@ -41,9 +50,17 @@ const Chapter: React.FC = () => {
             <div className="text-3xl font-semibold mb-5">
                 {currentChapter?.title}
             </div>
-            <p>
-                {currentChapter?.description}
-            </p>
+            <div>
+                {
+                    checklist?.map((childProps, i) => 
+                        <Link key={i} href={`${currentPath}/${childProps.id}`}>
+                            <p>{childProps.title}</p>
+                        </Link>
+
+                    )
+                }
+
+            </div>
             {isRoleGrantedEditUploadStatus &&
                 <CategoryVerseFloatingButton categoryId={categoryId} />
             }
