@@ -47,16 +47,12 @@ const Chapter: React.FC = () => {
 
     return (
         <div>
-            <div className="text-3xl font-semibold mb-5">
-                {currentChapter?.title}
-            </div>
             <div>
                 {
                     checklist?.map((childProps, i) => 
                         <Link key={i} href={`${currentPath}/${childProps.id}`}>
-                            <p>{childProps.title}</p>
+                            <p style={{fontSize:'large'}}><b>{childProps.title}</b></p>
                         </Link>
-
                     )
                 }
 
