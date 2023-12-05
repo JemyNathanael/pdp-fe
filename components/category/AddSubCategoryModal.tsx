@@ -227,7 +227,7 @@ const AddSubCategoryModal: React.FC<{
 
                     <Form.Item<AddSubCategoryType>
                         name="description"
-                        rules={[{ required: true, message: 'Please input description' }]}
+                        rules={[{  }]}
                     >
                         <div>
                             <p style={{
