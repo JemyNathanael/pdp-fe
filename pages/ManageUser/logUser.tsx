@@ -104,8 +104,8 @@ const LogUser: React.FC = () => {
             <style>
                 {`
           #logUserTable .ant-table-thead > tr > th {
-            background-color: #4F7471 !important;
-            color: white !important;
+            background-color: #FAFAFA !important;
+            color: black !important;
             text-align:center !important;
           } 
         `}
@@ -129,7 +129,7 @@ const LogUser: React.FC = () => {
                     pageSize: 10
                 }}
             />
-            <footer className="font-semibold text-[#4F7471] text-center mt-5 md:mt-36">Copyright @ PT. Accelist Lentera Indonesia</footer>
+            <footer className="font-semibold text-[#3788FD] text-center mt-5 md:mt-36">Copyright @ PT. Accelist Lentera Indonesia</footer>
         </div>
     );
 }
