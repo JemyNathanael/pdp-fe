@@ -34,9 +34,9 @@ interface AddNewUserModalProps {
 const schema = z.object({
     name: z.string({ required_error: 'Name can\'t be empty' }).min(1, 'Name can\'t be empty'),
     email: z.string({ required_error: 'Email can\'t be empty' }).email({ message: 'Email Format not valid' }).min(1, 'Email can\'t be empty'),
-    password: z.string({ 
-        required_error: 'Password can\'t be empty' 
-    }) 
+    password: z.string({
+        required_error: 'Password can\'t be empty'
+    })
         .min(8, 'Password must be at least 8 characters')
         .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-])/, 'Passwords must have uppercase letters, lowercase letters, numbers, and special characters'),
     confirmPassword: z.string({ required_error: 'Confirmation password can\'t be empty' }),
@@ -192,8 +192,12 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
                             placeholder='Choose Role'
                             formErrorMessage={errors?.role?.message}
                         />
-
-                        <button type="submit" className="addButton">Add</button>
+                        <div className="col-span-1 text-end">
+                            <button
+                                className="bg-[#3788FD] text-white px-5 py-2 rounded w-[100px]">
+                                Add
+                            </button>
+                        </div>
                     </form>
                 </div>
             </Modal>

@@ -9,7 +9,7 @@ const TabNavigation = () => {
     const [activeTab, setActiveTab] = useState(1);
     const tabClasses = (tabNumber) =>
         `px-4 py-2 text-sm font-medium ${activeTab === tabNumber
-            ? "text-greyeen border-b-4 border-greyeen"
+            ? "text-[#3788FD] border-b-4 border-[#3788FD]"
             : "text-gray-700"
         }`;
 

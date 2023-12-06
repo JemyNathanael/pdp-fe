@@ -57,7 +57,7 @@ const PopupDelete: React.FC<PopupDeleteProps> = ({ onGoToHome }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-10 bg-secondary-100 backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
       <div className="flex flex-col p-6 sm:p-12 border items-center justify-center">
-        <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#4f7471", fontSize: "64px", marginBottom: "8px" }} />
+        <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#3788FD", fontSize: "64px", marginBottom: "8px" }} />
         <div className="w-full h-4 sm:h-8" />
         <h3 className="text-xl sm:text-2xl text-accent-100 font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Deletion was successful</h3>
       </div>
@@ -125,7 +125,7 @@ const OverviewUser: React.FC = () => {
 
           <button
             onClick={() => handleEdit(record)}
-            className="bg-[#4F7471] text-white px-6 py-2 rounded "
+            className="bg-[#3788FD] text-white px-6 py-2 rounded "
           >
             Edit
           </button>
@@ -270,7 +270,7 @@ const OverviewUser: React.FC = () => {
         <div className="col-span-1 text-end">
           <button
             onClick={handleAdd}
-            className="bg-greyeen text-white px-5 py-2 rounded mr-5">
+            className="bg-[#3788FD] text-white px-5 py-2 rounded mr-5">
             Add
           </button>
         </div>
@@ -303,7 +303,7 @@ const OverviewUser: React.FC = () => {
       />
 
       {renderPopupSuccess()}
-      <footer className="font-semibold text-[#4F7471] text-center mt-5 md:mt-36">Copyright @ PT. Accelist Lentera Indonesia</footer>
+      <footer className="font-semibold text-[#3788FD] text-center mt-5 md:mt-36">Copyright @ PT. Accelist Lentera Indonesia</footer>
     </div>
   );
 }

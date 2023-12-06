@@ -41,9 +41,9 @@ const SuccessUpdateModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-10 bg-secondary-100 backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
             <div className="flex flex-col p-6 sm:p-12 border items-center justify-center">
-                <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#4f7471", fontSize: "64px", marginBottom: "8px" }} />
+                <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#3788FD", fontSize: "64px", marginBottom: "8px" }} />
                 <div className="w-full h-4 sm:h-8" />
-                <h3 className="text-xl sm:text-2xl text-accent-100 font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Successfully Updated User Role</h3>
+                <h3 className="text-xl sm:text-2xl text-accent-100 font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Successfully Updated User Role!</h3>
             </div>
         </div>
     );
@@ -107,7 +107,7 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
             width={750}
             className=''
             footer={[
-            <button key="submit" type="submit" onClick={onFinish} className={`bg-[#4F7471] text-white px-4 py-2 rounded mb-2 
+            <button key="submit" type="submit" onClick={onFinish} className={`bg-[#3788FD] text-white px-4 py-2 mr-4 rounded mb-2 
             ${
                 (record?.role === selectedRole)
                     ? 'opacity-50 cursor-not-allowed'
@@ -121,7 +121,7 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
             <h3 className='text-xl sm:text-2xl text-center font-body font-bold mt-6'>{`Change Role of "${record?.fullName}"`}</h3>
             <div className='p-5'>
                 <h4 className='text-xl sm:text-2xl font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8'>
-                    Current Role: <u className='text-[#4F7471]'>{record?.role}</u>
+                    Current Role: <u className='text-[#3788FD]'>{record?.role}</u>
                 </h4>
                 <h4 className='text-xl sm:text-2xl font-body font-bold mb-2 sm:mb-3'>Please Select a New Role </h4>
                 <Select
