@@ -9,10 +9,11 @@ import { CloseOutlined } from '@ant-design/icons';
 interface ChapterModel {
     id: string
     title: string
-    verses: {
+    secondSubcategories: {
         id: string
         title: string
     }[]
+    createdAt: Date
 }
 
 type DeleteSubCategoryType = {
@@ -37,7 +38,7 @@ const DeleteSubCategoryModal: React.FC<{
     const swrFetcher = useSwrFetcherWithAccessToken()
     const fetch = useFetchWithAccessToken()
 
-    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getChaptersVerses, swrFetcher)
+    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getSubCategoryList, swrFetcher)
 
     function resetForm() {
         form.resetFields()
@@ -111,10 +112,10 @@ const DeleteSubCategoryModal: React.FC<{
         if (!checkChapter || checkChapter.length == 0) {
             for (let i = 0; i < data.length; i++) {
                 for (let j = 0; j < data.length; j++) {
-                    if (data[i]?.verses[j]?.id === newValue) {
+                    if (data[i]?.secondSubcategories[j]?.id === newValue) {
                         selectedItem =
                         {
-                            title: data[i]?.verses[j]?.title ?? '',
+                            title: data[i]?.secondSubcategories[j]?.title ?? '',
                         }
                     }
                 }
@@ -193,12 +194,12 @@ const DeleteSubCategoryModal: React.FC<{
                                                 return {
                                                     title: Q.title,
                                                     value: Q.id,
-                                                    children: Q.verses.map(Z => {
+                                                    children: Q.secondSubcategories.map(Z => {
                                                         return {
                                                             title: Z.title,
                                                             value: Z.id
                                                         }
-                                                    })
+                                                    }) ?? []
                                                 }
                                             })
                                         }

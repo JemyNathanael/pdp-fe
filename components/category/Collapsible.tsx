@@ -69,7 +69,7 @@ const Collapsible: React.FC<IProps> = ({ open, title, childrenItem, routePath, c
   };
 
   const handleTitleRouting = () => {
-    router.push(childrenItem?.[0]?.routePath ?? routePath);
+    router.push(routePath);
   }
 
   let bgClassName = 'px-3';
