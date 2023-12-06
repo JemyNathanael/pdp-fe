@@ -193,7 +193,8 @@ const Home: React.FC = () => {
                 fontWeight: '600',
                 position: "fixed",
                 bottom: 16,
-                left: 0
+                left: 0,
+                color:'#3788FD'
             }}>Copyright @ PT. Accelist Lentera Indonesia</footer>
 
         </div>
