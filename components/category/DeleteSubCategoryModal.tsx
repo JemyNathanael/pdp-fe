@@ -9,7 +9,7 @@ import { CloseOutlined } from '@ant-design/icons';
 interface ChapterModel {
     id: string
     title: string
-    secondSubcategories: {
+    secondSubCategories: {
         id: string
         title: string
     }[]
@@ -21,6 +21,7 @@ type DeleteSubCategoryType = {
 }
 
 const DeleteSubCategoryModal: React.FC<{
+    categoryId: string,
     isModalOpen: boolean,
     setIsModalOpen: Dispatch<SetStateAction<boolean>>
 }> = (props) => {
@@ -38,7 +39,7 @@ const DeleteSubCategoryModal: React.FC<{
     const swrFetcher = useSwrFetcherWithAccessToken()
     const fetch = useFetchWithAccessToken()
 
-    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getSubCategoryList, swrFetcher)
+    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getSubCategoryList+ `/${props.categoryId}`, swrFetcher)
 
     function resetForm() {
         form.resetFields()
@@ -62,6 +63,8 @@ const DeleteSubCategoryModal: React.FC<{
 
     const handleCancelResult = () => {
         setIsResultOpen(false)
+
+        location.reload();
     }
 
     const onFinish = async () => {
@@ -112,10 +115,10 @@ const DeleteSubCategoryModal: React.FC<{
         if (!checkChapter || checkChapter.length == 0) {
             for (let i = 0; i < data.length; i++) {
                 for (let j = 0; j < data.length; j++) {
-                    if (data[i]?.secondSubcategories[j]?.id === newValue) {
+                    if (data[i]?.secondSubCategories[j]?.id === newValue) {
                         selectedItem =
                         {
-                            title: data[i]?.secondSubcategories[j]?.title ?? '',
+                            title: data[i]?.secondSubCategories[j]?.title ?? '',
                         }
                     }
                 }
@@ -189,12 +192,13 @@ const DeleteSubCategoryModal: React.FC<{
                                         allowClear
                                         onChange={onChange}
                                         treeDefaultExpandAll
+                                        treeNodeFilterProp='title'
                                         treeData={
                                             data?.map(Q => {
                                                 return {
                                                     title: Q.title,
                                                     value: Q.id,
-                                                    children: Q.secondSubcategories.map(Z => {
+                                                    children: Q.secondSubCategories.map(Z => {
                                                         return {
                                                             title: Z.title,
                                                             value: Z.id

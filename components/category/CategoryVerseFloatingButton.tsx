@@ -86,8 +86,8 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
             )}
 
             <AddSubCategoryModal isModalOpen={isAddSubCategoryModalOpen} setIsModalOpen={setIsAddSubCategoryModalOpen} categoryId={categoryId} />
-            <UpdateSubCategoryModal isModalOpen={isUpdateSubCategoryModalOpen} setIsModalOpen={setIsUpdateSubCategoryModalOpen} />
-            <DeleteSubCategoryModal isModalOpen={isDeleteSubCategoryModalOpen} setIsModalOpen={setIsDeleteSubCategoryModalOpen} />
+            <UpdateSubCategoryModal isModalOpen={isUpdateSubCategoryModalOpen} setIsModalOpen={setIsUpdateSubCategoryModalOpen} categoryId={categoryId}/>
+            <DeleteSubCategoryModal isModalOpen={isDeleteSubCategoryModalOpen} setIsModalOpen={setIsDeleteSubCategoryModalOpen} categoryId={categoryId}/>
         </ConfigProvider >
     );
 }

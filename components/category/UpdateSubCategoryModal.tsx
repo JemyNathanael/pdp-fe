@@ -10,7 +10,7 @@ const { TextArea } = Input
 interface ChapterModel {
     id: string
     title: string
-    secondSubcategories: {
+    secondSubCategories: {
         id: string
         title: string
     }[]
@@ -23,6 +23,7 @@ type UpdateSubCategoryType = {
 }
 
 const UpdateSubCategoryModal: React.FC<{
+    categoryId: string,
     isModalOpen: boolean,
     setIsModalOpen: Dispatch<SetStateAction<boolean>>
 }> = (props) => {
@@ -44,7 +45,7 @@ const UpdateSubCategoryModal: React.FC<{
     const swrFetcher = useSwrFetcherWithAccessToken()
     const fetch = useFetchWithAccessToken()
 
-    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getSubCategoryList, swrFetcher)
+    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getSubCategoryList + `/${props.categoryId}`, swrFetcher)
 
     function resetForm() {
         form.resetFields()
@@ -71,6 +72,8 @@ const UpdateSubCategoryModal: React.FC<{
 
     const handleCancelResult = () => {
         setIsResultOpen(false)
+
+        location.reload();
     }
 
     const onFinish = async (values: UpdateSubCategoryType) => {
@@ -124,10 +127,10 @@ const UpdateSubCategoryModal: React.FC<{
         if (!checkChapter || checkChapter.length == 0) {
             for (let i = 0; i < data.length; i++) {
                 for (let j = 0; j < data.length; j++) {
-                    if (data[i]?.secondSubcategories[j]?.id === newValue) {
+                    if (data[i]?.secondSubCategories[j]?.id === newValue) {
                         selectedItem =
                         {
-                            title: data[i]?.secondSubcategories[j]?.title ?? '',
+                            title: data[i]?.secondSubCategories[j]?.title ?? '',
                         }
                     }
                 }
@@ -199,7 +202,7 @@ const UpdateSubCategoryModal: React.FC<{
                                             return {
                                                 title: Q.title,
                                                 value: Q.id,
-                                                children: Q.secondSubcategories.map(Z => {
+                                                children: Q.secondSubCategories.map(Z => {
                                                     return {
                                                         title: Z.title,
                                                         value: Z.id
@@ -242,7 +245,7 @@ const UpdateSubCategoryModal: React.FC<{
 
                             <Form.Item<UpdateSubCategoryType>
                                 name="description"
-                                rules={[{ required: true, message: 'Please input description' }]}
+                                rules={[{}]}
                             >
                                 <div>
                                     <p style={{

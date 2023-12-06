@@ -1,21 +1,26 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Button, Form, Input, Modal, Radio, RadioChangeEvent, Result, Select } from 'antd';
+import { Button, Form, Input, Modal, Radio, RadioChangeEvent, Result, TreeSelect } from 'antd';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import useSWR from 'swr';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
+import { useSession } from 'next-auth/react';
 
 const { TextArea } = Input
 
 interface ChapterModel {
-    id: string,
+    id: string
     title: string
+    secondSubCategories: {
+        id: string
+        title: string
+    }[]
+    createdAt: Date
 }
 
 type AddSubCategoryType = {
     title: string
-    description: string
-    isVerse: boolean
+    isSecond: boolean
     id?: string
     checklist?: {
         description: string
@@ -23,6 +28,7 @@ type AddSubCategoryType = {
             name: string
         }
     }[]
+    createdBy: string | null
 }
 
 const AddSubCategoryModal: React.FC<{
@@ -32,11 +38,14 @@ const AddSubCategoryModal: React.FC<{
 }> = (props) => {
 
     const [form] = Form.useForm();
-
+    const { data: session } = useSession();
     const [loading, setLoading] = useState(false);
     const [isResultOpen, setIsResultOpen] = useState(false);
     const [isDijadikanAyat, setIsDijadikanAyat] = useState(false);
     const [checklistDescriptionList, setChecklistDescriptionList] = useState<string[]>([])
+
+    const username = session?.user?.name;
+
 
     const [formResult, setFormResult] = useState<{ status: 'success' | 'error', message: string }>({
         status: 'success',
@@ -46,7 +55,9 @@ const AddSubCategoryModal: React.FC<{
     const swrFetcher = useSwrFetcherWithAccessToken()
     const fetch = useFetchWithAccessToken()
 
-    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getChapters + `/${props.categoryId}`, swrFetcher);
+    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getSubCategoryList+ `/${props.categoryId}`, swrFetcher);
+
+    const dataArray = data ? Object.values(data) : [];
 
     useEffect(() => {
         if (isDijadikanAyat) {
@@ -79,15 +90,19 @@ const AddSubCategoryModal: React.FC<{
 
     const handleCancelResult = () => {
         setIsResultOpen(false);
+
+        location.reload();
     };
 
     const onAyatRadioChange = (e: RadioChangeEvent) => {
         setIsDijadikanAyat(e.target.value);
+        console.log(data);
+        console.log(Array.isArray(data));
     };
 
     // Filter `option.label` match the user type `input`
-    const filterOption = (input: string, option?: { label: string; value: string }) =>
-        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+    // const filterOption = (input: string, option?: { label: string; value: string }) =>
+    //     (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
     const onFinish = async (values: AddSubCategoryType) => {
         setLoading(true);
@@ -95,8 +110,7 @@ const AddSubCategoryModal: React.FC<{
         const formSubmission: AddSubCategoryType = {
             id: values.id ?? props.categoryId,
             title: values.title,
-            description: values.description,
-            isVerse: values.isVerse,
+            isSecond: values.isSecond,
             checklist: checklistDescriptionList.length === 0 || (checklistDescriptionList.length === 1 && !checklistDescriptionList[0]) ? [] : checklistDescriptionList.map(Q => {
                 return {
                     description: Q,
@@ -104,7 +118,8 @@ const AddSubCategoryModal: React.FC<{
                         name: ''
                     }
                 }
-            })
+            }),
+            createdBy: username ? null : "Administrator"
         }
 
         try {
@@ -134,6 +149,8 @@ const AddSubCategoryModal: React.FC<{
             setIsResultOpen(true)
         }
     };
+
+    
 
     return (
         <div>
@@ -169,7 +186,7 @@ const AddSubCategoryModal: React.FC<{
 
                         <div style={{ marginLeft: '48px', paddingTop: '6px', flexGrow: 1 }}>
                             <Form.Item<AddSubCategoryType>
-                                name="isVerse"
+                                name="isSecond"
                                 initialValue={false}
                                 rules={[{ required: true }]}
                             >
@@ -185,17 +202,19 @@ const AddSubCategoryModal: React.FC<{
                                     name="id"
                                     rules={[{ required: true, message: 'Please select pasal' }]}
                                 >
-                                    <Select
+                                    <TreeSelect
                                         showSearch
                                         placeholder="Pilih pasal yang akan ditambahkan ayat baru"
-                                        optionFilterProp="children"
-                                        filterOption={filterOption}
+                                        // optionFilterProp="children"
+                                        // filterOption={filterOption}
+                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                        treeDefaultExpandAll
                                         dropdownMatchSelectWidth={false}
-                                        options={
-                                            data?.map(Q => {
+                                        treeData={
+                                            dataArray?.map(Q => {
                                                 return {
+                                                    title: Q.title,
                                                     value: Q.id,
-                                                    label: Q.title
                                                 }
                                             })
                                         }
