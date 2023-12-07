@@ -88,46 +88,46 @@ const Home: React.FC = () => {
                 </div>
                 <div className="flex items-center">
 
-                    {
-                        status === 'authenticated' ?
-                            <div style={{ margin: '0 16px', fontWeight: '600' }}>Hello, {displayUserName}</div>
-                            :
-                            <div></div>
-                    }
-                    {
-                        role === "Admin" &&
-                        <div className='mr-2'>
-                            <button onClick={() => router.push('/ManageUser')}>
+                {
+                    status === 'authenticated' ?
+                        <div style={{ margin: '0 20px', fontWeight: '600', paddingLeft:'2px' }}>Halo, {displayUserName}</div>
+                        :
+                        <div></div>
+                }
+                {
+                    role === "Admin" &&
+                    <div className='mr-2'>
+                        <button onClick={() => router.push('/ManageUser')}>
+                            <div style={{
+                                padding: '0px 12px 2px',
+                                // margin: ' 2px',
+                                fontSize: '18px',
+                                fontWeight: '600'
+                            }}>
+                                <FontAwesomeIcon icon={faUserGear} />
+                            </div>
+                        </button>
+                    </div>
+                }
+                {
+                    status === 'authenticated' ?
+                        <div>
+                            <button onClick={() => {
+                                nProgress.start();
+                                signOut({
+                                    callbackUrl: '/api/end-session'
+                                });
+                            }}>
                                 <div style={{
-                                    padding: '4px 12px',
-                                    margin: ' 2px',
+                                    padding: '0px 14px 2px',
+                                    marginRight: ' 3px',
                                     fontSize: '18px',
                                     fontWeight: '600'
                                 }}>
-                                    <FontAwesomeIcon icon={faUserGear} />
+                                    <FontAwesomeIcon icon={faArrowRightFromBracket} />
                                 </div>
                             </button>
                         </div>
-                    }
-                    {
-                        status === 'authenticated' ?
-                            <div>
-                                <button onClick={() => {
-                                    nProgress.start();
-                                    signOut({
-                                        callbackUrl: '/api/end-session'
-                                    });
-                                }}>
-                                    <div style={{
-                                        padding: '4px 12px',
-                                        margin: ' 2px',
-                                        fontSize: '18px',
-                                        fontWeight: '600'
-                                    }}>
-                                        <FontAwesomeIcon icon={faArrowRightFromBracket} />
-                                    </div>
-                                </button>
-                            </div>
 
                             :
 
