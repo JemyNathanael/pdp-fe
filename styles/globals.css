@@ -149,3 +149,6 @@
 .css-1qqjgso.ant-result-info .ant-result-icon>.anticon {
   color: red !important;
 }
+.css-1qqjgso.ant-result-success .ant-result-icon>.anticon {
+  color: #3788FD !important;
+}
