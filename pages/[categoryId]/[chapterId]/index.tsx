@@ -47,7 +47,7 @@ const Chapter: React.FC = () => {
 
     return (
         <div>
-            <div className="text-xl font-semibold mb-5">
+            <div className="text-xl font-semibold mb-5 text-[#3788FD]">
                 {currentChapter?.title}
             </div>
             <div>

@@ -6,7 +6,7 @@ import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import { useSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faCircleXmark} from '@fortawesome/free-regular-svg-icons';
+import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 
 const { TextArea } = Input
 
@@ -57,9 +57,15 @@ const AddSubCategoryModal: React.FC<{
     const swrFetcher = useSwrFetcherWithAccessToken()
     const fetch = useFetchWithAccessToken()
 
-    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getSubCategoryList+ `/${props.categoryId}`, swrFetcher);
+    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getSubCategoryList + `/${props.categoryId}`, swrFetcher);
 
     const dataArray = data ? Object.values(data) : [];
+
+    const [addForm, setAddForm] = useState<{
+        ayat: boolean,
+        title: string,
+        checkList: string[]
+    }>({ ayat: false, title: '', checkList: [] })
 
     useEffect(() => {
         if (isDijadikanAyat) {
@@ -98,8 +104,9 @@ const AddSubCategoryModal: React.FC<{
 
     const onAyatRadioChange = (e: RadioChangeEvent) => {
         setIsDijadikanAyat(e.target.value);
-        console.log(data);
-        console.log(Array.isArray(data));
+        setAddForm(prev => {
+            return { ...prev, ayat: e.target.value }
+        })
     };
 
     // Filter `option.label` match the user type `input`
@@ -134,7 +141,7 @@ const AddSubCategoryModal: React.FC<{
                 message: 'Successfully Added \n Sub - Category!',
                 status: 'success'
             });
-            
+
 
         } catch (e) {
             setFormResult({
@@ -152,7 +159,85 @@ const AddSubCategoryModal: React.FC<{
         }
     };
 
-    
+    function checkAddButton(){
+        if(!addForm.ayat){
+            if(!addForm.title){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        else if(addForm.ayat){
+            if(!addForm.title && addForm.checkList.length === 0){
+                return true
+            }
+            else if(!addForm.title && addForm.checkList.length > 0){
+                return true
+            }
+            else if(addForm.title && addForm.checkList.length === 0){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        return false
+    }
+
+    function checkBackgroundColor(){
+        if(!addForm.ayat){
+            if(!addForm.title){
+                return '#A3A3A3'
+            }
+            else{
+                return '#3788FD'
+            }
+        }
+        else if(addForm.ayat){
+            if(!addForm.title && addForm.checkList.length === 0){
+                return '#A3A3A3'
+            }
+            else if(!addForm.title && addForm.checkList.length > 0){
+                return '#A3A3A3'
+            }
+            else if(addForm.title && addForm.checkList.length === 0){
+                return '#A3A3A3'
+            }
+            else{
+                return '#3788FD'
+            }
+        }
+        return '#A3A3A3'
+    }
+
+    function checkColor(){
+        if(!addForm.ayat){
+            if(!addForm.title){
+                return 'black'
+            }
+            else{
+                return 'white'
+            }
+        }
+        else if(addForm.ayat){
+            if(!addForm.title && addForm.checkList.length === 0){
+                return 'black'
+            }
+            else if(!addForm.title && addForm.checkList.length > 0){
+                return 'black'
+            }
+            else if(addForm.title && addForm.checkList.length === 0){
+                return 'black'
+            }
+            else{
+                return 'white'
+            }
+        }
+        return 'black'
+    }
+
+
 
     return (
         <div>
@@ -162,7 +247,7 @@ const AddSubCategoryModal: React.FC<{
                 open={props.isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd"}} />}
+                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{ color: "#3788fd" }} />}
                 footer={[]}
             >
                 <p style={{
@@ -193,7 +278,9 @@ const AddSubCategoryModal: React.FC<{
                                 initialValue={false}
                                 rules={[{ required: true }]}
                             >
-                                <Radio.Group onChange={onAyatRadioChange} value={isDijadikanAyat}>
+                                <Radio.Group 
+                                    onChange={onAyatRadioChange} 
+                                    value={isDijadikanAyat}>
                                     <Radio value={false}><span style={{ fontSize: '18px' }}>No</span></Radio>
                                     <Radio value={true}><span style={{ fontSize: '18px' }}>Yes</span></Radio>
                                 </Radio.Group>
@@ -203,11 +290,11 @@ const AddSubCategoryModal: React.FC<{
                                 isDijadikanAyat &&
                                 <Form.Item<AddSubCategoryType>
                                     name="id"
-                                    rules={[{ required: true, message: 'Please select pasal' }]}
+                                    rules={[{ required: true, message: 'Please select sub-category' }]}
                                 >
                                     <TreeSelect
                                         showSearch
-                                        placeholder="Pilih pasal yang akan ditambahkan ayat baru"
+                                        placeholder="Pilih sub-category yang akan diberikan checklist"
                                         // optionFilterProp="children"
                                         // filterOption={filterOption}
                                         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -240,6 +327,9 @@ const AddSubCategoryModal: React.FC<{
                                 marginBottom: '8px'
                             }}>Title</p>
                             <Input
+                                onChange={e => setAddForm(prev => {
+                                    return { ...prev, title: e.target.value }
+                                })}
                                 placeholder='Insert title' style={{ fontSize: '18px' }}
                             />
                         </div>
@@ -249,7 +339,7 @@ const AddSubCategoryModal: React.FC<{
 
                     <Form.Item<AddSubCategoryType>
                         name="description"
-                        rules={[{  }]}
+                        rules={[{}]}
                     >
                         <div>
                             <p style={{
@@ -257,7 +347,10 @@ const AddSubCategoryModal: React.FC<{
                                 fontWeight: 'bold',
                                 marginBottom: '8px'
                             }}>Description</p>
-                            <TextArea rows={4} placeholder='Insert description' style={{ fontSize: '18px' }} />
+                            <TextArea
+                                rows={4}
+                                placeholder='Insert description'
+                                style={{ fontSize: '18px' }} />
                         </div>
                     </Form.Item>
 
@@ -279,6 +372,9 @@ const AddSubCategoryModal: React.FC<{
                                         value={Q}
                                         required
                                         onChange={e => {
+                                            setAddForm(prev => {
+                                                return { ...prev, checkList: [e.target.value] }
+                                            })
                                             const checklistTemp = checklistDescriptionList.slice()
                                             checklistTemp[idx] = e.target.value
                                             setChecklistDescriptionList(checklistTemp)
@@ -298,7 +394,7 @@ const AddSubCategoryModal: React.FC<{
                                 size='large'
                                 onClick={() => {
                                     setChecklistDescriptionList(prev => [...prev, ''])
-                                }} style={{backgroundColor: '#3788FD', color: 'white'}}>Add another checklist</Button>
+                                }} style={{ backgroundColor: '#3788FD', color: 'white' }}>Add another checklist</Button>
                             <Button type='primary'
                                 danger
                                 size='large'
@@ -311,7 +407,13 @@ const AddSubCategoryModal: React.FC<{
                     <Form.Item style={{ textAlign: 'right' }}>
                         <Button key="submit" type="default" htmlType='submit' loading={loading}
                             size='large'
-                            style={{backgroundColor:'#3788FD', color:'white'}}>
+                            style={{
+                                backgroundColor: checkBackgroundColor(),
+                                color: checkColor(),
+                            }}
+                            disabled={
+                                checkAddButton()
+                            }>
                             Add
                         </Button>
                     </Form.Item>
@@ -327,7 +429,7 @@ const AddSubCategoryModal: React.FC<{
                 open={isResultOpen}
                 onCancel={handleCancelResult}
                 footer={[]}
-                closable={false} 
+                closable={false}
             >
                 <Result
                     status={formResult.status}

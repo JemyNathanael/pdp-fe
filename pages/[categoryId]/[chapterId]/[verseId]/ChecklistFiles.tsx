@@ -145,7 +145,7 @@ const ChecklistFiles: React.FC = () => {
 
                 </div>
                 <p className='flex flex-1 flex-row-reverse mt-3 text-red-500 text-xs font-semibold'>
-                    *Format Files: PDF, PNG, Word, and Excel
+                    *Format Files: PDF, PNG, docx, and xlsx 
                 </p>
             </div>
 
