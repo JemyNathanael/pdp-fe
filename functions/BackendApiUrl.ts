@@ -26,7 +26,8 @@ export const BackendApiUrl = {
     uploadFile: baseUrl + '/api/v1/Blob/upload-file',
     uploadFileInformation: baseUrl + '/api/v1/Blob/upload-file-information',
     presignedPutObject:baseUrl + '/api/v1/Blob/presigned-put-object',
-    saveFile:baseUrl + '/api/v1/Checklist/save-file'
+    saveFile:baseUrl + '/api/v1/Checklist/save-file',
+    getInformation: baseUrl + '/api/v1/category/get-chapter'
 }
 
 export function GetUser(
@@ -79,4 +80,13 @@ export function GetChecklistList(verseId: string) {
     param.append('verseId', verseId.toString());
 
     return BackendApiUrl.getChecklists + '?' + param.toString();
+}
+
+export function GetInformation(categoryId : string){
+    const param = new URLSearchParams();
+
+    param.append('categoryId',categoryId.toString());
+
+    return BackendApiUrl.getInformation + '?' + param.toString();
+
 }
