@@ -15,6 +15,8 @@ import { SelectOptions } from '@/components/interfaces/AddNewUserForms';
 import useSWR from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import { Modal } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCircleXmark} from '@fortawesome/free-regular-svg-icons';
 
 interface DataItem {
     roleName: string;
@@ -129,6 +131,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
                 onCancel={handleCancel}
                 footer={null}
                 width={800}
+                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd"}} />}
             >
                 <div className="flex flex-col px-2 md:px-4 lg:px-8 mt-4 md:mt-16">
                     <h3 className="text-xl sm:text-2xl text-center font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Add New Account</h3>
