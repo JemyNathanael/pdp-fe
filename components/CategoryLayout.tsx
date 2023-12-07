@@ -12,7 +12,7 @@ import { GetCategoryDetail } from "@/functions/BackendApiUrl";
 import useSWR from 'swr';
 import { Authorize } from "./Authorize";
 
-const { Sider, Content, Header } = Layout;
+const { Sider, Content } = Layout;
 
 const sidebarBackgroundColor = 'white';
 
@@ -142,8 +142,8 @@ const CategoryLayout: React.FC<{
     }
 
     const logoutButton = () => (
-        <button onClick={onClickLogout} className="pl-4">
-            <FontAwesomeIcon className="mr-2" icon={faArrowRightFromBracket} color="white"></FontAwesomeIcon>
+        <button onClick={onClickLogout} className="pl-4 mt-1">
+            <FontAwesomeIcon className="mr-2" icon={faArrowRightFromBracket} color="white" fontSize="18px"></FontAwesomeIcon>
         </button>
     )
 
@@ -164,29 +164,67 @@ const CategoryLayout: React.FC<{
                     <link key="favicon" rel="icon" href="/favicon.ico" />
                 </Head>
 
-                <Header className="bg-[#3788FD] px-2 py-1 flex items-center" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.6)", padding: 0, position: 'fixed', width: '100%', zIndex: 1 }}>
+                {/* <Header className="bg-[#3788FD] flex items-center" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", padding: '16px', margin: 0, position: 'fixed', width: '100%', zIndex: 1, height: '90px' }}>
                     <div className="flex flex-1 items-center">
 
                         <div className="p-6 flex flex-1 flex-row-reverse items-center">
 
                             {logoutButton()}
                             {isAdmin &&
-                                <button onClick={goToManageUserPage} style={{ color: 'white' }}>
+                                <button onClick={goToManageUserPage} style={{ color: 'white', fontSize: '18px', paddingRight: '4px' }}>
                                     <FontAwesomeIcon icon={faUserGear} />
                                 </button>
                             }
-                            <div className="mr-6 text-sm text-white font-bold">
+                            <div className="mr-6 text-white font-semibold" style={{fontSize:'18px'}}>
                                 Halo, {displayUserName}
                             </div>
-
                         </div>
                     </div>
-                </Header>
+                </Header> */}
+
+                <nav className="bg-[#3788FD]" style={{
+                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                    padding: '16px',
+                    position: 'fixed',
+                    width: '100%',
+                    zIndex: 1,
+                }}>
+                    <div className="flex flex-1 items-center">
+                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
+                            <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
+                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-4 items-center">
+                            <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
+                                <ul className="lg:flex space-x-4 items-center">
+                                    <li className="flex items-center">
+                                        <div className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px'" style={{fontSize:'16px'}}>
+                                            {`Halo, ${displayUserName}`}
+                                        </div>
+                                        {isAdmin && (
+                                            <button
+                                                onClick={goToManageUserPage}
+                                                className="text-white text-lg pr-3 ml-1 mr-1"
+                                            >
+                                                <FontAwesomeIcon icon={faUserGear} />
+                                            </button>
+                                        )}
+                                        <button
+                                            onClick={logoutButton}
+                                            className="text-white text-lg pl-4 mt-1"
+                                        >
+                                            <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
 
                 <Layout>
                     <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000 }}>
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src='adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '8px' }} />
+                            <img src='adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '10px', padding:'8px' }} />
                         </div>
                         <p className="p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
                             {data?.title}
@@ -213,7 +251,7 @@ const CategoryLayout: React.FC<{
                         </button>
                     </Sider>
 
-                    <Content className="p-7" style={{paddingTop: 100}}>
+                    <Content className="p-7" style={{ paddingTop: 100 }}>
                         {children}
                     </Content>
                 </Layout>

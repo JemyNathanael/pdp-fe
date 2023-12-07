@@ -84,33 +84,28 @@ const Home: React.FC = () => {
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
                 </div>
                 <div className="">
-                    <SearchBarNav placeholder="input search text" style={{ width: 600  }} />
+                    <SearchBarNav placeholder="input search text" style={{ width: 600 }} />
                 </div>
                 <div className="flex items-center">
-
-                {
-                    status === 'authenticated' ?
-                        <div style={{ margin: '0 20px', fontWeight: '600', paddingLeft:'2px' }}>Halo, {displayUserName}</div>
-                        :
-                        <div></div>
-                }
-                {
-                    role === "Admin" &&
-                    <div className='mr-2'>
-                        <button onClick={() => router.push('/ManageUser')}>
-                            <div style={{
-                                padding: '0px 12px 2px',
-                                // margin: ' 2px',
-                                fontSize: '18px',
-                                fontWeight: '600'
-                            }}>
-                                <FontAwesomeIcon icon={faUserGear} />
-                            </div>
-                        </button>
-                    </div>
-                }
-                {
-                    status === 'authenticated' ?
+                    {status === 'authenticated' ?
+                        <div style={{ margin: '0 16px', fontWeight: '600' }}>Halo, {displayUserName}</div>
+                        : <div></div>
+                    }
+                    {role === "Admin" &&
+                        <div className='mr-2'>
+                            <button onClick={() => router.push('/ManageUser')}>
+                                <div style={{
+                                    padding: '4px 12px 3px',
+                                    fontSize: '18px',
+                                    fontWeight: '600',
+                                    marginLeft: '4px',
+                                }}>
+                                    <FontAwesomeIcon icon={faUserGear} />
+                                </div>
+                            </button>
+                        </div>
+                    }
+                    {status === 'authenticated' ?
                         <div>
                             <button onClick={() => {
                                 nProgress.start();
@@ -119,36 +114,35 @@ const Home: React.FC = () => {
                                 });
                             }}>
                                 <div style={{
-                                    padding: '0px 14px 2px',
-                                    marginRight: ' 3px',
+                                    padding: '4px 14px 3px',
+                                    marginRight: '3px',
                                     fontSize: '18px',
-                                    fontWeight: '600'
+                                    fontWeight: '600',
                                 }}>
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} />
                                 </div>
                             </button>
                         </div>
-
-                            :
-
-                            <div>
-                                <button onClick={() => {
-                                    nProgress.start();
-                                    signIn('oidc');
+                        :
+                        <div>
+                            <button onClick={() => {
+                                nProgress.start();
+                                signIn('oidc');
+                            }}>
+                                <div style={{
+                                    border: 'solid white 2px',
+                                    padding: '4px 12px',
+                                    borderRadius: '16px',
+                                    fontSize: '18px',
+                                    fontWeight: '600',
                                 }}>
-                                    <div style={{
-                                        border: 'solid white 2px',
-                                        padding: '4px 12px',
-                                        borderRadius: '16px',
-                                        fontSize: '18px',
-                                        fontWeight: '600'
-                                    }}>
-                                        <FontAwesomeIcon icon={faSigning}></FontAwesomeIcon> Login
-                                    </div>
-                                </button>
-                            </div>
+                                    <FontAwesomeIcon icon={faSigning}></FontAwesomeIcon> Login
+                                </div>
+                            </button>
+                        </div>
                     }
                 </div>
+
             </nav>
 
             <div>
