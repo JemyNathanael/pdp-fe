@@ -38,12 +38,21 @@ const SearchBarNav : React.FC<{placeholder: string, style: React.CSSProperties }
     const handleSelect = (selectedValue, selectedData) => {
         console.log("wtf ", selectedValue);
         console.log("wtf asdsad", selectedData);
+        // console.log(data?.map((d) => ({
+        //     key: `${d.value}-${d.label}`,
+        //     label: d.label,
+        //     value: d.value,
+        //     type: d['type'],
+        //     firstSubCategoryId: d['firstSubCategoryId'],
+        //     secondSubCategoryId: d['secondSubCategoryId'],
+        //     })) || []);
         if(selectedData.type == 'Category') {
             window.location.href = `/${selectedData.value}`;
         } else if(selectedData.type == 'First Sub-Category') {
-            window.location.href = `/${selectedData.value}/${selectedData.firstSubCategoryId}`;
-        } else if(selectedData.type == 'Second Sub-Category') {
-            window.location.href = `/${selectedData.value}/${selectedData.firstSubCategoryId}/${selectedData.secondSubCategoryId}`;
+            window.location.href = `/${selectedData.key}/${selectedData.value}`;
+        }
+        if(selectedData.type == 'Second Sub-Category') {
+            window.location.href = `/${selectedData.key}/${selectedData.firstSubCategoryId}/${selectedData.value}`;
         }
     }
 
@@ -60,14 +69,33 @@ const SearchBarNav : React.FC<{placeholder: string, style: React.CSSProperties }
             onSearch={handleSearch}
             onChange={handleChange}
             onSelect={handleSelect}
-            options={(data || []).map((d) => ({ 
-                key: `${d.value}-${d.label}`,
-                label: d.label,
-                value: d.value,
-                type: d['type'],
-                firstSubCategoryId: d['firstSubCategoryId'],
-                secondSubCategoryId: d['secondSubCategoryId'],
-            }))}
+            options={(data || []).map((d) => {
+                // Jika data yang diselect type Category
+                let valueOfType = d.value;
+                // Jika data yang diselect type First Sub-Category
+                if(d['type'] == 'First Sub-Category') {
+                    valueOfType = d['firstSubCategoryId'];
+                }
+                // Jika data yang diselect type Second Sub-Category
+                if(d['type'] == 'Second Sub-Category') {
+                    valueOfType = d['secondSubCategoryId'];
+                }
+                return{
+                    key: `${d.value}`, // Ini CategoryId
+                    label: d.label,
+                    value: valueOfType, // Ini SubCategoryId
+                    type: d['type'],
+                    firstSubCategoryId: d['firstSubCategoryId'],
+                }
+            })}
+            // options={(data || []).map((d) => ({ 
+            //     key: `${d.value}-${d.label}`,
+            //     label: d.label,
+            //     value: d.value,
+            //     type: d['type'],
+            //     firstSubCategoryId: d['firstSubCategoryId'],
+            //     secondSubCategoryId: d['secondSubCategoryId'],
+            // }))}
         />
     )
 } 
