@@ -130,7 +130,7 @@ const CategoryLayout: React.FC<{
             }
         }
     }
-    
+
     const handleLogout = () => {
         if (status === 'authenticated') {
             nProgress.start();
@@ -166,26 +166,37 @@ const CategoryLayout: React.FC<{
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
                             <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
                         </div>
-                        <div className="flex flex-1 flex-row-reverse mr-6 items-center">
-                            <ul className="lg:flex space-x-4 items-center">
-                                <li>
-                                    <div className="text-white cursor-pointer font-semibold pr-4"  style={{ fontSize:'16px'}}>{`Halo, ${displayUserName}`}</div>
-                                </li>
-                                {isAdmin &&
-                                    <li>
-                                        <button onClick={goToManageUserPage} style={{ color: 'white', fontSize: '18px', paddingRight: '12px' }}>
-                                            <FontAwesomeIcon icon={faUserGear} />
+                        <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-3 items-center">
+                            <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
+                                <ul className="lg:flex space-x-4 items-center">
+                                    <li className="flex items-center">
+                                        <div className="text-white cursor-pointer font-semibold pr-7" style={{fontSize:'16px'}}>
+                                            {`Halo, ${displayUserName}`}
+                                        </div>
+                                        {isAdmin && (
+                                            <button
+                                                onClick={goToManageUserPage}
+                                                className="text-white text-lg hover:text-gray-300 pr-6"
+                                            >
+                                                <FontAwesomeIcon icon={faUserGear} />
+                                            </button>
+                                        )}
+                                        <button
+                                            onClick={handleLogout}
+                                            className="text-white text-lg hover:text-gray-300"
+                                            style={{
+                                                padding: '3px 10px 2px',
+                                                fontSize: '18px',
+                                                fontWeight: '600',
+                                            }}
+                                        >
+                                            <FontAwesomeIcon icon={faArrowRightFromBracket} />
                                         </button>
                                     </li>
-                                }
-                                <li>
-                                    <button onClick={handleLogout} className="pl-1" style={{ color: 'white', fontSize: '18px' }}>
-                                        <FontAwesomeIcon icon={faArrowRightFromBracket} />
-                                    </button>
-                                </li>
-                            </ul>
+                                </ul>
+                            </div>
                         </div>
-                    </div> 
+                    </div>
                 </nav>
 
                 <Layout>
