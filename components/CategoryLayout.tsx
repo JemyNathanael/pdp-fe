@@ -12,7 +12,7 @@ import { GetCategoryDetail } from "@/functions/BackendApiUrl";
 import useSWR from 'swr';
 import { Authorize } from "./Authorize";
 
-const { Sider, Content, Header } = Layout;
+const { Sider, Content, } = Layout;
 
 const sidebarBackgroundColor = '#4F7471';
 
@@ -66,7 +66,7 @@ const CategoryLayout: React.FC<{
     const router = useRouter();
     const categoryId = router.query['categoryId']?.toString() ?? '';
 
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const displayUserName = session?.user?.name;
 
     const swrFetcher = useSwrFetcherWithAccessToken();
@@ -130,19 +130,15 @@ const CategoryLayout: React.FC<{
             }
         }
     }
-
-    function onClickLogout() {
-        nProgress.start();
-        signOut({
-            callbackUrl: '/api/end-session'
-        });
+    
+    const handleLogout = () => {
+        if (status === 'authenticated') {
+            nProgress.start();
+            signOut({
+                callbackUrl: '/api/end-session',
+            });
+        }
     }
-
-    const logoutButton = () => (
-        <button onClick={onClickLogout} className="pl-4">
-            <FontAwesomeIcon className="mr-2" icon={faArrowRightFromBracket} color="white"></FontAwesomeIcon>
-        </button>
-    )
 
     return (
         <ConfigProvider theme={{
@@ -161,26 +157,36 @@ const CategoryLayout: React.FC<{
                     <link key="favicon" rel="icon" href="/favicon.ico" />
                 </Head>
 
-                <Header className="bg-[#3788FD] px-2 py-1 flex items-center"style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.6)" }}>
-                    <div className="flex flex-1 items-center">
+                <nav className="bg-[#3788FD]" style={{
+                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                    padding: '16px',
+                    backgroundColor: '#3788FD'
+                }}>
+                    <div className="flex items-center">
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '160px', margin: '8px'}} />
+                            <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
                         </div>
-                        <div className="p-6 flex flex-1 flex-row-reverse items-center">
-
-                            {logoutButton()}
-                            {isAdmin &&
-                                <button onClick={goToManageUserPage} style={{ color: 'white' }}>
-                                    <FontAwesomeIcon icon={faUserGear} />
-                                </button>
-                            }
-                            <div className="mr-6 text-sm text-white font-bold">
-                                Halo, {displayUserName}
-                            </div>
-
+                        <div className="flex flex-1 flex-row-reverse mr-6 items-center">
+                            <ul className="lg:flex space-x-4 items-center">
+                                <li>
+                                    <div className="text-white cursor-pointer font-semibold pr-4"  style={{ fontSize:'16px'}}>{`Halo, ${displayUserName}`}</div>
+                                </li>
+                                {isAdmin &&
+                                    <li>
+                                        <button onClick={goToManageUserPage} style={{ color: 'white', fontSize: '18px', paddingRight: '12px' }}>
+                                            <FontAwesomeIcon icon={faUserGear} />
+                                        </button>
+                                    </li>
+                                }
+                                <li>
+                                    <button onClick={handleLogout} className="pl-1" style={{ color: 'white', fontSize: '18px' }}>
+                                        <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                </Header>
+                    </div> 
+                </nav>
 
                 <Layout>
                     <Sider width={300} className="pb-24 hidden lg:block">
