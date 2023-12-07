@@ -145,7 +145,7 @@ const DeleteSubCategoryModal: React.FC<{
             >
 
                 <Result
-                    style={{ margin: '0', padding: '0', marginTop: '16px', color:'red'}}
+                    style={{ margin: '0', padding: '0', marginTop: '16px'}}
                 />
 
                 {
