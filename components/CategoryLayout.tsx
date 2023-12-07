@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Head from 'next/head';
 import { ConfigProvider, Layout } from "antd";
-import { faHome, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRightFromBracket, faUserGear } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import Collapsible from "./category/Collapsible";
@@ -72,6 +72,12 @@ const CategoryLayout: React.FC<{
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data } = useSWR<CategoryDetailModel>(GetCategoryDetail(categoryId), swrFetcher);
 
+    const userRole = session?.user?.['role'][0];
+    const isAdmin = userRole === "Admin";
+    const goToManageUserPage = () => {
+        router.push('/ManageUser');
+    }
+
     useEffect(() => {
         if (data) {
             const firstSubCategoriesItem: CategorySidebarItemsModel[] = data?.firstSubCategories.map((chapter) => {
@@ -133,9 +139,8 @@ const CategoryLayout: React.FC<{
     }
 
     const logoutButton = () => (
-        <button onClick={onClickLogout} className="flex items-center text-[#4F7471] font-semibold border-2 border-[#4F7471] h-9 px-3 rounded-full">
-            <FontAwesomeIcon className="mr-2" icon={faArrowRightFromBracket} color="#4F7471"></FontAwesomeIcon>
-            Logout
+        <button onClick={onClickLogout} className="pl-4">
+            <FontAwesomeIcon className="mr-2" icon={faArrowRightFromBracket} color="white"></FontAwesomeIcon>
         </button>
     )
 
@@ -156,19 +161,23 @@ const CategoryLayout: React.FC<{
                     <link key="favicon" rel="icon" href="/favicon.ico" />
                 </Head>
 
-                <Header className="bg-white px-0 flex items-center">
+                <Header className="bg-[#3788FD] px-2 py-1 flex items-center"style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.6)" }}>
                     <div className="flex flex-1 items-center">
-                        <button className="p-6 border-r-2 border-r-gray-200" onClick={() => router.push('/')}>
-                            <FontAwesomeIcon icon={faHome} color="#4F7471" className="fa-xl"></FontAwesomeIcon>
-                        </button>
-                        <div className="p-6 flex-1 text-[#4F7471] font-bold text-xl">
-                            LOGO
+                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
+                            <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '160px', margin: '8px'}} />
                         </div>
                         <div className="p-6 flex flex-1 flex-row-reverse items-center">
+
                             {logoutButton()}
-                            <div className="mr-6 font-semibold text-xs">
+                            {isAdmin &&
+                                <button onClick={goToManageUserPage} style={{ color: 'white' }}>
+                                    <FontAwesomeIcon icon={faUserGear} />
+                                </button>
+                            }
+                            <div className="mr-6 text-sm text-white font-bold">
                                 Halo, {displayUserName}
                             </div>
+
                         </div>
                     </div>
                 </Header>
