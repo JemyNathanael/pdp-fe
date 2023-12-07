@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Select } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import { BackendApiUrl, GetUser } from '@/functions/BackendApiUrl';
 import { mutate } from 'swr';
@@ -104,6 +105,7 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
             open={visible}
             onCancel={onCancel}
             centered
+            closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd"}} />}
             width={750}
             className=''
             footer={[

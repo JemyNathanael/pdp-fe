@@ -93,10 +93,8 @@ const Home: React.FC = () => {
                     <div className='mr-2'>
                         <button onClick={() => router.push('/ManageUser')}>
                             <div style={{
-                                // border: 'solid white 2px',
                                 padding: '4px 12px',
                                 margin: ' 2px',
-                                // borderRadius: '16px',
                                 fontSize: '18px',
                                 fontWeight: '600'
                             }}>
@@ -115,10 +113,8 @@ const Home: React.FC = () => {
                                 });
                             }}>
                                 <div style={{
-                                    // border: 'solid white 2px',
                                     padding: '4px 12px',
                                     margin: ' 2px',
-                                    // borderRadius: '16px',
                                     fontSize: '18px',
                                     fontWeight: '600'
                                 }}>
@@ -165,7 +161,6 @@ const Home: React.FC = () => {
                                             style={{
                                                 transition: 'background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s',
                                                 backgroundColor: '#3788FD',
-                                                color: 'white',
                                                 boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.4)',
                                                 borderColor: '#3788FD',
                                                 borderStyle: 'solid',
@@ -188,13 +183,13 @@ const Home: React.FC = () => {
                                                 top: '10px',
                                                 right: '10px',
                                                 cursor: 'pointer',
-                                                transition: 'color 1,0s', // Add transition for smooth effect
+                                                transition: 'color 1,0s',
                                             }} onClick={(e) => { e.stopPropagation(); handleIconModal(Q.id); }}
                                                 onMouseOver={(e) => {
-                                                    e.currentTarget.style.color = '#3788FD'; // Change to blue when hovered
+                                                    e.currentTarget.style.color = '#3788FD';
                                                 }}
                                                 onMouseOut={(e) => {
-                                                    e.currentTarget.style.color = 'white'; // Change back to the original color when not hovered
+                                                    e.currentTarget.style.color = 'white';
                                                 }} />
                                             <div className='categoryTitleHome'>
                                                 <FontAwesomeIcon icon={getRelatedIcon(Q.title)} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>

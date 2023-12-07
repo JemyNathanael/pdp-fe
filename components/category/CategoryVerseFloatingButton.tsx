@@ -25,7 +25,7 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
         <ConfigProvider
             theme={{
                 token: {
-                    colorPrimary: "#4F7471"
+                    colorPrimary: "#3788FD"
                 }
             }}>
 
