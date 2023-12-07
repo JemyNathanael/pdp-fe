@@ -3,6 +3,8 @@ import { Modal } from 'antd';
 import { GetInformation } from '@/functions/BackendApiUrl';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import useSWR from 'swr';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCircleXmark} from '@fortawesome/free-solid-svg-icons';
 
 interface InformationModalProps {
     onCancel: () => void;
@@ -35,6 +37,7 @@ const InformationModal: React.FC<InformationModalProps> = ({ onCancel, visible, 
                 mask={false}
                 onCancel={onCancel}
                 footer={null}
+                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd",}} />}
             >
                 <div className='p-5'>
                     {informationData && informationData.map((info, i) =>
