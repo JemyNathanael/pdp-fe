@@ -9,6 +9,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { mutate } from 'swr';
 import { useRouter } from 'next/router';
+import {faCircleXmark} from '@fortawesome/free-regular-svg-icons';
 
 interface EditChecklistModalProps {
     visible: boolean;
@@ -33,7 +34,7 @@ const SuccessUpdateModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-10 bg-secondary-100 backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
             <div className="flex flex-col p-6 sm:p-12 border items-center justify-center">
-                <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#4f7471", fontSize: "64px", marginBottom: "8px" }} />
+                <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#3788FD", fontSize: "64px", marginBottom: "8px" }} />
                 <div className="w-full h-4 sm:h-8" />
                 <h3 className="text-xl sm:text-2xl text-accent-100 font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Successfully Updated Checklist</h3>
             </div>
@@ -85,6 +86,7 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
                 width={750}
                 onCancel={onCancel}
                 footer={null}
+                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd", fontSize:'24px'}} />}
             >
                 <h3 className='text-xl sm:text-2xl text-center font-body font-bold mt-6'>Update Checklist</h3>
                 <div className='p-5'>
@@ -104,7 +106,7 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
                             <p className="text-md text-red-600 font-normal font-body mt-1.5">{errors.description?.message}</p>
                         )}
                         <div className="flex justify-end mt-5">
-                            <button type="submit" className="bg-greyeen text-white rounded font-medium px-5 py-1">Update</button>
+                            <button type="submit" className="bg-[#3788FD] text-white rounded font-medium px-5 py-1">Update</button>
                         </div>
                     </form>
                 </div>

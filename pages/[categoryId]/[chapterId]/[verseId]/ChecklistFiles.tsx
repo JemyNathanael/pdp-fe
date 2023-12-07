@@ -112,7 +112,7 @@ const ChecklistFiles: React.FC = () => {
         <div className='flex flex-1'>
             <div>
                 <button onClick={navigateBackToVerse}>
-                    <FontAwesomeIcon icon={faCircleLeft} className='text-[#4F7471] mr-5' size={'2x'} />
+                    <FontAwesomeIcon icon={faCircleLeft} className='text-[#3788FD] mr-5' size={'2x'} />
                 </button>
             </div>
 

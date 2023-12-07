@@ -112,9 +112,9 @@ const VersePage: Page = () => {
             <div className='mb-10'>
             <Row>
                 <Link href={ router.asPath.replace(verseId, "")}>
-                    <p style={{fontSize:'large', fontWeight:600}}>{indexData?.subCategoryTitle}</p>
+                    <p style={{fontSize:'large', fontWeight:600, color:"grey"}}>{indexData?.subCategoryTitle} </p>
                 </Link>
-                <p style={{fontSize:'large',color:'#3788FD', fontWeight:600}}> / {indexData?.checklistTitle}</p>
+                <p style={{fontSize:'large',color:'#3788FD', fontWeight:600, marginLeft:'4px'}}> / {indexData?.checklistTitle}</p>
             </Row>
             <br />
                 {(checklist && uploadStatusDropdown) &&
