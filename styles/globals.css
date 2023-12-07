@@ -138,14 +138,14 @@
  color: red;
 }
 
-.css-dev-only-do-not-override-1dex64i.ant-result-success .ant-result-icon>.anticon {
-  color:#416a67;
-}
-
 .css-dev-only-do-not-override-1qqjgso.ant-result-success .ant-result-icon>.anticon {
   color: #3788FD;
 }
 
 .css-dev-only-do-not-override-1qqjgso.ant-result-info .ant-result-icon>.anticon {
-  color: red;
+  color: red !important;
+}
+
+.css-1qqjgso.ant-result-info .ant-result-icon>.anticon {
+  color: red !important;
 }
