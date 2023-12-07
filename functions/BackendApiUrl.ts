@@ -17,6 +17,8 @@ export const BackendApiUrl = {
     deleteChecklist: baseUrl + '/api/v1/Checklist',
     getChapters: baseUrl + '/api/v1/category',
     
+    getHomeSearch: baseUrl + '/api/v1/Home',
+    
     createSubCategory: baseUrl + '/api/v1/category',
     updateSubCategory: baseUrl + '/api/v1/category',
     deleteSubCategory: baseUrl + '/api/v1/category',
