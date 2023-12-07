@@ -35,13 +35,7 @@ const DefaultLayout: React.FC<{
         <>
             <nav className="bg-[#3788FD]" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}>
                 <div className="flex items-center">
-                    {/* <div className="flex justify-center p-6 items-center  border-r-2 border-gray-300">
-                        <FontAwesomeIcon icon={faHouse} className='text-greyeen text-2xl' />
-                    </div>
-                    <div className="flex ml-5 text-2xl text-greyeen cursor-pointer font-bold">
-                        LOGO
-                    </div> */}
-                    <div style={{ flexGrow: 1, }}>
+                    <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
                         <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '160px', margin:'8px' }} />
                     </div>
                     <div className="flex flex-1 flex-row-reverse mr-12 items-center">

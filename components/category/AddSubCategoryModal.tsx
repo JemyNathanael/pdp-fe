@@ -270,9 +270,11 @@ const AddSubCategoryModal: React.FC<{
                                         fontWeight: 'bold',
                                         marginBottom: '8px'
                                     }}>Checklist Description {checklistDescriptionList.length > 1 && ` ${idx + 1}`}</p>
-                                    <Input
+                                    <TextArea
+                                        rows={4}
                                         placeholder='Insert checklist description'
                                         value={Q}
+                                        required
                                         onChange={e => {
                                             const checklistTemp = checklistDescriptionList.slice()
                                             checklistTemp[idx] = e.target.value
@@ -293,7 +295,7 @@ const AddSubCategoryModal: React.FC<{
                                 size='large'
                                 onClick={() => {
                                     setChecklistDescriptionList(prev => [...prev, ''])
-                                }}>Add another checklist</Button>
+                                }} style={{backgroundColor: '#416a67', color: 'white'}}>Add another checklist</Button>
                             <Button type='primary'
                                 danger
                                 size='large'
