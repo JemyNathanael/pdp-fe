@@ -84,7 +84,7 @@ const Home: React.FC = () => {
 
                 {
                     status === 'authenticated' ?
-                        <div style={{ margin: '0 16px', fontWeight: '600' }}>Hello, {displayUserName}</div>
+                        <div style={{ margin: '0 20px', fontWeight: '600', paddingLeft:'2px' }}>Halo, {displayUserName}</div>
                         :
                         <div></div>
                 }
@@ -93,8 +93,8 @@ const Home: React.FC = () => {
                     <div className='mr-2'>
                         <button onClick={() => router.push('/ManageUser')}>
                             <div style={{
-                                padding: '4px 12px',
-                                margin: ' 2px',
+                                padding: '0px 12px 2px',
+                                // margin: ' 2px',
                                 fontSize: '18px',
                                 fontWeight: '600'
                             }}>
@@ -113,8 +113,8 @@ const Home: React.FC = () => {
                                 });
                             }}>
                                 <div style={{
-                                    padding: '4px 12px',
-                                    margin: ' 2px',
+                                    padding: '0px 14px 2px',
+                                    marginRight: ' 3px',
                                     fontSize: '18px',
                                     fontWeight: '600'
                                 }}>
