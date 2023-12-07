@@ -235,7 +235,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                 {
                                     blobList.length !== 0 &&
                                     <div className='flex flex-row-reverse'>
-                                        <button className='text-[#4F7471] underline text-xs font-semibold' onClick={navigateToChecklistPage}>
+                                        <button className='text-[#3788FD] underline text-xs font-semibold' onClick={navigateToChecklistPage}>
                                             view all files
                                         </button>
                                     </div>
