@@ -4,7 +4,6 @@ import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAcces
 import useSWR from 'swr';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
-import { CloseOutlined } from '@ant-design/icons';
 
 interface ChapterModel {
     id: string
@@ -77,7 +76,7 @@ const DeleteSubCategoryModal: React.FC<{
             }
 
             setFormResult({
-                message: 'Deletion was successfull!',
+                message: 'Deletion was successfull',
                 status: 'success'
             })
 
@@ -141,7 +140,7 @@ const DeleteSubCategoryModal: React.FC<{
                 open={props.isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                closeIcon={<CloseOutlined />}
+                closable={false} 
                 footer={[]}
             >
 
@@ -176,7 +175,7 @@ const DeleteSubCategoryModal: React.FC<{
                             <p style={{
                                 fontSize: '22px',
                                 fontWeight: 'bold'
-                            }}>Sub-Category Name</p>
+                            }}>Sub - Category Name:</p>
 
                             <div style={{ paddingTop: '2px' }}>
                                 <Form.Item<DeleteSubCategoryType>
@@ -228,7 +227,7 @@ const DeleteSubCategoryModal: React.FC<{
                         <Button key="back" type="default"
                             onClick={handleCancel}
                             size='large'
-                            style={{ marginRight: '8px', width: '100px' }}>
+                            style={{ marginRight: '8px', width: '100px', borderColor:'#3788FD', color:'#3788FD' }}>
                             Back
                         </Button>
                         <Button key="submit" type="default" htmlType='submit' loading={loading}
@@ -248,6 +247,7 @@ const DeleteSubCategoryModal: React.FC<{
                 centered
                 open={isResultOpen}
                 onCancel={handleCancelResult}
+                closable={false} 
                 footer={[]}
             >
                 <Result

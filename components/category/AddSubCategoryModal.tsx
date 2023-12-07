@@ -5,6 +5,8 @@ import useSWR from 'swr';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import { useSession } from 'next-auth/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCircleXmark} from '@fortawesome/free-regular-svg-icons';
 
 const { TextArea } = Input
 
@@ -160,6 +162,7 @@ const AddSubCategoryModal: React.FC<{
                 open={props.isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
+                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd"}} />}
                 footer={[]}
             >
                 <p style={{
@@ -295,7 +298,7 @@ const AddSubCategoryModal: React.FC<{
                                 size='large'
                                 onClick={() => {
                                     setChecklistDescriptionList(prev => [...prev, ''])
-                                }} style={{backgroundColor: '#416a67', color: 'white'}}>Add another checklist</Button>
+                                }} style={{backgroundColor: '#3788FD', color: 'white'}}>Add another checklist</Button>
                             <Button type='primary'
                                 danger
                                 size='large'
@@ -324,6 +327,7 @@ const AddSubCategoryModal: React.FC<{
                 open={isResultOpen}
                 onCancel={handleCancelResult}
                 footer={[]}
+                closable={false} 
             >
                 <Result
                     status={formResult.status}

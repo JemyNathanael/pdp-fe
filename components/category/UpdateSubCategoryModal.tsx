@@ -4,6 +4,8 @@ import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAcces
 import useSWR from 'swr';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCircleXmark} from '@fortawesome/free-regular-svg-icons';
 
 const { TextArea } = Input
 
@@ -159,6 +161,7 @@ const UpdateSubCategoryModal: React.FC<{
                 open={props.isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
+                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd"}} />}
                 footer={[]}
             >
                 <p style={{
@@ -266,7 +269,12 @@ const UpdateSubCategoryModal: React.FC<{
                     <Form.Item style={{ textAlign: 'right' }}>
                         <Button key="submit" type="default" htmlType='submit' loading={loading}
                             size='large'
-                            style={{backgroundColor:'#3788FD', color:'white'}}>
+                            style={{
+                                backgroundColor: updateForm.title ? '#3788FD' : '#A3A3A3',
+                                color: updateForm.title? 'white' : 'black',
+                            }}
+                            disabled={!updateForm.title}
+                            >
                             Update
                         </Button>
                     </Form.Item>
@@ -280,6 +288,7 @@ const UpdateSubCategoryModal: React.FC<{
                 centered
                 open={isResultOpen}
                 onCancel={handleCancelResult}
+                closable={false} 
                 footer={[]}
             >
                 <Result
