@@ -10,6 +10,7 @@ import useSWR from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useRouter } from 'next/router';
+import SearchBarNav from '@/components/category/SearchBarNav';
 import InformationModal from '@/components/InformationModal';
 
 interface CategoryHomeApiModel {
@@ -74,17 +75,22 @@ const Home: React.FC = () => {
             <nav style={{
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'space-between',
                 padding: '24px',
                 boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.1)',
                 backgroundColor: '#3788FD'
             }}>
-                <div style={{ flexGrow: 1 }}>
+                <div>
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
                 </div>
+                <div className="">
+                    <SearchBarNav placeholder="input search text" style={{ width: 600  }} />
+                </div>
+                <div className="flex items-center">
 
                 {
                     status === 'authenticated' ?
-                        <div style={{ margin: '0 16px', fontWeight: '600' }}>Hello, {displayUserName}</div>
+                        <div style={{ margin: '0 20px', fontWeight: '600', paddingLeft:'2px' }}>Halo, {displayUserName}</div>
                         :
                         <div></div>
                 }
@@ -93,8 +99,8 @@ const Home: React.FC = () => {
                     <div className='mr-2'>
                         <button onClick={() => router.push('/ManageUser')}>
                             <div style={{
-                                padding: '4px 12px',
-                                margin: ' 2px',
+                                padding: '0px 12px 2px',
+                                // margin: ' 2px',
                                 fontSize: '18px',
                                 fontWeight: '600'
                             }}>
@@ -113,8 +119,8 @@ const Home: React.FC = () => {
                                 });
                             }}>
                                 <div style={{
-                                    padding: '4px 12px',
-                                    margin: ' 2px',
+                                    padding: '0px 14px 2px',
+                                    marginRight: ' 3px',
                                     fontSize: '18px',
                                     fontWeight: '600'
                                 }}>
@@ -123,25 +129,26 @@ const Home: React.FC = () => {
                             </button>
                         </div>
 
-                        :
+                            :
 
-                        <div>
-                            <button onClick={() => {
-                                nProgress.start();
-                                signIn('oidc');
-                            }}>
-                                <div style={{
-                                    border: 'solid white 2px',
-                                    padding: '4px 12px',
-                                    borderRadius: '16px',
-                                    fontSize: '18px',
-                                    fontWeight: '600'
+                            <div>
+                                <button onClick={() => {
+                                    nProgress.start();
+                                    signIn('oidc');
                                 }}>
-                                    <FontAwesomeIcon icon={faSigning}></FontAwesomeIcon> Login
-                                </div>
-                            </button>
-                        </div>
-                }
+                                    <div style={{
+                                        border: 'solid white 2px',
+                                        padding: '4px 12px',
+                                        borderRadius: '16px',
+                                        fontSize: '18px',
+                                        fontWeight: '600'
+                                    }}>
+                                        <FontAwesomeIcon icon={faSigning}></FontAwesomeIcon> Login
+                                    </div>
+                                </button>
+                            </div>
+                    }
+                </div>
             </nav>
 
             <div>

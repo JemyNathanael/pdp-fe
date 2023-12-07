@@ -247,7 +247,7 @@ const AddSubCategoryModal: React.FC<{
                 open={props.isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{ color: "#3788fd" }} />}
+                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd", fontSize:'24px'}} />}
                 footer={[]}
             >
                 <p style={{
