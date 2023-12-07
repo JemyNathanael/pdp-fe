@@ -308,7 +308,7 @@ const AddSubCategoryModal: React.FC<{
                     <Form.Item style={{ textAlign: 'right' }}>
                         <Button key="submit" type="default" htmlType='submit' loading={loading}
                             size='large'
-                            style={{backgroundColor:'#416a67', color:'white'}}>
+                            style={{backgroundColor:'#3788FD', color:'white'}}>
                             Add
                         </Button>
                     </Form.Item>

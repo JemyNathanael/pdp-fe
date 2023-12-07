@@ -14,7 +14,7 @@ import { Authorize } from "./Authorize";
 
 const { Sider, Content, Header } = Layout;
 
-const sidebarBackgroundColor = '#4F7471';
+const sidebarBackgroundColor = 'white';
 
 interface Verse {
     id: string;
@@ -47,6 +47,7 @@ interface CategoryDetailModel {
 interface SidebarMenuModel {
     title: string;
     routePath: string;
+    isOpen: boolean;
 }
 
 interface CategorySidebarItemsModel extends SidebarMenuModel {
@@ -85,7 +86,8 @@ const CategoryLayout: React.FC<{
                 const currentChapterVerses: SidebarMenuModel[] = chapter.secondSubCategories.map((verse) => {
                     return {
                         title: verse.title,
-                        routePath: `/${router.query['categoryId']}/${chapter.id}/${verse.id}`
+                        routePath: `/${router.query['categoryId']}/${chapter.id}/${verse.id}`,
+                        isOpen: false
                     }
                 })
 
@@ -93,6 +95,7 @@ const CategoryLayout: React.FC<{
                     title: chapter.title,
                     routePath: `/${router.query['categoryId']}/${chapter.id}`,
                     children: currentChapterVerses,
+                    isOpen: false
                 }
             })
 
@@ -161,11 +164,9 @@ const CategoryLayout: React.FC<{
                     <link key="favicon" rel="icon" href="/favicon.ico" />
                 </Head>
 
-                <Header className="bg-[#3788FD] px-2 py-1 flex items-center"style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.6)" }}>
+                <Header className="bg-[#3788FD] px-2 py-1 flex items-center" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.6)", padding: 0, position: 'fixed', width: '100%', zIndex: 1 }}>
                     <div className="flex flex-1 items-center">
-                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '160px', margin: '8px'}} />
-                        </div>
+
                         <div className="p-6 flex flex-1 flex-row-reverse items-center">
 
                             {logoutButton()}
@@ -183,11 +184,14 @@ const CategoryLayout: React.FC<{
                 </Header>
 
                 <Layout>
-                    <Sider width={300} className="pb-24 hidden lg:block">
-                        <p className="p-2 px-4 m-4 text-white font-bold">
+                    <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000 }}>
+                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
+                            <img src='adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '8px' }} />
+                        </div>
+                        <p className="p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
                             {data?.title}
                         </p>
-                        <div className="m-4">
+                        <div className="m-4" style={{ backgroundColor: '##000000' }}>
                             {firstSubCategories &&
                                 firstSubCategories.map((firstSub, i) =>
                                     <Collapsible
@@ -204,12 +208,12 @@ const CategoryLayout: React.FC<{
                                 )
                             }
                         </div>
-                        <button className="mx-8 mt-5 text-white underline text-xs" onClick={handleExpandOrCollapseAll}>
+                        <button className="mx-8 mt-5 text-[#373737] underline text-xs" onClick={handleExpandOrCollapseAll}>
                             Expand / Collapse all
                         </button>
                     </Sider>
 
-                    <Content className="p-7">
+                    <Content className="p-7" style={{paddingTop: 100}}>
                         {children}
                     </Content>
                 </Layout>

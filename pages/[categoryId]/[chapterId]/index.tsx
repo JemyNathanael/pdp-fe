@@ -47,6 +47,9 @@ const Chapter: React.FC = () => {
 
     return (
         <div>
+            <div className="text-xl font-semibold mb-5">
+                {currentChapter?.title}
+            </div>
             <div>
                 {
                     checklist?.map((childProps, i) => 
