@@ -145,16 +145,20 @@
 .custom-scrollbar {
   max-height: 70vh;
   overflow-y: auto;
-  margin-top: 25px;
+
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: #3788fd;
   border-radius: 10px;
 }
-
 
