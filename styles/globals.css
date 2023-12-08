@@ -141,3 +141,20 @@
 .ant-result-success .ant-result-icon>.anticon {
   color: #3788FD !important;
 }
+
+.custom-scrollbar {
+  max-height: 70vh;
+  overflow-y: auto;
+  margin-top: 25px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #3788fd;
+  border-radius: 10px;
+}
+
+
