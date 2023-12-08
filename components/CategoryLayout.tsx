@@ -192,7 +192,7 @@ const CategoryLayout: React.FC<{
                     width: '100%',
                     zIndex: 1,
                 }}>
-                    <div className="flex flex-1 items-center justify-between">
+                    <div className="flex flex-1 items-center">
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
                             <img src="/adaptist-blue-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
                         </div>
