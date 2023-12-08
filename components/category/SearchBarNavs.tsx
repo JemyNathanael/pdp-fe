@@ -4,14 +4,18 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
-const SearchBarNavs = ({setSearchResults}) => {
+const SearchBarNavs = ({setSearchResults, searchResults}) => {
     const [input, setInput] = useState<string>('');
     const swrFetcher = useSwrFetcherWithAccessToken();
 
     const handleSearch = async (value: string) => {
         const searchApiUrl = `${BackendApiUrl.getHomeSearch}?search=${value}`;
-        if(value != '') {
-            try {
+        try {
+            if(value == '')
+            {
+                setSearchResults([]);
+            }
+            else{
                 const response = await swrFetcher(searchApiUrl);
                 const options = response?.map((item) => ({
                     value: item.id, 
@@ -21,23 +25,25 @@ const SearchBarNavs = ({setSearchResults}) => {
                     secondSubCategoryId: item['secondSubCategoryId'],
                 }));
                 setSearchResults(options);
-                // console.log(options);
-            }
-            catch (error) {
-                console.log(error);
+                console.log(input);
             }
         }
+        catch (error) {
+            console.log(error);
+        }
     }
-    const handleChange = (e) => {
-        setInput(e.target.value);
-        handleSearch(input);
+    const handleChange = (value: string) => {
+        setInput(value);
+        handleSearch(value);
     }
 
     return (
         <div className="relative">
             <input placeholder='Search' 
-                className='py-4 px-5 rounded-full text-black w-96 outline-none' 
-                onChange={handleChange}
+                className={`py-4 px-5 rounded-3xl text-black w-96 outline-none ${
+                    searchResults.length === 0 ? '' : 'rounded-b-none'
+                }`}
+                onChange={(e) => handleChange(e.target.value)}
             />
             <FontAwesomeIcon
                 icon={faSearch}

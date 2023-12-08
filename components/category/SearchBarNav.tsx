@@ -12,23 +12,23 @@ const SearchBarNav : React.FC<{placeholder: string, style: React.CSSProperties }
 
     const handleSearch = async (newValue: string) => {
         const searchApiUrl = `${BackendApiUrl.getHomeSearch}?search=${newValue}`;
-        if(newValue != '') {
-            try {
-                const response = await swrFetcher(searchApiUrl);
-                const options = response?.map((item) => ({
-                    value: item.id, 
-                    label: item.title, 
-                    type: item['type'],
-                    firstSubCategoryId: item['firstSubCategoryId'],
-                    secondSubCategoryId: item['secondSubCategoryId'],
-                }));
-                console.log(options);
-                setData(options || []);
-            }
-            catch (error) {
-                console.log(error);
-            }
+        try {
+            const response = await swrFetcher(searchApiUrl);
+            const options = response?.map((item) => ({
+                value: item.id, 
+                label: item.title, 
+                type: item['type'],
+                firstSubCategoryId: item['firstSubCategoryId'],
+                secondSubCategoryId: item['secondSubCategoryId'],
+            }));
+            // console.log(options);
+            if(newValue != '') 
+            setData(options || []);
         }
+        catch (error) {
+            console.log(error);
+        }
+        
     };
 
     const handleChange = (newValue: string) => {
@@ -36,8 +36,8 @@ const SearchBarNav : React.FC<{placeholder: string, style: React.CSSProperties }
     }
 
     const handleSelect = (selectedValue, selectedData) => {
-        console.log("wtf ", selectedValue);
-        console.log("wtf asdsad", selectedData);
+        // console.log("wtf ", selectedValue);
+        // console.log("wtf asdsad", selectedData);
         // console.log(data?.map((d) => ({
         //     key: `${d.value}-${d.label}`,
         //     label: d.label,

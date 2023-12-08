@@ -47,7 +47,6 @@ const Home: React.FC = () => {
         setInformationModal(false);
         router.push('/')
     }
-
     function getRelatedIcon(title: string): IconDefinition {
         title = title.toLowerCase()
 
@@ -88,7 +87,7 @@ const Home: React.FC = () => {
                 </div>
                 <div className="">
                     {/* <SearchBarNav placeholder="input search text" style={{ width: 600 }} /> */}
-                    <SearchBarNavs setSearchResults={setSearchResults}/>
+                    <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
                     <SearchResultNav searchResults={searchResults} />
                 </div>
                 <div className="flex items-center">
