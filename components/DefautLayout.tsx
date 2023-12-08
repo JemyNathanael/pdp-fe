@@ -33,29 +33,38 @@ const DefaultLayout: React.FC<{
 
     return (
         <>
-            <nav className="bg-[#3788FD]" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}>
-                <div className="flex items-center">
+            <nav className="bg-[#3788FD]" style={{
+                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                padding: '16px',
+            }}>
+                <div className="flex flex-1 items-center">
                     <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                        <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '160px', margin:'8px' }} />
+                        <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
                     </div>
-                    <div className="flex flex-1 flex-row-reverse mr-12 items-center">
-                        <ul className="lg:flex space-x-4 items-center">
-                            <li>
-                                <div className="text-white text-sm cursor-pointer font-bold">{`Halo, ${displayUserName}`}</div>
-                            </li>
-                            {isAdmin &&
-                                <li>
-                                    <button onClick={goToManageUserPage} style={{ color: 'white' }}>
-                                        <FontAwesomeIcon icon={faUserGear} />
+                    <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-4 items-center">
+                        <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
+                            <ul className="lg:flex space-x-4 items-center">
+                                <li className="flex items-center">
+                                    <div className="text-white text-md cursor-pointer font-semibold pr-7 fontWeight: '600', paddingLeft:'2px'">
+                                        {`Halo, ${displayUserName}`}
+                                    </div>
+                                    {isAdmin && (
+                                        <button
+                                            onClick={goToManageUserPage}
+                                            className="text-white text-lg pr-3 ml-1 mr-1"
+                                        >
+                                            <FontAwesomeIcon icon={faUserGear} />
+                                        </button>
+                                    )}
+                                    <button
+                                        onClick={handleLogout}
+                                        className="text-white text-lg pl-4 mt-1"
+                                    >
+                                        <FontAwesomeIcon  className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
                                     </button>
                                 </li>
-                            }
-                            <li>
-                                <button onClick={handleLogout} className="pl-1" style={{ color: 'white' }}>
-                                    <FontAwesomeIcon className="pr-0.5" icon={faArrowRightFromBracket} />
-                                </button>
-                            </li>
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </nav>

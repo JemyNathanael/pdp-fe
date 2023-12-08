@@ -28,7 +28,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     }
 
     return (
-        <div className='bg-white border-[#4F7471] border-[3px] h-[136px] w-[122px] rounded-md flex flex-col relative'>
+        <div className='bg-white border-[#3788FD] border-[3px] h-[136px] w-[122px] rounded-md flex flex-col relative'>
             <button onClick={() => removeFileByIndex(currentIndex)}>
                 <div className='relative mr-[-8px] mt-[-10px]'>
                         <FontAwesomeIcon className='text-white text-[20px] absolute top-0 right-0 ' icon={faCircle} />
@@ -36,9 +36,9 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
                 </div>
             </button>
             <div className='flex flex-1 items-center justify-center'>
-                <FontAwesomeIcon icon={icon} className='text-[#4F7471]' size={'3x'}/>
+                <FontAwesomeIcon icon={icon} className='text-[#3788FD]' size={'3x'}/>
             </div>
-            <div className='text-xs text-center text-[#4F7471] p-1 border-[#4F7471] border-t-[3px]'>
+            <div className='text-xs text-center text-[#3788FD] p-1 border-[#3788FD] border-t-[3px]'>
                 {filename}
             </div>
         </div>
