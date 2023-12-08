@@ -10,7 +10,6 @@ import useSWR from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useRouter } from 'next/router';
-// import SearchBarNav from '@/components/category/SearchBarNav';
 import SearchBarNavs from '@/components/category/SearchBarNavs';
 import InformationModal from '@/components/InformationModal';
 import SearchResultNav from '@/components/category/SearchResultNav';
@@ -89,7 +88,6 @@ const Home: React.FC = () => {
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
                 </div>
                 <div className="">
-                    {/* <SearchBarNav placeholder="input search text" style={{ width: 600 }} /> */}
                     <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
                     <SearchResultNav searchResults={searchResults} />
                 </div>
