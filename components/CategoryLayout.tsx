@@ -69,7 +69,7 @@ const CategoryLayout: React.FC<{
     const router = useRouter();
     const categoryId = router.query['categoryId']?.toString() ?? '';
 
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const displayUserName = session?.user?.name;
 
     const swrFetcher = useSwrFetcherWithAccessToken();
@@ -137,18 +137,14 @@ const CategoryLayout: React.FC<{
         }
     }
 
-    function onClickLogout() {
-        nProgress.start();
-        signOut({
-            callbackUrl: '/api/end-session'
-        });
+    const handleLogout = () => {
+        if (status === 'authenticated') {
+            nProgress.start();
+            signOut({
+                callbackUrl: '/api/end-session',
+            });
+        }
     }
-
-    const logoutButton = () => (
-        <button onClick={onClickLogout} className="pl-4 mt-1">
-            <FontAwesomeIcon className="mr-2" icon={faArrowRightFromBracket} color="white" fontSize="18px"></FontAwesomeIcon>
-        </button>
-    )
 
     return (
         <ConfigProvider theme={{
@@ -167,24 +163,6 @@ const CategoryLayout: React.FC<{
                     <link key="favicon" rel="icon" href="/favicon.ico" />
                 </Head>
 
-                {/* <Header className="bg-[#3788FD] flex items-center" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", padding: '16px', margin: 0, position: 'fixed', width: '100%', zIndex: 1, height: '90px' }}>
-                    <div className="flex flex-1 items-center">
-
-                        <div className="p-6 flex flex-1 flex-row-reverse items-center">
-
-                            {logoutButton()}
-                            {isAdmin &&
-                                <button onClick={goToManageUserPage} style={{ color: 'white', fontSize: '18px', paddingRight: '4px' }}>
-                                    <FontAwesomeIcon icon={faUserGear} />
-                                </button>
-                            }
-                            <div className="mr-6 text-white font-semibold" style={{fontSize:'18px'}}>
-                                Halo, {displayUserName}
-                            </div>
-                        </div>
-                    </div>
-                </Header> */}
-
                 <nav className="bg-[#3788FD]" style={{
                     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
                     padding: '16px',
@@ -193,8 +171,8 @@ const CategoryLayout: React.FC<{
                     zIndex: 1,
                 }}>
                     <div className="flex flex-1 items-center">
-                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src="/adaptist-blue-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
+                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, marginBottom: '20px'}}>
+                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
                         </div>
                         <div className="2xl:mr-72 xl:mr-48 lg:mr-7 md:mr-2">
                             <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
@@ -218,7 +196,7 @@ const CategoryLayout: React.FC<{
                                             </button>
                                         )}
                                         <button
-                                            onClick={logoutButton}
+                                            onClick={handleLogout}
                                             className="text-white text-lg pl-4 mt-1"
                                         >
                                             <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
@@ -233,11 +211,14 @@ const CategoryLayout: React.FC<{
                 <Layout>
                     <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000, position: 'fixed', height: '100vh', overflowY: 'auto' }}>
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '10px', padding:'8px' }} />
+                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '10px', padding: '8px' }} />
                         </div>
-                        <p className="p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
-                            {data?.title}
-                        </p>
+                        <div className="p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8', overflow: 'hidden' }}>
+                            <p className={`moveLeft ${data?.title && data.title.length > 10 ? 'moveLeft' : ''}`}>
+                                {data?.title}
+                            </p>
+                        </div>
+
                         <div className="m-4" style={{ backgroundColor: '##000000' }}>
                             {firstSubCategories &&
                                 firstSubCategories.map((firstSub, i) =>
