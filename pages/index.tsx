@@ -156,8 +156,7 @@ const Home: React.FC = () => {
                                 {category && <InformationModal onCancel={handleCancel} categoryId={category} visible={informationModal} />}
                                 <div className='col-span-12 lg:col-span-6 xl:col-span-4'>
                                     <div style={{ display: 'flex', justifyContent: 'center', margin: '5px' }} className='cursor-pointer'>
-                                        <div
-                                            className='rounded-md min-w-[400px] text-center m-4 min-h-[180px] max-h-[180px] relative max-w-[400px]  bg-[#3788FD] p-5'
+                                        <div className='rounded-md min-w-[400px] text-center m-4 min-h-[180px] max-h-[180px] relative max-w-[400px]  bg-[#3788FD] p-5'
                                             onClick={() => onClickCategory(Q.id)}
                                             style={{
                                                 transition: 'background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s',
@@ -168,31 +167,41 @@ const Home: React.FC = () => {
                                                 borderStyle: 'solid',
                                                 borderWidth: '1.5px',
                                             }}
-
                                             onMouseOver={(e) => {
                                                 e.currentTarget.style.backgroundColor = 'white';
                                                 e.currentTarget.style.color = '#3788FD';
                                                 e.currentTarget.style.transform = 'translateY(-8px)';
+                                                const infoIcon = e.currentTarget.querySelector('.info-icon') as HTMLElement;
+                                                if (infoIcon) {
+                                                    infoIcon.style.color = '#3788FD';
+                                                }
                                             }}
                                             onMouseOut={(e) => {
                                                 e.currentTarget.style.backgroundColor = '#3788FD';
                                                 e.currentTarget.style.color = 'white';
                                                 e.currentTarget.style.transform = 'translateY(0)';
+                                                const infoIcon = e.currentTarget.querySelector('.info-icon') as HTMLElement;
+                                                if (infoIcon) {
+                                                    infoIcon.style.color = 'white';
+                                                }
                                             }}
                                         >
-                                            <FontAwesomeIcon icon={faInfoCircle} size='lg' style={{
-                                                position: 'absolute',
-                                                top: '10px',
-                                                right: '10px',
-                                                cursor: 'pointer',
-                                                transition: 'color 1,0s', // Add transition for smooth effect
-                                            }} onClick={(e) => { e.stopPropagation(); handleIconModal(Q.id); }}
-                                                onMouseOver={(e) => {
-                                                    e.currentTarget.style.color = '#3788FD'; // Change to blue when hovered
+                                            <FontAwesomeIcon
+                                                icon={faInfoCircle}
+                                                size='lg'
+                                                className='info-icon'
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '10px',
+                                                    right: '10px',
+                                                    cursor: 'pointer',
+                                                    transition: 'color 1s',
                                                 }}
-                                                onMouseOut={(e) => {
-                                                    e.currentTarget.style.color = 'white'; // Change back to the original color when not hovered
-                                                }} />
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleIconModal(Q.id);
+                                                }}
+                                            />
                                             <div className='categoryTitleHome'>
                                                 <FontAwesomeIcon icon={getRelatedIcon(Q.title)} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
                                                 <br />
@@ -204,10 +213,8 @@ const Home: React.FC = () => {
                             </React.Fragment>
                         ))}
                     </div>
-
                 </div>
             </div>
-
             <footer style={{
                 marginLeft: '24px',
                 marginRight: '24px',
@@ -218,7 +225,6 @@ const Home: React.FC = () => {
                 left: 0,
                 color: '#3788FD'
             }}>Copyright @ PT. Accelist Lentera Indonesia</footer>
-
         </div>
     );
 };
