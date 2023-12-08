@@ -57,7 +57,7 @@ const VersePage: Page = () => {
     const { data: dropdownUploadStatusData } = useSWR<UploadStatusDropdownModel[]>(BackendApiUrl.getUploadStatus, swrFetcher);
     const { data: indexData} = useSWR<Indexing>(GetChecklistTitle(verseId), swrFetcher);
 
-    const canEditUploadStatusRole = ['Admin', 'Auditor'];
+    const canEditUploadStatusRole = ['Admin', 'Auditor', 'Uploader'];
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
 

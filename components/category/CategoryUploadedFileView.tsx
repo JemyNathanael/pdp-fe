@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile, faFileExcel, faFileImage, faFilePdf, faFileWord, faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { IconDefinition, faCircle } from '@fortawesome/free-solid-svg-icons';
+import { useSession } from 'next-auth/react';
 
 interface UploadedFileViewProps {
     filename: string;
@@ -10,7 +11,7 @@ interface UploadedFileViewProps {
 }
 
 export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ filename, currentIndex, removeFileByIndex }) => {
-    const fileExtension = filename.substring(filename.lastIndexOf('.')+1, filename.length).toLowerCase();
+    const fileExtension = filename.substring(filename.lastIndexOf('.') + 1, filename.length).toLowerCase();
     const icon = extensionToIcon(fileExtension);
 
     function extensionToIcon(fileExtension: string): IconDefinition {
@@ -27,16 +28,22 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
         }
     }
 
+    const canEditUploadStatusRole = ['Admin', 'Auditor', 'Uploader'];
+    const { data: session } = useSession();
+    const role = session?.user?.['role'][0];
+
     return (
         <div className='bg-white border-[#3788FD] border-[3px] h-[136px] w-[122px] rounded-md flex flex-col relative'>
-            <button onClick={() => removeFileByIndex(currentIndex)}>
-                <div className='relative mr-[-8px] mt-[-10px]'>
+            {!canEditUploadStatusRole.includes(role) ? true :
+                <button onClick={() => removeFileByIndex(currentIndex)}>
+                    <div className='relative mr-[-8px] mt-[-10px]'>
                         <FontAwesomeIcon className='text-white text-[20px] absolute top-0 right-0 ' icon={faCircle} />
                         <FontAwesomeIcon className='text-[#FF0000] text-[20px] absolute top-0 right-0 ' icon={faCircleXmark} />
-                </div>
-            </button>
+                    </div>
+                </button>
+            }
             <div className='flex flex-1 items-center justify-center'>
-                <FontAwesomeIcon icon={icon} className='text-[#3788FD]' size={'3x'}/>
+                <FontAwesomeIcon icon={icon} className='text-[#3788FD]' size={'3x'} />
             </div>
             <div className='text-xs text-center text-[#3788FD] p-1 border-[#3788FD] border-t-[3px]'>
                 {filename}
