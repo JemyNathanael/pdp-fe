@@ -17,6 +17,7 @@ import { BlobListModel } from "@/pages/[categoryId]/[chapterId]/[verseId]";
 import DeleteChecklistModal from "./DeleteChecklistModal";
 import { v4 as uuidv4 } from 'uuid';
 import { mutate } from "swr";
+import { useSession } from 'next-auth/react';
 
 interface CategoryVerseContentProps {
     checklistId: string,
@@ -52,6 +53,12 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const [addModal, setAddModal] = useState<boolean>(false)
     const [deleteModal, setDeleteModal] = useState<boolean>(false)
     const [tempData, setTempData] = useState<BlobListModel[]>(blobList);
+
+    const canEditStatusRole = ['Admin', 'Auditor'];
+    const canSeeEllipsis = ['Admin', 'Reader'];
+    const canSeeDropdown = ['Admin', 'Reader'];
+    const { data: session } = useSession();
+    const role = session?.user?.['role'][0];
 
     const handleFileUpload = async (index: number) => {
         const fileExt = tempData[index]?.fileName?.split('.').pop();
@@ -173,19 +180,19 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                         defaultValue={uploadStatus}
                         options={selectOptions}
                         onChange={(selection) => handleStatusChange(selection)}
-                        disabled={!canUpdateStatus}
+                        disabled={!canEditStatusRole.includes(role)}
                     />
                 </div>
 
                 <div className='flex-1'>
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
-                            <Dropdown menu={{ items }} trigger={canUpdateStatus ? ['contextMenu'] : []}>
+                            <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>
                                 <div className='py-1'>
                                     <p style={{ whiteSpace: 'pre-line' , textAlign: 'justify'}}>{title}</p>
                                 </div>
                             </Dropdown>
-                            {canUpdateStatus &&
+                            {canSeeEllipsis.includes(role) &&
                                 <div className="flex-1 text-right">
                                     <Dropdown menu={{ items }} trigger={['click']}>
                                         <a onClick={(e) => e.preventDefault()}>
