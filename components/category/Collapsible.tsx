@@ -88,10 +88,10 @@ const Collapsible: React.FC<IProps> = ({ open, title, childrenItem, routePath, c
             <div className="py-1 flex justify-content-between flex-1 items-center">
                 <button type="button" className="p-1 mr-2" onClick={handleFilterOpening}>
                 {!isOpen ? (
-                    <FontAwesomeIcon icon={faChevronRight} className={iconClassName}/>
-                    ) : (
-                        <FontAwesomeIcon icon={faChevronDown} className={iconClassName}/>
-                        )}
+                  <FontAwesomeIcon icon={faChevronRight} className={`fa-fw ${iconClassName}`} />
+                ) : (
+                  <FontAwesomeIcon icon={faChevronDown} className={`fa-fw ${iconClassName}`} />
+                )}
                 </button>
                 <button className="flex-1" onClick={handleTitleRouting}>
                     <p className={textClassName}>{title}</p>

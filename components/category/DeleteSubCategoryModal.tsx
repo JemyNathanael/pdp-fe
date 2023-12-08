@@ -8,10 +8,11 @@ import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 interface ChapterModel {
     id: string
     title: string
-    verses: {
+    secondSubCategories: {
         id: string
         title: string
     }[]
+    createdAt: Date
 }
 
 type DeleteSubCategoryType = {
@@ -19,6 +20,7 @@ type DeleteSubCategoryType = {
 }
 
 const DeleteSubCategoryModal: React.FC<{
+    categoryId: string,
     isModalOpen: boolean,
     setIsModalOpen: Dispatch<SetStateAction<boolean>>
 }> = (props) => {
@@ -36,7 +38,7 @@ const DeleteSubCategoryModal: React.FC<{
     const swrFetcher = useSwrFetcherWithAccessToken()
     const fetch = useFetchWithAccessToken()
 
-    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getChaptersVerses, swrFetcher)
+    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getSubCategoryList+ `/${props.categoryId}`, swrFetcher)
 
     function resetForm() {
         form.resetFields()
@@ -60,6 +62,8 @@ const DeleteSubCategoryModal: React.FC<{
 
     const handleCancelResult = () => {
         setIsResultOpen(false)
+
+        location.reload();
     }
 
     const onFinish = async () => {
@@ -72,7 +76,7 @@ const DeleteSubCategoryModal: React.FC<{
             }
 
             setFormResult({
-                message: 'Deletion was successfull!',
+                message: 'Deletion was successfull',
                 status: 'success'
             })
 
@@ -110,10 +114,10 @@ const DeleteSubCategoryModal: React.FC<{
         if (!checkChapter || checkChapter.length == 0) {
             for (let i = 0; i < data.length; i++) {
                 for (let j = 0; j < data.length; j++) {
-                    if (data[i]?.verses[j]?.id === newValue) {
+                    if (data[i]?.secondSubCategories[j]?.id === newValue) {
                         selectedItem =
                         {
-                            title: data[i]?.verses[j]?.title ?? '',
+                            title: data[i]?.secondSubCategories[j]?.title ?? '',
                         }
                     }
                 }
@@ -136,12 +140,12 @@ const DeleteSubCategoryModal: React.FC<{
                 open={props.isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                closeIcon={[]}
+                closable={false} 
                 footer={[]}
             >
 
                 <Result
-                    style={{ margin: '0', padding: '0', marginTop: '16px' }}
+                    style={{ margin: '0', padding: '0', marginTop: '16px'}}
                 />
 
                 {
@@ -171,7 +175,7 @@ const DeleteSubCategoryModal: React.FC<{
                             <p style={{
                                 fontSize: '22px',
                                 fontWeight: 'bold'
-                            }}>Category Name</p>
+                            }}>Sub - Category Name:</p>
 
                             <div style={{ paddingTop: '2px' }}>
                                 <Form.Item<DeleteSubCategoryType>
@@ -187,17 +191,18 @@ const DeleteSubCategoryModal: React.FC<{
                                         allowClear
                                         onChange={onChange}
                                         treeDefaultExpandAll
+                                        treeNodeFilterProp='title'
                                         treeData={
                                             data?.map(Q => {
                                                 return {
                                                     title: Q.title,
                                                     value: Q.id,
-                                                    children: Q.verses.map(Z => {
+                                                    children: Q.secondSubCategories.map(Z => {
                                                         return {
                                                             title: Z.title,
                                                             value: Z.id
                                                         }
-                                                    })
+                                                    }) ?? []
                                                 }
                                             })
                                         }
@@ -205,7 +210,7 @@ const DeleteSubCategoryModal: React.FC<{
                                     />
                                 </Form.Item>
                             </div>
-                            <p style={{ color: 'red', marginTop: '-18px' }}>You can only choose one category to delete!</p>
+                            <p style={{ color: 'red', marginTop: '-18px' }}>You can only choose one sub-category or cheklist to delete!</p>
                         </div>
                     }
 
@@ -222,17 +227,17 @@ const DeleteSubCategoryModal: React.FC<{
                         <Button key="back" type="default"
                             onClick={handleCancel}
                             size='large'
-                            style={{ marginRight: '8px', width: '100px' }}>
+                            style={{ marginRight: '8px', width: '100px', borderColor:'#3788FD', color:'#3788FD' }}>
                             Back
                         </Button>
                         <Button key="submit" type="default" htmlType='submit' loading={loading}
                             size='large'
                             danger
-                            style={{ width: '100px' }}>
+                            style={{ width: '100px',backgroundColor:'#FF0000', color:'white' }}>
                             Delete
                         </Button>
                     </Form.Item>
-
+                    
                 </Form>
 
             </Modal>
@@ -242,12 +247,13 @@ const DeleteSubCategoryModal: React.FC<{
                 centered
                 open={isResultOpen}
                 onCancel={handleCancelResult}
+                closable={false} 
                 footer={[]}
             >
                 <Result
                     status={formResult.status}
                     title={formResult.message}
-                    style={{ fontSize: '32px', fontWeight: 'bold' }}
+                    style={{ fontSize: '32px', fontWeight: 'bold',  color: 'red'}}
                 />
 
             </Modal>

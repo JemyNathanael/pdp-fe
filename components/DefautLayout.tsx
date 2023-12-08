@@ -1,6 +1,5 @@
 import React from "react";
-import { Button } from "antd";
-import { faArrowRightFromBracket, faHouse } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRightFromBracket, faUserGear } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
@@ -34,31 +33,27 @@ const DefaultLayout: React.FC<{
 
     return (
         <>
-            <nav className="bg-white" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}>
+            <nav className="bg-[#3788FD]" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}>
                 <div className="flex items-center">
-                    <div className="flex justify-center p-6 items-center  border-r-2 border-gray-300">
-                        <FontAwesomeIcon icon={faHouse} className='text-greyeen text-2xl' />
-                    </div>
-                    <div className="flex ml-5 text-2xl text-greyeen cursor-pointer font-bold">
-                        LOGO
+                    <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
+                        <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '160px', margin:'8px' }} />
                     </div>
                     <div className="flex flex-1 flex-row-reverse mr-12 items-center">
                         <ul className="lg:flex space-x-4 items-center">
                             <li>
-                                <div className="text-black text-sm cursor-pointer font-bold">{`Halo, ${displayUserName}`}</div>
+                                <div className="text-white text-sm cursor-pointer font-bold">{`Halo, ${displayUserName}`}</div>
                             </li>
                             {isAdmin &&
                                 <li>
-                                    <Button onClick={goToManageUserPage} className="hover:bg-slate-500 text-greyeen border-2 border-greyeen rounded-full px-3 py-1 cursor-pointer font-bold">
-                                        Manage User
-                                    </Button>
+                                    <button onClick={goToManageUserPage} style={{ color: 'white' }}>
+                                        <FontAwesomeIcon icon={faUserGear} />
+                                    </button>
                                 </li>
                             }
                             <li>
-                                <Button onClick={handleLogout} className="hover:bg-slate-500 text-greyeen border-2 gap-2 border-greyeen rounded-full px-3 py-1 cursor-pointer font-bold">
-                                    <FontAwesomeIcon className="mr-2" icon={faArrowRightFromBracket} />
-                                    Logout
-                                </Button>
+                                <button onClick={handleLogout} className="pl-1" style={{ color: 'white' }}>
+                                    <FontAwesomeIcon className="pr-0.5" icon={faArrowRightFromBracket} />
+                                </button>
                             </li>
                         </ul>
                     </div>

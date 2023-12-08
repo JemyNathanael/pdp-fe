@@ -4,27 +4,28 @@ import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAcces
 import useSWR from 'swr';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCircleXmark} from '@fortawesome/free-regular-svg-icons';
 
 const { TextArea } = Input
 
 interface ChapterModel {
     id: string
     title: string
-    description: string
-    verses: {
+    secondSubCategories: {
         id: string
         title: string
-        description: string
     }[]
+    createdAt: Date
 }
 
 type UpdateSubCategoryType = {
     title: string
-    description: string
     id: string
 }
 
 const UpdateSubCategoryModal: React.FC<{
+    categoryId: string,
     isModalOpen: boolean,
     setIsModalOpen: Dispatch<SetStateAction<boolean>>
 }> = (props) => {
@@ -36,8 +37,7 @@ const UpdateSubCategoryModal: React.FC<{
 
     const [updateForm, setUpdateForm] = useState<{
         title: string
-        description: string
-    }>({ title: '', description: '' })
+    }>({ title: ''})
 
     const [formResult, setFormResult] = useState<{ status: 'success' | 'error', message: string }>({
         status: 'success',
@@ -47,12 +47,12 @@ const UpdateSubCategoryModal: React.FC<{
     const swrFetcher = useSwrFetcherWithAccessToken()
     const fetch = useFetchWithAccessToken()
 
-    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getChaptersVerses, swrFetcher)
+    const { data } = useSWR<ChapterModel[]>(BackendApiUrl.getSubCategoryList + `/${props.categoryId}`, swrFetcher)
 
     function resetForm() {
         form.resetFields()
         setUpdateForm({
-            description: '', title: ''
+            title: ''
         })
         setSelectedId('')
     }
@@ -74,6 +74,8 @@ const UpdateSubCategoryModal: React.FC<{
 
     const handleCancelResult = () => {
         setIsResultOpen(false)
+
+        location.reload();
     }
 
     const onFinish = async (values: UpdateSubCategoryType) => {
@@ -81,7 +83,6 @@ const UpdateSubCategoryModal: React.FC<{
         const formSubmission: UpdateSubCategoryType = {
             id: values.id,
             title: values.title,
-            description: values.description,
         }
 
         try {
@@ -121,20 +122,17 @@ const UpdateSubCategoryModal: React.FC<{
         setSelectedId(newValue);
         let selectedItem: {
             title: string
-            description: string
         } = {
-            description: '',
             title: ''
         }
         const checkChapter = data.filter(Q => Q.id === newValue)
         if (!checkChapter || checkChapter.length == 0) {
             for (let i = 0; i < data.length; i++) {
                 for (let j = 0; j < data.length; j++) {
-                    if (data[i]?.verses[j]?.id === newValue) {
+                    if (data[i]?.secondSubCategories[j]?.id === newValue) {
                         selectedItem =
                         {
-                            description: data[i]?.verses[j]?.description ?? '',
-                            title: data[i]?.verses[j]?.title ?? '',
+                            title: data[i]?.secondSubCategories[j]?.title ?? '',
                         }
                     }
                 }
@@ -142,19 +140,16 @@ const UpdateSubCategoryModal: React.FC<{
         } else {
             selectedItem =
             {
-                description: checkChapter[0]?.description ?? '',
-                title: checkChapter[0]?.title ?? '',
+                title: checkChapter[0]?.title ?? ''
             }
         }
 
         form.setFieldsValue({
             title: selectedItem.title,
-            description: selectedItem.description,
         })
 
         setUpdateForm({
-            title: selectedItem.title,
-            description: selectedItem.description,
+            title: selectedItem.title
         })
     }
 
@@ -166,6 +161,7 @@ const UpdateSubCategoryModal: React.FC<{
                 open={props.isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
+                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd"}} />}
                 footer={[]}
             >
                 <p style={{
@@ -209,7 +205,7 @@ const UpdateSubCategoryModal: React.FC<{
                                             return {
                                                 title: Q.title,
                                                 value: Q.id,
-                                                children: Q.verses.map(Z => {
+                                                children: Q.secondSubCategories.map(Z => {
                                                     return {
                                                         title: Z.title,
                                                         value: Z.id
@@ -252,7 +248,7 @@ const UpdateSubCategoryModal: React.FC<{
 
                             <Form.Item<UpdateSubCategoryType>
                                 name="description"
-                                rules={[{ required: true, message: 'Please input description' }]}
+                                rules={[{}]}
                             >
                                 <div>
                                     <p style={{
@@ -261,10 +257,7 @@ const UpdateSubCategoryModal: React.FC<{
                                         marginBottom: '8px'
                                     }}>Description</p>
                                     <TextArea rows={4} placeholder='Insert description' style={{ fontSize: '18px' }}
-                                        value={updateForm.description}
-                                        onChange={e => setUpdateForm(prev => {
-                                            return { ...prev, description: e.target.value }
-                                        })}
+                                        value=""
                                     />
                                 </div>
                             </Form.Item>
@@ -276,7 +269,12 @@ const UpdateSubCategoryModal: React.FC<{
                     <Form.Item style={{ textAlign: 'right' }}>
                         <Button key="submit" type="default" htmlType='submit' loading={loading}
                             size='large'
-                            style={{}}>
+                            style={{
+                                backgroundColor: updateForm.title ? '#3788FD' : '#A3A3A3',
+                                color: updateForm.title? 'white' : 'black',
+                            }}
+                            disabled={!updateForm.title}
+                            >
                             Update
                         </Button>
                     </Form.Item>
@@ -290,6 +288,7 @@ const UpdateSubCategoryModal: React.FC<{
                 centered
                 open={isResultOpen}
                 onCancel={handleCancelResult}
+                closable={false} 
                 footer={[]}
             >
                 <Result

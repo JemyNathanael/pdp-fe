@@ -182,7 +182,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                         <div className='text-base flex items-center'>
                             <Dropdown menu={{ items }} trigger={canUpdateStatus ? ['contextMenu'] : []}>
                                 <div className='py-1'>
-                                    <label className='mr-8'>{title}</label>
+                                    <p style={{ whiteSpace: 'pre-line' , textAlign: 'justify'}}>{title}</p>
                                 </div>
                             </Dropdown>
                             {canUpdateStatus &&

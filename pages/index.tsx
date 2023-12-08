@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Title } from '../components/Title';
 import { Page } from '../types/Page';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition, faArrowRightFromBracket, faCalendar, faHandshake, faLaptop, faPeopleArrows, faPeopleGroup, faServer, faSigning, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faArrowRightFromBracket, faUserGear, faCalendar, faHandshake, faLaptop, faPeopleArrows, faPeopleGroup, faServer, faSigning, faCalendarDays, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import nProgress from 'nprogress';
 import { Authorize } from '@/components/Authorize';
@@ -10,6 +10,7 @@ import useSWR from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useRouter } from 'next/router';
+import InformationModal from '@/components/InformationModal';
 
 interface CategoryHomeApiModel {
     id: string,
@@ -19,6 +20,8 @@ interface CategoryHomeApiModel {
 
 const Home: React.FC = () => {
     const { data: session, status } = useSession();
+    const [informationModal, setInformationModal] = useState<boolean>(false);
+    const [category, setCategory] = useState<string>('');
     const displayUserName = session?.user?.name;
     const role = session?.user?.['role'][0];
 
@@ -30,6 +33,16 @@ const Home: React.FC = () => {
 
     const onClickCategory = (categoryId: string) => {
         router.push(`/${categoryId}`)
+    }
+
+    const handleIconModal = (categoryId: string) => {
+        setInformationModal(true);
+        setCategory(categoryId);
+    }
+
+    function handleCancel() {
+        setInformationModal(false);
+        router.push('/')
     }
 
     function getRelatedIcon(title: string): IconDefinition {
@@ -62,10 +75,11 @@ const Home: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 padding: '24px',
-                borderBottom: 'solid rgba(255, 255, 255, 0.15) 4px'
+                boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.1)',
+                backgroundColor: '#3788FD'
             }}>
                 <div style={{ flexGrow: 1 }}>
-                    <img src="release.png" alt="logo" style={{ maxWidth: '50px' }} />
+                    <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
                 </div>
 
                 {
@@ -79,13 +93,12 @@ const Home: React.FC = () => {
                     <div className='mr-2'>
                         <button onClick={() => router.push('/ManageUser')}>
                             <div style={{
-                                border: 'solid white 2px',
                                 padding: '4px 12px',
-                                borderRadius: '16px',
+                                margin: ' 2px',
                                 fontSize: '18px',
                                 fontWeight: '600'
                             }}>
-                                Manage User
+                                <FontAwesomeIcon icon={faUserGear} />
                             </div>
                         </button>
                     </div>
@@ -100,13 +113,12 @@ const Home: React.FC = () => {
                                 });
                             }}>
                                 <div style={{
-                                    border: 'solid white 2px',
                                     padding: '4px 12px',
-                                    borderRadius: '16px',
+                                    margin: ' 2px',
                                     fontSize: '18px',
                                     fontWeight: '600'
                                 }}>
-                                    <FontAwesomeIcon icon={faArrowRightFromBracket}></FontAwesomeIcon> Logout
+                                    <FontAwesomeIcon icon={faArrowRightFromBracket} />
                                 </div>
                             </button>
                         </div>
@@ -133,26 +145,64 @@ const Home: React.FC = () => {
             </nav>
 
             <div>
+                <div className='justify-center text-center mt-4 font-bold' style={{ fontSize: '40px', color: 'black' }}>
+                    Sistem Evaluasi Perlindungan Data Pribadi
+                </div>
                 <div className="flex justify-center">
                     <div className="grid grid-cols-12">
-                        {
-                            data?.map((Q, index) => {
-                                return (
-                                    <div key={'category#' + index} className='col-span-12 md:col-span-6 lg:col-span-4'>
-                                        <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }} className='cursor-pointer'>
-                                            <div className='categoryHome' onClick={() => onClickCategory(Q.id)}>
-                                                <div className='categoryTitleHome'>
-                                                    <FontAwesomeIcon icon={getRelatedIcon(Q.title)} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
-                                                    <br />
-                                                    {Q.title}
-                                                </div>
+                        {data?.map((Q, index) => (
+                            <React.Fragment key={'category#' + index}>
+                                {category && <InformationModal onCancel={handleCancel} categoryId={category} visible={informationModal} />}
+                                <div className='col-span-12 lg:col-span-6 xl:col-span-4'>
+                                    <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }} className='cursor-pointer'>
+                                        <div
+                                            className='rounded-md min-w-[400px] text-center m-4 min-h-[200px] relative max-w-[400px]  bg-[#3788FD]'
+                                            onClick={() => onClickCategory(Q.id)}
+                                            style={{
+                                                transition: 'background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s',
+                                                backgroundColor: '#3788FD',
+                                                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.4)',
+                                                borderColor: '#3788FD',
+                                                borderStyle: 'solid',
+                                                borderWidth: '1.5px',
+                                            }}
+
+                                            onMouseOver={(e) => {
+                                                e.currentTarget.style.backgroundColor = 'white';
+                                                e.currentTarget.style.color = '#3788FD';
+                                                e.currentTarget.style.transform = 'translateY(-8px)';
+                                            }}
+                                            onMouseOut={(e) => {
+                                                e.currentTarget.style.backgroundColor = '#3788FD';
+                                                e.currentTarget.style.color = 'white';
+                                                e.currentTarget.style.transform = 'translateY(0)';
+                                            }}
+                                        >
+                                            <FontAwesomeIcon icon={faInfoCircle} style={{
+                                                position: 'absolute',
+                                                top: '10px',
+                                                right: '10px',
+                                                cursor: 'pointer',
+                                                transition: 'color 1,0s',
+                                            }} onClick={(e) => { e.stopPropagation(); handleIconModal(Q.id); }}
+                                                onMouseOver={(e) => {
+                                                    e.currentTarget.style.color = '#3788FD';
+                                                }}
+                                                onMouseOut={(e) => {
+                                                    e.currentTarget.style.color = 'white';
+                                                }} />
+                                            <div className='categoryTitleHome'>
+                                                <FontAwesomeIcon icon={getRelatedIcon(Q.title)} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>
+                                                <br />
+                                                {Q.title}
                                             </div>
                                         </div>
                                     </div>
-                                );
-                            })
-                        }
-                    </div >
+                                </div>
+                            </React.Fragment>
+                        ))}
+                    </div>
+
                 </div>
             </div>
 
@@ -163,7 +213,8 @@ const Home: React.FC = () => {
                 fontWeight: '600',
                 position: "fixed",
                 bottom: 16,
-                left: 0
+                left: 0,
+                color: '#3788FD'
             }}>Copyright @ PT. Accelist Lentera Indonesia</footer>
 
         </div>
@@ -173,7 +224,7 @@ const Home: React.FC = () => {
 const HomePage: Page = () => {
     return (
         <Authorize>
-            <div className='green-gradient-bg'
+            <div className='bg'
                 style={{
                     minHeight: '100vh',
                     color: 'white'

@@ -16,12 +16,17 @@ export const BackendApiUrl = {
     addChecklist: baseUrl + '/api/v1/Checklist',
     deleteChecklist: baseUrl + '/api/v1/Checklist',
     getChapters: baseUrl + '/api/v1/category',
+    
     createSubCategory: baseUrl + '/api/v1/category',
     updateSubCategory: baseUrl + '/api/v1/category',
     deleteSubCategory: baseUrl + '/api/v1/category',
-    getChaptersVerses: baseUrl + '/api/dropdown/chapter-list',
+    getSubCategory: baseUrl + '/api/v1/category',
+    getSubCategoryList: baseUrl + '/api/Dropdown/sub-category-list',
+    uploadFile: baseUrl + '/api/v1/Blob/upload-file',
+    uploadFileInformation: baseUrl + '/api/v1/Blob/upload-file-information',
     presignedPutObject:baseUrl + '/api/v1/Blob/presigned-put-object',
-    saveFile:baseUrl + '/api/v1/Checklist/save-file'
+    saveFile:baseUrl + '/api/v1/Checklist/save-file',
+    getInformation: baseUrl + '/api/v1/category/get-chapter'
 }
 
 export function GetUser(
@@ -74,4 +79,13 @@ export function GetChecklistList(verseId: string) {
     param.append('verseId', verseId.toString());
 
     return BackendApiUrl.getChecklists + '?' + param.toString();
+}
+
+export function GetInformation(categoryId : string){
+    const param = new URLSearchParams();
+
+    param.append('categoryId',categoryId.toString());
+
+    return BackendApiUrl.getInformation + '?' + param.toString();
+
 }
