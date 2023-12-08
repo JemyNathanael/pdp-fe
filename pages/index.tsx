@@ -88,7 +88,7 @@ const Home: React.FC = () => {
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
                 </div>
                 <div className="">
-                    <SearchBarNav placeholder="input search text" style={{ width: '30vw'}} />
+                    <SearchBarNav placeholder="input search text" style={{ width: 600 }} />
                 </div>
                 <div className="flex items-center">
                     {status === 'authenticated' ?
