@@ -5,6 +5,7 @@ import UpdateSubCategoryModal from './UpdateSubCategoryModal';
 import DeleteSubCategoryModal from './DeleteSubCategoryModal';
 import { faArrowsRotate, faBars, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useSession } from 'next-auth/react';
 
 interface CategoryVerseFloatingButtonProps {
     categoryId: string
@@ -16,6 +17,10 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
     const [isUpdateSubCategoryModalOpen, setIsUpdateSubCategoryModalOpen] = useState(false);
     const [isDeleteSubCategoryModalOpen, setIsDeleteSubCategoryModalOpen] = useState(false);
     const [backdropVisible, setBackdropVisible] = useState<boolean>(false);
+
+    const canSeeHamburger = ['Admin', 'Reader'];
+    const { data: session } = useSession();
+    const role = session?.user?.['role'][0];
 
     const handleBackdrop = () => {
         setBackdropVisible(!backdropVisible);
@@ -29,54 +34,56 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
                 }
             }}>
 
-            <div onClick={handleBackdrop}>
-                <FloatButton.Group
-                    trigger='click'
-                    type='primary'
-                    style={{ right: 50 }}
-                    icon={<FontAwesomeIcon icon={faBars} />}
-                >
-                    <>
-                        <span style={{
-                            position: 'absolute',
-                            width: '200px',
-                            right: '0',
-                            top: '6px',
-                            fontWeight: 'bolder',
-                            color: 'white'
-                        }}>
-                            Update Sub-Category
-                        </span>
-                        <FloatButton type="primary" icon={<FontAwesomeIcon icon={faArrowsRotate} />} onClick={() => setIsUpdateSubCategoryModalOpen(true)} />
-                    </>
-                    <>
-                        <span style={{
-                            position: 'absolute',
-                            width: '180px',
-                            right: '0',
-                            top: '62px',
-                            fontWeight: 'bolder',
-                            color: 'white'
-                        }}>
-                            Add Sub-Category
-                        </span>
-                        <FloatButton type="primary" icon={<FontAwesomeIcon icon={faPlus} />} onClick={() => setIsAddSubCategoryModalOpen(true)} />
-                    </>
-                    <>
-                        <span style={{
-                            position: 'absolute',
-                            width: '100px',
-                            right: '0',
-                            top: '120px',
-                            fontWeight: 'bold',
-                            color: 'white'
-                        }}>
-                            Delete
-                        </span>
-                        <FloatButton type="primary" icon={<FontAwesomeIcon icon={faMinus} />} onClick={() => setIsDeleteSubCategoryModalOpen(true)} />
-                    </>
-                </FloatButton.Group>
-            </div>
+            {canSeeHamburger.includes(role) &&
+                <div onClick={handleBackdrop}>
+                    <FloatButton.Group
+                        trigger='click'
+                        type='primary'
+                        style={{ right: 50 }}
+                        icon={<FontAwesomeIcon icon={faBars} />}
+                    >
+                        <>
+                            <span style={{
+                                position: 'absolute',
+                                width: '200px',
+                                right: '0',
+                                top: '6px',
+                                fontWeight: 'bolder',
+                                color: 'white'
+                            }}>
+                                Update Sub-Category
+                            </span>
+                            <FloatButton type="primary" icon={<FontAwesomeIcon icon={faArrowsRotate} />} onClick={() => setIsUpdateSubCategoryModalOpen(true)} />
+                        </>
+                        <>
+                            <span style={{
+                                position: 'absolute',
+                                width: '180px',
+                                right: '0',
+                                top: '62px',
+                                fontWeight: 'bolder',
+                                color: 'white'
+                            }}>
+                                Add Sub-Category
+                            </span>
+                            <FloatButton type="primary" icon={<FontAwesomeIcon icon={faPlus} />} onClick={() => setIsAddSubCategoryModalOpen(true)} />
+                        </>
+                        <>
+                            <span style={{
+                                position: 'absolute',
+                                width: '100px',
+                                right: '0',
+                                top: '120px',
+                                fontWeight: 'bold',
+                                color: 'white'
+                            }}>
+                                Delete
+                            </span>
+                            <FloatButton type="primary" icon={<FontAwesomeIcon icon={faMinus} />} onClick={() => setIsDeleteSubCategoryModalOpen(true)} />
+                        </>
+                    </FloatButton.Group>
+                </div>
+            }
 
             {backdropVisible && (
                 <div
@@ -86,8 +93,8 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
             )}
 
             <AddSubCategoryModal isModalOpen={isAddSubCategoryModalOpen} setIsModalOpen={setIsAddSubCategoryModalOpen} categoryId={categoryId} />
-            <UpdateSubCategoryModal isModalOpen={isUpdateSubCategoryModalOpen} setIsModalOpen={setIsUpdateSubCategoryModalOpen} categoryId={categoryId}/>
-            <DeleteSubCategoryModal isModalOpen={isDeleteSubCategoryModalOpen} setIsModalOpen={setIsDeleteSubCategoryModalOpen} categoryId={categoryId}/>
+            <UpdateSubCategoryModal isModalOpen={isUpdateSubCategoryModalOpen} setIsModalOpen={setIsUpdateSubCategoryModalOpen} categoryId={categoryId} />
+            <DeleteSubCategoryModal isModalOpen={isDeleteSubCategoryModalOpen} setIsModalOpen={setIsDeleteSubCategoryModalOpen} categoryId={categoryId} />
         </ConfigProvider >
     );
 }

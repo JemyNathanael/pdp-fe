@@ -10,8 +10,9 @@ import useSWR from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useRouter } from 'next/router';
-import SearchBarNav from '@/components/category/SearchBarNav';
+import SearchBarNavs from '@/components/category/SearchBarNavs';
 import InformationModal from '@/components/InformationModal';
+import SearchResultNav from '@/components/category/SearchResultNav';
 
 interface CategoryHomeApiModel {
     id: string,
@@ -25,7 +26,7 @@ const Home: React.FC = () => {
     const [category, setCategory] = useState<string>('');
     const displayUserName = session?.user?.name;
     const role = session?.user?.['role'][0];
-
+    const [searchResults, setSearchResults] = useState([]); // Search Bar Result
     const router = useRouter();
 
     const swrFetcher = useSwrFetcherWithAccessToken();
@@ -45,7 +46,6 @@ const Home: React.FC = () => {
         setInformationModal(false);
         router.push('/')
     }
-
     function getRelatedIcon(title: string): IconDefinition {
         title = title.toLowerCase()
 
@@ -76,19 +76,24 @@ const Home: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                width: '100%',
                 padding: '24px',
                 boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.1)',
-                backgroundColor: '#3788FD'
+                backgroundColor: '#3788FD',
+                position: 'fixed',
+                top: 0,
+                zIndex: 1000
             }}>
-                <div>
+                <div className="hidden sm:block">
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
                 </div>
                 <div className="">
-                    <SearchBarNav placeholder="input search text" style={{ width: 600 }} />
+                    <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
+                    <SearchResultNav searchResults={searchResults} />
                 </div>
                 <div className="flex items-center">
                     {status === 'authenticated' ?
-                        <div style={{ margin: '0 16px', fontWeight: '600' }}>Halo, {displayUserName}</div>
+                        <div className="hidden md:block" style={{ margin: '0 32px', fontWeight: '600' }}>Halo, {displayUserName}</div>
                         : <div></div>
                     }
                     {role === "Admin" &&
@@ -98,7 +103,6 @@ const Home: React.FC = () => {
                                     padding: '4px 12px 3px',
                                     fontSize: '18px',
                                     fontWeight: '600',
-                                    marginLeft: '4px',
                                 }}>
                                     <FontAwesomeIcon icon={faUserGear} />
                                 </div>
@@ -114,8 +118,8 @@ const Home: React.FC = () => {
                                 });
                             }}>
                                 <div style={{
-                                    padding: '4px 14px 3px',
-                                    marginRight: '3px',
+                                    padding: '4px 12px 3px',
+                                    marginRight: '8px',
                                     fontSize: '18px',
                                     fontWeight: '600',
                                 }}>
@@ -145,7 +149,7 @@ const Home: React.FC = () => {
 
             </nav>
 
-            <div>
+            <div style={{ paddingTop: '100px', paddingBottom: '10px' }}>
                 <div className='justify-center text-center mt-4 font-bold' style={{ fontSize: '40px', color: 'black' }}>
                     Sistem Evaluasi Perlindungan Data Pribadi
                 </div>
