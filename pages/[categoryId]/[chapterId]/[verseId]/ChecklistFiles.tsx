@@ -112,7 +112,7 @@ const ChecklistFiles: React.FC = () => {
         <div className='flex flex-1'>
             <div>
                 <button onClick={navigateBackToVerse}>
-                    <FontAwesomeIcon icon={faCircleLeft} className='text-[#4F7471] mr-5' size={'2x'} />
+                    <FontAwesomeIcon icon={faCircleLeft} className='text-[#3788FD] mr-5' size={'2x'} />
                 </button>
             </div>
 
@@ -145,7 +145,7 @@ const ChecklistFiles: React.FC = () => {
 
                 </div>
                 <p className='flex flex-1 flex-row-reverse mt-3 text-red-500 text-xs font-semibold'>
-                    *Format Files: PDF, PNG, Word, and Excel
+                    *Format Files: PDF, PNG, docx, and xlsx 
                 </p>
             </div>
 

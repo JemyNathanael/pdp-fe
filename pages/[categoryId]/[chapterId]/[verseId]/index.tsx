@@ -8,10 +8,12 @@ import { Authorize } from '@/components/Authorize';
 import { useRouter } from 'next/router';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import useSWR from 'swr';
-import { BackendApiUrl, GetChecklistList } from '@/functions/BackendApiUrl';
+import { BackendApiUrl, GetChecklistList, GetChecklistTitle } from '@/functions/BackendApiUrl';
 import { DefaultOptionType } from 'antd/es/select';
 import { useSession } from 'next-auth/react';
 import { RcFile } from 'antd/es/upload';
+import Link from 'next/link';
+import { Row } from 'antd';
 
 interface ChecklistList {
     id: string;
@@ -38,7 +40,10 @@ interface UploadStatusDropdownModel {
     status: string;
 }
 
-
+interface Indexing{
+    checklistTitle: string;
+    subCategoryTitle: string;
+}
 
 const VersePage: Page = () => {
 
@@ -50,6 +55,7 @@ const VersePage: Page = () => {
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data: checklistData } = useSWR<ChecklistModel>(GetChecklistList(verseId), swrFetcher);
     const { data: dropdownUploadStatusData } = useSWR<UploadStatusDropdownModel[]>(BackendApiUrl.getUploadStatus, swrFetcher);
+    const { data: indexData} = useSWR<Indexing>(GetChecklistTitle(verseId), swrFetcher);
 
     const canEditUploadStatusRole = ['Admin', 'Auditor'];
     const { data: session } = useSession();
@@ -104,9 +110,17 @@ const VersePage: Page = () => {
         <Authorize>
             <Title>Ayat</Title>
             <div className='mb-10'>
+            <Row>
+                <Link href={ router.asPath.replace(verseId, "")}>
+                    <p style={{fontSize:'large', fontWeight:600, color:"grey"}}>{indexData?.subCategoryTitle} </p>
+                </Link>
+                <p style={{fontSize:'large',color:'#3788FD', fontWeight:600, marginLeft:'4px'}}> / {indexData?.checklistTitle}</p>
+            </Row>
+            <br />
                 {(checklist && uploadStatusDropdown) &&
                     checklist.map((checklist, i) =>
                         <div key={i} className='mb-16'>
+                            
                             <CategoryVerseContent
                                 checklistId={checklist.id}
                                 title={checklist.description}

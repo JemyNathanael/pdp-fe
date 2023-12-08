@@ -9,7 +9,6 @@ module.exports = {
         extend: {
             colors: {
                 topbar: '#001529',
-                greyeen : '#4F7471'
             },
         },
     },

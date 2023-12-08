@@ -84,33 +84,28 @@ const Home: React.FC = () => {
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
                 </div>
                 <div className="">
-                    <SearchBarNav placeholder="input search text" style={{ width: 600  }} />
+                    <SearchBarNav placeholder="input search text" style={{ width: 600 }} />
                 </div>
                 <div className="flex items-center">
-
-                {
-                    status === 'authenticated' ?
-                        <div style={{ margin: '0 20px', fontWeight: '600', paddingLeft:'2px' }}>Halo, {displayUserName}</div>
-                        :
-                        <div></div>
-                }
-                {
-                    role === "Admin" &&
-                    <div className='mr-2'>
-                        <button onClick={() => router.push('/ManageUser')}>
-                            <div style={{
-                                padding: '0px 12px 2px',
-                                // margin: ' 2px',
-                                fontSize: '18px',
-                                fontWeight: '600'
-                            }}>
-                                <FontAwesomeIcon icon={faUserGear} />
-                            </div>
-                        </button>
-                    </div>
-                }
-                {
-                    status === 'authenticated' ?
+                    {status === 'authenticated' ?
+                        <div style={{ margin: '0 16px', fontWeight: '600' }}>Halo, {displayUserName}</div>
+                        : <div></div>
+                    }
+                    {role === "Admin" &&
+                        <div className='mr-2'>
+                            <button onClick={() => router.push('/ManageUser')}>
+                                <div style={{
+                                    padding: '4px 12px 3px',
+                                    fontSize: '18px',
+                                    fontWeight: '600',
+                                    marginLeft: '4px',
+                                }}>
+                                    <FontAwesomeIcon icon={faUserGear} />
+                                </div>
+                            </button>
+                        </div>
+                    }
+                    {status === 'authenticated' ?
                         <div>
                             <button onClick={() => {
                                 nProgress.start();
@@ -119,36 +114,35 @@ const Home: React.FC = () => {
                                 });
                             }}>
                                 <div style={{
-                                    padding: '0px 14px 2px',
-                                    marginRight: ' 3px',
+                                    padding: '4px 14px 3px',
+                                    marginRight: '3px',
                                     fontSize: '18px',
-                                    fontWeight: '600'
+                                    fontWeight: '600',
                                 }}>
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} />
                                 </div>
                             </button>
                         </div>
-
-                            :
-
-                            <div>
-                                <button onClick={() => {
-                                    nProgress.start();
-                                    signIn('oidc');
+                        :
+                        <div>
+                            <button onClick={() => {
+                                nProgress.start();
+                                signIn('oidc');
+                            }}>
+                                <div style={{
+                                    border: 'solid white 2px',
+                                    padding: '4px 12px',
+                                    borderRadius: '16px',
+                                    fontSize: '18px',
+                                    fontWeight: '600',
                                 }}>
-                                    <div style={{
-                                        border: 'solid white 2px',
-                                        padding: '4px 12px',
-                                        borderRadius: '16px',
-                                        fontSize: '18px',
-                                        fontWeight: '600'
-                                    }}>
-                                        <FontAwesomeIcon icon={faSigning}></FontAwesomeIcon> Login
-                                    </div>
-                                </button>
-                            </div>
+                                    <FontAwesomeIcon icon={faSigning}></FontAwesomeIcon> Login
+                                </div>
+                            </button>
+                        </div>
                     }
                 </div>
+
             </nav>
 
             <div>
@@ -161,13 +155,14 @@ const Home: React.FC = () => {
                             <React.Fragment key={'category#' + index}>
                                 {category && <InformationModal onCancel={handleCancel} categoryId={category} visible={informationModal} />}
                                 <div className='col-span-12 lg:col-span-6 xl:col-span-4'>
-                                    <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }} className='cursor-pointer'>
+                                    <div style={{ display: 'flex', justifyContent: 'center', margin: '5px' }} className='cursor-pointer'>
                                         <div
-                                            className='rounded-md min-w-[400px] text-center m-4 min-h-[200px] relative max-w-[400px]  bg-[#3788FD]'
+                                            className='rounded-md min-w-[400px] text-center m-4 min-h-[180px] max-h-[180px] relative max-w-[400px]  bg-[#3788FD] p-5'
                                             onClick={() => onClickCategory(Q.id)}
                                             style={{
                                                 transition: 'background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s',
                                                 backgroundColor: '#3788FD',
+                                                color: 'white',
                                                 boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.4)',
                                                 borderColor: '#3788FD',
                                                 borderStyle: 'solid',
@@ -185,18 +180,18 @@ const Home: React.FC = () => {
                                                 e.currentTarget.style.transform = 'translateY(0)';
                                             }}
                                         >
-                                            <FontAwesomeIcon icon={faInfoCircle} style={{
+                                            <FontAwesomeIcon icon={faInfoCircle} size='lg' style={{
                                                 position: 'absolute',
                                                 top: '10px',
                                                 right: '10px',
                                                 cursor: 'pointer',
-                                                transition: 'color 1,0s',
+                                                transition: 'color 1,0s', // Add transition for smooth effect
                                             }} onClick={(e) => { e.stopPropagation(); handleIconModal(Q.id); }}
                                                 onMouseOver={(e) => {
-                                                    e.currentTarget.style.color = '#3788FD';
+                                                    e.currentTarget.style.color = '#3788FD'; // Change to blue when hovered
                                                 }}
                                                 onMouseOut={(e) => {
-                                                    e.currentTarget.style.color = 'white';
+                                                    e.currentTarget.style.color = 'white'; // Change back to the original color when not hovered
                                                 }} />
                                             <div className='categoryTitleHome'>
                                                 <FontAwesomeIcon icon={getRelatedIcon(Q.title)} style={{ width: '50px', height: '50px' }}></FontAwesomeIcon>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faChevronRight, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 
 interface IProps {
@@ -17,9 +17,10 @@ interface IProps {
 interface ChildProps {
     title: string;
     routePath: string;
+    isOpen: boolean;
 }
 
-const Child: React.FC<ChildProps> = ({ routePath, title }) => {
+const Child: React.FC<ChildProps> = ({ routePath, title, isOpen }) => {
     const router = useRouter();
 
     const handleTitleRouting = () => {
@@ -27,19 +28,26 @@ const Child: React.FC<ChildProps> = ({ routePath, title }) => {
     }
 
     let bgClassName = 'px-3 py-1';
-    let textClassName = 'ml-12 font-semibold text-left text-white';
+    let textClassName = 'ml-12 font-semibold text-left text-black';
 
     if (router.asPath === routePath){
-        bgClassName = 'bg-[#FBF8E0] px-3 py-1';
-        textClassName = 'ml-12 font-semibold text-left text-[#3B5250]';
+        bgClassName = 'px-3 py-1';
+        textClassName = 'ml-12 font-semibold text-left text-[#3788FD]';
+        
     }
     
     return (
         <div className={bgClassName}>
             <div className="py-1 flex justify-content-between flex-1 items-center">
                 <button className="flex-1" onClick={handleTitleRouting}>
-                    <p className={textClassName}>{title}</p>
+                {isOpen && router.asPath === routePath? (
+                  <p className={textClassName} style={{fontSize: '110%'}}> <FontAwesomeIcon icon={faCircle} size="2xs" display={'block'}/> {title}</p>
+                ) : (
+                  <p className={textClassName}> {title}</p>
+                )}
+                    
                 </button>
+                
             </div>
         </div>
     )
@@ -73,13 +81,13 @@ const Collapsible: React.FC<IProps> = ({ open, title, childrenItem, routePath, c
   }
 
   let bgClassName = 'px-3';
-  let iconClassName = 'text-white'
-  let textClassName = 'font-semibold text-left text-white';
+  let iconClassName = 'text-[#DBDBDB]'
+  let textClassName = 'font-semibold text-left text-black';
 
-  if (router.asPath === routePath){
-    bgClassName = 'bg-[#FBF8E0] px-3';
-    iconClassName = 'text-[#3B5250]';
-    textClassName = 'font-semibold text-left text-[#3B5250]';
+  if (router.asPath.includes(routePath) ){
+    bgClassName = 'px-3';
+    iconClassName = 'text-[#3788FD]';
+    textClassName = 'font-semibold text-left text-[#3788FD] text-base';
   }
 
   return (
@@ -93,16 +101,16 @@ const Collapsible: React.FC<IProps> = ({ open, title, childrenItem, routePath, c
                   <FontAwesomeIcon icon={faChevronDown} className={`fa-fw ${iconClassName}`} />
                 )}
                 </button>
-                <button className="flex-1" onClick={handleTitleRouting}>
-                    <p className={textClassName}>{title}</p>
-                </button>
+                <p onClick={handleTitleRouting} className={textClassName} >{title}</p>
             </div>
         </div>
 
         <div>
           <div>{(isOpen && childrenItem) &&
             childrenItem.map((childProps, i) => 
-                <Child title={childProps.title} routePath={childProps.routePath} key={i}/>
+                <div key={i}>
+                  <Child title={childProps.title} routePath={childProps.routePath} isOpen={isOpen}/>
+                </div>
             )
           }</div>
         </div>

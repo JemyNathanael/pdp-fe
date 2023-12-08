@@ -12,9 +12,9 @@ import { GetCategoryDetail } from "@/functions/BackendApiUrl";
 import useSWR from 'swr';
 import { Authorize } from "./Authorize";
 
-const { Sider, Content, } = Layout;
+const { Sider, Content } = Layout;
 
-const sidebarBackgroundColor = '#4F7471';
+const sidebarBackgroundColor = 'white';
 
 interface Verse {
     id: string;
@@ -47,6 +47,7 @@ interface CategoryDetailModel {
 interface SidebarMenuModel {
     title: string;
     routePath: string;
+    isOpen: boolean;
 }
 
 interface CategorySidebarItemsModel extends SidebarMenuModel {
@@ -66,7 +67,7 @@ const CategoryLayout: React.FC<{
     const router = useRouter();
     const categoryId = router.query['categoryId']?.toString() ?? '';
 
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
     const displayUserName = session?.user?.name;
 
     const swrFetcher = useSwrFetcherWithAccessToken();
@@ -85,7 +86,8 @@ const CategoryLayout: React.FC<{
                 const currentChapterVerses: SidebarMenuModel[] = chapter.secondSubCategories.map((verse) => {
                     return {
                         title: verse.title,
-                        routePath: `/${router.query['categoryId']}/${chapter.id}/${verse.id}`
+                        routePath: `/${router.query['categoryId']}/${chapter.id}/${verse.id}`,
+                        isOpen: false
                     }
                 })
 
@@ -93,6 +95,7 @@ const CategoryLayout: React.FC<{
                     title: chapter.title,
                     routePath: `/${router.query['categoryId']}/${chapter.id}`,
                     children: currentChapterVerses,
+                    isOpen: false
                 }
             })
 
@@ -131,14 +134,18 @@ const CategoryLayout: React.FC<{
         }
     }
 
-    const handleLogout = () => {
-        if (status === 'authenticated') {
-            nProgress.start();
-            signOut({
-                callbackUrl: '/api/end-session',
-            });
-        }
+    function onClickLogout() {
+        nProgress.start();
+        signOut({
+            callbackUrl: '/api/end-session'
+        });
     }
+
+    const logoutButton = () => (
+        <button onClick={onClickLogout} className="pl-4 mt-1">
+            <FontAwesomeIcon className="mr-2" icon={faArrowRightFromBracket} color="white" fontSize="18px"></FontAwesomeIcon>
+        </button>
+    )
 
     return (
         <ConfigProvider theme={{
@@ -157,40 +164,55 @@ const CategoryLayout: React.FC<{
                     <link key="favicon" rel="icon" href="/favicon.ico" />
                 </Head>
 
+                {/* <Header className="bg-[#3788FD] flex items-center" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", padding: '16px', margin: 0, position: 'fixed', width: '100%', zIndex: 1, height: '90px' }}>
+                    <div className="flex flex-1 items-center">
+
+                        <div className="p-6 flex flex-1 flex-row-reverse items-center">
+
+                            {logoutButton()}
+                            {isAdmin &&
+                                <button onClick={goToManageUserPage} style={{ color: 'white', fontSize: '18px', paddingRight: '4px' }}>
+                                    <FontAwesomeIcon icon={faUserGear} />
+                                </button>
+                            }
+                            <div className="mr-6 text-white font-semibold" style={{fontSize:'18px'}}>
+                                Halo, {displayUserName}
+                            </div>
+                        </div>
+                    </div>
+                </Header> */}
+
                 <nav className="bg-[#3788FD]" style={{
                     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
                     padding: '16px',
-                    backgroundColor: '#3788FD'
+                    position: 'fixed',
+                    width: '100%',
+                    zIndex: 1,
                 }}>
-                    <div className="flex items-center">
+                    <div className="flex flex-1 items-center">
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
                             <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
                         </div>
-                        <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-3 items-center">
+                        <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-4 items-center">
                             <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
                                 <ul className="lg:flex space-x-4 items-center">
                                     <li className="flex items-center">
-                                        <div className="text-white cursor-pointer font-semibold pr-7" style={{fontSize:'16px'}}>
+                                        <div className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px'" style={{fontSize:'16px'}}>
                                             {`Halo, ${displayUserName}`}
                                         </div>
                                         {isAdmin && (
                                             <button
                                                 onClick={goToManageUserPage}
-                                                className="text-white text-lg hover:text-gray-300 pr-6"
+                                                className="text-white text-lg pr-3 ml-1 mr-1"
                                             >
                                                 <FontAwesomeIcon icon={faUserGear} />
                                             </button>
                                         )}
                                         <button
-                                            onClick={handleLogout}
-                                            className="text-white text-lg hover:text-gray-300"
-                                            style={{
-                                                padding: '3px 10px 2px',
-                                                fontSize: '18px',
-                                                fontWeight: '600',
-                                            }}
+                                            onClick={logoutButton}
+                                            className="text-white text-lg pl-4 mt-1"
                                         >
-                                            <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                                            <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
                                         </button>
                                     </li>
                                 </ul>
@@ -200,11 +222,14 @@ const CategoryLayout: React.FC<{
                 </nav>
 
                 <Layout>
-                    <Sider width={300} className="pb-24 hidden lg:block">
-                        <p className="p-2 px-4 m-4 text-white font-bold">
+                    <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000 }}>
+                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
+                            <img src='adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '10px', padding:'8px' }} />
+                        </div>
+                        <p className="p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
                             {data?.title}
                         </p>
-                        <div className="m-4">
+                        <div className="m-4" style={{ backgroundColor: '##000000' }}>
                             {firstSubCategories &&
                                 firstSubCategories.map((firstSub, i) =>
                                     <Collapsible
@@ -221,12 +246,12 @@ const CategoryLayout: React.FC<{
                                 )
                             }
                         </div>
-                        <button className="mx-8 mt-5 text-white underline text-xs" onClick={handleExpandOrCollapseAll}>
+                        <button className="mx-8 mt-5 text-[#373737] underline text-xs" onClick={handleExpandOrCollapseAll}>
                             Expand / Collapse all
                         </button>
                     </Sider>
 
-                    <Content className="p-7">
+                    <Content className="p-7" style={{ paddingTop: 100 }}>
                         {children}
                     </Content>
                 </Layout>

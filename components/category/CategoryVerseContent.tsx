@@ -189,7 +189,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                     <Dropdown menu={{ items }} trigger={['click']}>
                                         <a onClick={(e) => e.preventDefault()}>
                                             <Space>
-                                                <div className="cursor-pointer font-bold text-black">
+                                                <div className="cursor-pointer font-bold text-black pl-10">
                                                     <FontAwesomeIcon icon={faEllipsisV} />
                                                 </div>
                                             </Space>
@@ -235,7 +235,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                 {
                                     blobList.length !== 0 &&
                                     <div className='flex flex-row-reverse'>
-                                        <button className='text-[#4F7471] underline text-xs font-semibold' onClick={navigateToChecklistPage}>
+                                        <button className='text-[#3788FD] underline text-xs font-semibold' onClick={navigateToChecklistPage}>
                                             view all files
                                         </button>
                                     </div>
@@ -244,7 +244,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                         </div>
                     </div>
                     <p className='mx-5 mt-3 text-red-500 text-xs font-semibold'>
-                        *Format Files: PDF, PNG, Word, and Excel
+                        *Format Files: PDF, PNG, docx, and xlsx
                     </p>
                 </div>
                 {canUpdateStatus &&

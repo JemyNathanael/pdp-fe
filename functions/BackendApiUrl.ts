@@ -23,6 +23,7 @@ export const BackendApiUrl = {
     updateSubCategory: baseUrl + '/api/v1/category',
     deleteSubCategory: baseUrl + '/api/v1/category',
     getSubCategory: baseUrl + '/api/v1/category',
+    getChecklistTitle: baseUrl + '/api/v1/category/get-title',
     getSubCategoryList: baseUrl + '/api/Dropdown/sub-category-list',
 
     uploadFile: baseUrl + '/api/v1/Blob/upload-file',
@@ -82,6 +83,14 @@ export function GetChecklistList(verseId: string) {
     param.append('verseId', verseId.toString());
 
     return BackendApiUrl.getChecklists + '?' + param.toString();
+}
+
+export function GetChecklistTitle(verseId: string) {
+    const param = new URLSearchParams();
+
+    param.append('verseId', verseId.toString());
+
+    return BackendApiUrl.getChecklistTitle + '?' + param.toString();
 }
 
 export function GetInformation(categoryId : string){
