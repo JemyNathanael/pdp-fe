@@ -11,17 +11,20 @@ import { Authorize } from '@/components/Authorize';
 import { Upload } from 'antd';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import useSWR, { mutate } from 'swr';
+import { v4 as uuidv4 } from 'uuid';
 import { BackendApiUrl, GetChecklistList } from '@/functions/BackendApiUrl';
 import { useSession } from 'next-auth/react';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
+import { RcFile } from 'antd/es/upload';
 
 
 
 export interface BlobListModel {
     id: string;
     fileName: string;
-    filePath: string;
+    filePath?: string | undefined;
     contentType: string;
+    originFileObj?: RcFile | undefined
 }
 
 interface ChecklistList {
@@ -36,9 +39,14 @@ interface ChecklistModel {
     checklistList: ChecklistList[];
 }
 
+interface ResponseTest {
+    data: string;
+}
+
 
 const ChecklistFiles: React.FC = () => {
     const router = useRouter();
+    const {id} = router.query;
 
     const [files, setFiles] = useState<ChecklistList[]>();
     const canEditUploadStatusRole = ['Admin', 'Auditor'];
@@ -47,11 +55,14 @@ const ChecklistFiles: React.FC = () => {
     const verseId = router.query['verseId']?.toString() ?? '';
 
     const isRoleGrantedEditUploadStatus = canEditUploadStatusRole.includes(role) ? true : false;
-    const { fetchPOST } = useFetchWithAccessToken();
+    const { fetchPUT, fetchGET } = useFetchWithAccessToken();
 
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data: checklistData } = useSWR<ChecklistModel>(GetChecklistList(verseId), swrFetcher);
-    const titleData = checklistData?.checklistList.map(title => title.description);
+    const currChecklist = checklistData?.checklistList.find(item => item.id === id);
+    const blobList = currChecklist?.blobList ?? [];
+    const [tempData, setTempData] = useState<BlobListModel[]>(currChecklist?.blobList ?? []);
+
     function navigateBackToVerse() {
         router.back();
     }
@@ -80,33 +91,58 @@ const ChecklistFiles: React.FC = () => {
         }
     }
 
-    const handleFileUpload = async (info) => {
-        if (info.file.status === 'done') {
-            const targetChecklist = files?.find((checklist) =>
-                checklist.blobList.some((blob) => blob.fileName === info.file.name)
-            );
 
-            if (targetChecklist) {
-                const payload = {
-                    Id: info.file.response.fileId,
-                    FilePath: info.file.response.filePath,
-                    FileName: info.file.response.fileName,
-                    ContentType: info.file.response.contentType,
-                    ChecklistId: targetChecklist.id,
-                };
+    useEffect(() => {
+        setFiles(checklistData?.checklistList.filter(item => item.id == id))
+    }, [checklistData?.checklistList, id]);
 
-                await fetchPOST(BackendApiUrl.uploadFileInformation, payload);
+    const handleFileUpload = async (index: number) => {
+        const fileExt = tempData[index]?.fileName?.split('.').pop();
+        const { data } = await fetchGET<ResponseTest>(`${BackendApiUrl.presignedPutObject}?filename=${tempData[index]?.id}.${fileExt}`);
+        if (data) {
+            await fetch(data.data, {
+                method: 'PUT',
+                body: tempData[index]?.originFileObj
+            });
+        }
+    }
 
+    const handleSave = async () => {
+        if (tempData) {
+            for (const [index, value] of tempData.entries()) {
+                if (!blobList.includes(value)) {
+                    handleFileUpload(index);
+                }
+            }
+            const response = await fetchPUT(BackendApiUrl.saveFile, {
+                checklistId: id,
+                fileDatas: tempData.map((item) => ({
+                    FileId: item.id,
+                    FileName: item.fileName,
+                    ContentType: item.contentType
+                }))
+            });
+            if (response) {
                 mutate(GetChecklistList(verseId));
             }
         }
-    };
+    }
 
 
 
-    useEffect(() => {
-        setFiles(checklistData?.checklistList)
-    }, [checklistData?.checklistList]);
+    const handleChange = (file: RcFile, blobData: BlobListModel[]) => {
+        const fileId = uuidv4();
+
+        const newFile = {
+            id: fileId,
+            fileName: file.name,
+            originFileObj: file,
+            contentType: file.type,
+        };
+
+        setTempData([...blobData, newFile]);
+        return tempData.length;
+    }
 
     return (
         <div className='flex flex-1'>
@@ -118,7 +154,7 @@ const ChecklistFiles: React.FC = () => {
 
             <div className='flex-1'>
                 <p className='text-base mb-10'>
-                    {titleData}
+                    {currChecklist?.description}
                 </p>
                 <div className='flex flex-wrap gap-16'>
                     {files &&
@@ -136,14 +172,25 @@ const ChecklistFiles: React.FC = () => {
                 </div>
 
                 <div className='flex flex-1 flex-row-reverse mt-24'>
-                    <CategoryButton text='Save' className='px-9 ml-8' />
-                    {isRoleGrantedEditUploadStatus &&
-                        <Upload name='file' action={BackendApiUrl.uploadFile} onChange={handleFileUpload} defaultFileList={[]}>
-                            <CategoryButton text='+ Upload File' mode='outlined' className='px-9' />
-                        </Upload>
-                    }
-
+                    <div>
+                        <CategoryButton text='Save' className='px-9 ml-8' onClick={handleSave} />
+                    </div>
+                    <div>
+                        {isRoleGrantedEditUploadStatus &&
+                            <Upload name='File'
+                            beforeUpload={(file) => {
+                                handleChange(file, tempData);
+                                return false;
+                            }} 
+                            defaultFileList={[]}>
+                                <CategoryButton text='+ Upload File' mode='outlined' className='px-9' />
+                            </Upload>
+                        }
+                    </div>
+                    
+                    
                 </div>
+               
                 <p className='flex flex-1 flex-row-reverse mt-3 text-red-500 text-xs font-semibold'>
                     *Format Files: PDF, PNG, docx, and xlsx 
                 </p>
