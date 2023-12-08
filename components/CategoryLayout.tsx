@@ -203,7 +203,7 @@ const CategoryLayout: React.FC<{
                                         {isAdmin && (
                                             <button
                                                 onClick={goToManageUserPage}
-                                                className="text-white text-lg pr-3 ml-1 mr-1"
+                                                className="text-white text-lg pr-3 ml-4 mr-1"
                                             >
                                                 <FontAwesomeIcon icon={faUserGear} />
                                             </button>
