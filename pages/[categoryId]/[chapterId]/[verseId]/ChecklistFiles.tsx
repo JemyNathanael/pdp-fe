@@ -153,7 +153,7 @@ const ChecklistFiles: React.FC = () => {
             </div>
 
             <div className='flex-1'>
-                <p className='text-base mb-10'>
+                <p className='text-base mb-10' style={{ whiteSpace: 'pre-line' , textAlign: 'justify'}}>
                     {currChecklist?.description}
                 </p>
                 <div className='flex flex-wrap gap-16'>
