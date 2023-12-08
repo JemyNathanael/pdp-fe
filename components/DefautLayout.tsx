@@ -64,7 +64,7 @@ const DefaultLayout: React.FC<{
                                         onClick={handleLogout}
                                         className="text-white text-lg pl-4 mt-1"
                                     >
-                                        <FontAwesomeIcon  className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
+                                        <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
                                     </button>
                                 </li>
                             </ul>
@@ -72,7 +72,7 @@ const DefaultLayout: React.FC<{
                     </div>
                 </div>
             </nav>
-            <div className="mx-auto px-10 py-4" style={{paddingTop: 100}}>
+            <div className="mx-auto px-10 py-4" style={{ paddingTop: 100 }}>
                 {children}
             </div>
         </>
