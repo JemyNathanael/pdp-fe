@@ -10,8 +10,10 @@ import useSWR from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useRouter } from 'next/router';
-import SearchBarNav from '@/components/category/SearchBarNav';
+// import SearchBarNav from '@/components/category/SearchBarNav';
+import SearchBarNavs from '@/components/category/SearchBarNavs';
 import InformationModal from '@/components/InformationModal';
+import SearchResultNav from '@/components/category/SearchResultNav';
 
 interface CategoryHomeApiModel {
     id: string,
@@ -25,7 +27,7 @@ const Home: React.FC = () => {
     const [category, setCategory] = useState<string>('');
     const displayUserName = session?.user?.name;
     const role = session?.user?.['role'][0];
-
+    const [searchResults, setSearchResults] = useState([]); // Search Bar Result
     const router = useRouter();
 
     const swrFetcher = useSwrFetcherWithAccessToken();
@@ -76,6 +78,7 @@ const Home: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                width: '100%',
                 padding: '24px',
                 boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.1)',
                 backgroundColor: '#3788FD'
@@ -84,7 +87,9 @@ const Home: React.FC = () => {
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
                 </div>
                 <div className="">
-                    <SearchBarNav placeholder="input search text" style={{ width: 600 }} />
+                    {/* <SearchBarNav placeholder="input search text" style={{ width: 600 }} /> */}
+                    <SearchBarNavs setSearchResults={setSearchResults}/>
+                    <SearchResultNav searchResults={searchResults} />
                 </div>
                 <div className="flex items-center">
                     {status === 'authenticated' ?
