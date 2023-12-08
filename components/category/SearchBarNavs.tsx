@@ -40,7 +40,8 @@ const SearchBarNavs = ({setSearchResults, searchResults}) => {
     return (
         <div className="relative">
             <input placeholder='Search' 
-                className={`py-4 px-5 rounded-3xl text-black w-96 outline-none ${
+                style={{ width: '450px' }}
+                className={`py-4 px-5 rounded-3xl text-black outline-none ${
                     searchResults.length === 0 ? '' : 'rounded-b-none'
                 }`}
                 onChange={(e) => handleChange(e.target.value)}

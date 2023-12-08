@@ -82,7 +82,7 @@ const Home: React.FC = () => {
                 boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.1)',
                 backgroundColor: '#3788FD'
             }}>
-                <div>
+                <div className="hidden sm:block">
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
                 </div>
                 <div className="">
@@ -92,7 +92,7 @@ const Home: React.FC = () => {
                 </div>
                 <div className="flex items-center">
                     {status === 'authenticated' ?
-                        <div style={{ margin: '0 16px', fontWeight: '600' }}>Halo, {displayUserName}</div>
+                        <div className="hidden md:block" style={{ margin: '0 16px', fontWeight: '600' }}>Halo, {displayUserName}</div>
                         : <div></div>
                     }
                     {role === "Admin" &&

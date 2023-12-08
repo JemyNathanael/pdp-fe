@@ -19,7 +19,8 @@ const SearchResultNav = ({searchResults}) => {
     }
 
     return (
-        <div className='w-96 fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg'>
+        <div className='fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg'
+            style={{width:'450px'}}>
             {searchResults?.map((result) => (
                 <div className='flex flex-col px-5 py-3 border-b hover:bg-gray-200 cursor-pointer' 
                     key={`${result.value}-${result.label}`}
