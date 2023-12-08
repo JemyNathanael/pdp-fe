@@ -25,7 +25,6 @@ export const BackendApiUrl = {
     getSubCategory: baseUrl + '/api/v1/category',
     getChecklistTitle: baseUrl + '/api/v1/category/get-title',
     getSubCategoryList: baseUrl + '/api/Dropdown/sub-category-list',
-
     uploadFile: baseUrl + '/api/v1/Blob/upload-file',
     uploadFileInformation: baseUrl + '/api/v1/Blob/upload-file-information',
     presignedPutObject:baseUrl + '/api/v1/Blob/presigned-put-object',

@@ -224,7 +224,7 @@ const CategoryLayout: React.FC<{
                 <Layout>
                     <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000 }}>
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src='adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '10px', padding:'8px' }} />
+                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '10px', padding:'8px' }} />
                         </div>
                         <p className="p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
                             {data?.title}
