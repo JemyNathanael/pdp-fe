@@ -106,7 +106,11 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
     function navigateToChecklistPage() {
         const id = checklistId;
-        router.push(`${router.asPath}/ChecklistFiles/${id}`);
+        const queryParams = { id: id };
+        router.push({
+            pathname: `${router.asPath}/ChecklistFiles/`,
+            query: queryParams,
+        });
     }
 
     async function handleStatusChange(uploadStatusId: number) {

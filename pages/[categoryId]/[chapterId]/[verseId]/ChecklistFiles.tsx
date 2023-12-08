@@ -46,7 +46,7 @@ interface ResponseTest {
 
 const ChecklistFiles: React.FC = () => {
     const router = useRouter();
-    const {checklistId} = router.query;
+    const {id} = router.query;
 
     const [files, setFiles] = useState<ChecklistList[]>();
     const canEditUploadStatusRole = ['Admin', 'Auditor'];
@@ -59,7 +59,7 @@ const ChecklistFiles: React.FC = () => {
 
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data: checklistData } = useSWR<ChecklistModel>(GetChecklistList(verseId), swrFetcher);
-    const currChecklist = checklistData?.checklistList.find(item => item.id === checklistId);
+    const currChecklist = checklistData?.checklistList.find(item => item.id === id);
     const blobList = currChecklist?.blobList ?? [];
     const [tempData, setTempData] = useState<BlobListModel[]>(currChecklist?.blobList ?? []);
 
@@ -93,8 +93,8 @@ const ChecklistFiles: React.FC = () => {
 
 
     useEffect(() => {
-        setFiles(checklistData?.checklistList)
-    }, [checklistData?.checklistList]);
+        setFiles(checklistData?.checklistList.filter(item => item.id == id))
+    }, [checklistData?.checklistList, id]);
 
     const handleFileUpload = async (index: number) => {
         const fileExt = tempData[index]?.fileName?.split('.').pop();
@@ -115,7 +115,7 @@ const ChecklistFiles: React.FC = () => {
                 }
             }
             const response = await fetchPUT(BackendApiUrl.saveFile, {
-                checklistId: checklistId,
+                checklistId: id,
                 fileDatas: tempData.map((item) => ({
                     FileId: item.id,
                     FileName: item.fileName,
@@ -172,19 +172,25 @@ const ChecklistFiles: React.FC = () => {
                 </div>
 
                 <div className='flex flex-1 flex-row-reverse mt-24'>
-                    <CategoryButton text='Save' className='px-9 ml-8' onClick={handleSave} />
-                    {isRoleGrantedEditUploadStatus &&
-                        <Upload name='File'
-                        beforeUpload={(file) => {
-                            handleChange(file, tempData);
-                            return false;
-                        }} 
-                         defaultFileList={[]}>
-                            <CategoryButton text='+ Upload File' mode='outlined' className='px-9' />
-                        </Upload>
-                    }
-
+                    <div>
+                        <CategoryButton text='Save' className='px-9 ml-8' onClick={handleSave} />
+                    </div>
+                    <div>
+                        {isRoleGrantedEditUploadStatus &&
+                            <Upload name='File'
+                            beforeUpload={(file) => {
+                                handleChange(file, tempData);
+                                return false;
+                            }} 
+                            defaultFileList={[]}>
+                                <CategoryButton text='+ Upload File' mode='outlined' className='px-9' />
+                            </Upload>
+                        }
+                    </div>
+                    
+                    
                 </div>
+               
                 <p className='flex flex-1 flex-row-reverse mt-3 text-red-500 text-xs font-semibold'>
                     *Format Files: PDF, PNG, docx, and xlsx 
                 </p>
