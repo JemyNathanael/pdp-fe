@@ -171,8 +171,8 @@ const CategoryLayout: React.FC<{
                     zIndex: 1,
                 }}>
                     <div className="flex flex-1 items-center">
-                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src="/adaptist-blue-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
+                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, marginBottom: '20px'}}>
+                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
                         </div>
                         <div className="2xl:mr-72 xl:mr-48 lg:mr-7 md:mr-2">
                             <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
