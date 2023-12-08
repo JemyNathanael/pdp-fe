@@ -11,6 +11,8 @@ import { useSwrFetcherWithAccessToken } from "@/functions/useSwrFetcherWithAcces
 import { GetCategoryDetail } from "@/functions/BackendApiUrl";
 import useSWR from 'swr';
 import { Authorize } from "./Authorize";
+import SearchBarNavs from "./category/SearchBarNavs";
+import SearchResultNav from "./category/SearchResultNav";
 
 const { Sider, Content } = Layout;
 
@@ -74,6 +76,7 @@ const CategoryLayout: React.FC<{
     const { data } = useSWR<CategoryDetailModel>(GetCategoryDetail(categoryId), swrFetcher);
 
     const userRole = session?.user?.['role'][0];
+    const [searchResults, setSearchResults] = useState([]); // Search Bar Result
     const isAdmin = userRole === "Admin";
     const goToManageUserPage = () => {
         router.push('/ManageUser');
@@ -169,13 +172,19 @@ const CategoryLayout: React.FC<{
                 }}>
                     <div className="flex flex-1 items-center">
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
+                            <img src="/adaptist-blue-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
+                        </div>
+                        <div className="2xl:mr-72 xl:mr-48 lg:mr-7 md:mr-2">
+                            <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
+                            <SearchResultNav searchResults={searchResults} />
                         </div>
                         <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-4 items-center">
                             <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
                                 <ul className="lg:flex space-x-4 items-center">
                                     <li className="flex items-center">
-                                        <div className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px'" style={{ fontSize: '16px' }}>
+                                        <div 
+                                            className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px' hidden md:block" 
+                                            style={{ fontSize: '16px' }}>
                                             {`Halo, ${displayUserName}`}
                                         </div>
                                         {isAdmin && (
