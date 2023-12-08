@@ -159,78 +159,78 @@ const AddSubCategoryModal: React.FC<{
         }
     };
 
-    function checkAddButton(){
-        if(!addForm.ayat){
-            if(!addForm.title){
+    function checkAddButton() {
+        if (!addForm.ayat) {
+            if (!addForm.title) {
                 return true
             }
-            else{
+            else {
                 return false
             }
         }
-        else if(addForm.ayat){
-            if(!addForm.title && addForm.checkList.length === 0){
+        else if (addForm.ayat) {
+            if (!addForm.title && addForm.checkList.length === 0) {
                 return true
             }
-            else if(!addForm.title && addForm.checkList.length > 0){
+            else if (!addForm.title && addForm.checkList.length > 0) {
                 return true
             }
-            else if(addForm.title && addForm.checkList.length === 0){
+            else if (addForm.title && addForm.checkList.length === 0) {
                 return true
             }
-            else{
+            else {
                 return false
             }
         }
         return false
     }
 
-    function checkBackgroundColor(){
-        if(!addForm.ayat){
-            if(!addForm.title){
+    function checkBackgroundColor() {
+        if (!addForm.ayat) {
+            if (!addForm.title) {
                 return '#A3A3A3'
             }
-            else{
+            else {
                 return '#3788FD'
             }
         }
-        else if(addForm.ayat){
-            if(!addForm.title && addForm.checkList.length === 0){
+        else if (addForm.ayat) {
+            if (!addForm.title && addForm.checkList.length === 0) {
                 return '#A3A3A3'
             }
-            else if(!addForm.title && addForm.checkList.length > 0){
+            else if (!addForm.title && addForm.checkList.length > 0) {
                 return '#A3A3A3'
             }
-            else if(addForm.title && addForm.checkList.length === 0){
+            else if (addForm.title && addForm.checkList.length === 0) {
                 return '#A3A3A3'
             }
-            else{
+            else {
                 return '#3788FD'
             }
         }
         return '#A3A3A3'
     }
 
-    function checkColor(){
-        if(!addForm.ayat){
-            if(!addForm.title){
+    function checkColor() {
+        if (!addForm.ayat) {
+            if (!addForm.title) {
                 return 'black'
             }
-            else{
+            else {
                 return 'white'
             }
         }
-        else if(addForm.ayat){
-            if(!addForm.title && addForm.checkList.length === 0){
+        else if (addForm.ayat) {
+            if (!addForm.title && addForm.checkList.length === 0) {
                 return 'black'
             }
-            else if(!addForm.title && addForm.checkList.length > 0){
+            else if (!addForm.title && addForm.checkList.length > 0) {
                 return 'black'
             }
-            else if(addForm.title && addForm.checkList.length === 0){
+            else if (addForm.title && addForm.checkList.length === 0) {
                 return 'black'
             }
-            else{
+            else {
                 return 'white'
             }
         }
@@ -247,7 +247,7 @@ const AddSubCategoryModal: React.FC<{
                 open={props.isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd", fontSize:'24px'}} />}
+                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{ color: "#3788fd", fontSize: '24px' }} />}
                 footer={[]}
             >
                 <p style={{
@@ -278,8 +278,8 @@ const AddSubCategoryModal: React.FC<{
                                 initialValue={false}
                                 rules={[{ required: true }]}
                             >
-                                <Radio.Group 
-                                    onChange={onAyatRadioChange} 
+                                <Radio.Group
+                                    onChange={onAyatRadioChange}
                                     value={isDijadikanAyat}>
                                     <Radio value={false}><span style={{ fontSize: '18px' }}>No</span></Radio>
                                     <Radio value={true}><span style={{ fontSize: '18px' }}>Yes</span></Radio>
@@ -399,7 +399,8 @@ const AddSubCategoryModal: React.FC<{
                                 danger
                                 size='large'
                                 onClick={() => {
-                                    setChecklistDescriptionList([''])
+                                    const updatedList = checklistDescriptionList.slice(0, -1);
+                                    setChecklistDescriptionList(updatedList);
                                 }} style={{ marginLeft: '16px' }}>Delete checklist</Button>
                         </>
                     }
