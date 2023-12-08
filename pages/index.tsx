@@ -78,17 +78,21 @@ const Home: React.FC = () => {
                 justifyContent: 'space-between',
                 padding: '24px',
                 boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.1)',
-                backgroundColor: '#3788FD'
+                backgroundColor: '#3788FD',
+                position: 'fixed',
+                width: '100%',
+                top: 0,
+                zIndex: 1000
             }}>
                 <div>
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
                 </div>
                 <div className="">
-                    <SearchBarNav placeholder="input search text" style={{ width: 600 }} />
+                    <SearchBarNav placeholder="input search text" style={{ width: '30vw'}} />
                 </div>
                 <div className="flex items-center">
                     {status === 'authenticated' ?
-                        <div style={{ margin: '0 16px', fontWeight: '600' }}>Halo, {displayUserName}</div>
+                        <div style={{ margin: '0 32px', fontWeight: '600' }}>Halo, {displayUserName}</div>
                         : <div></div>
                     }
                     {role === "Admin" &&
@@ -98,7 +102,6 @@ const Home: React.FC = () => {
                                     padding: '4px 12px 3px',
                                     fontSize: '18px',
                                     fontWeight: '600',
-                                    marginLeft: '4px',
                                 }}>
                                     <FontAwesomeIcon icon={faUserGear} />
                                 </div>
@@ -114,8 +117,8 @@ const Home: React.FC = () => {
                                 });
                             }}>
                                 <div style={{
-                                    padding: '4px 14px 3px',
-                                    marginRight: '3px',
+                                    padding: '4px 12px 3px',
+                                    marginRight: '8px',
                                     fontSize: '18px',
                                     fontWeight: '600',
                                 }}>
@@ -145,7 +148,7 @@ const Home: React.FC = () => {
 
             </nav>
 
-            <div>
+            <div style={{ paddingTop: '100px', paddingBottom: '10px' }}>
                 <div className='justify-center text-center mt-4 font-bold' style={{ fontSize: '40px', color: 'black' }}>
                     Sistem Evaluasi Perlindungan Data Pribadi
                 </div>
