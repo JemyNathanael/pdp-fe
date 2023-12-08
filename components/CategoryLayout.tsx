@@ -197,13 +197,13 @@ const CategoryLayout: React.FC<{
                             <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
                                 <ul className="lg:flex space-x-4 items-center">
                                     <li className="flex items-center">
-                                        <div className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px'" style={{fontSize:'16px'}}>
+                                        <div className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px'" style={{ fontSize: '16px' }}>
                                             {`Halo, ${displayUserName}`}
                                         </div>
                                         {isAdmin && (
                                             <button
                                                 onClick={goToManageUserPage}
-                                                className="text-white text-lg pr-3 ml-1 mr-1"
+                                                className="text-white text-lg pr-3 ml-4 mr-1"
                                             >
                                                 <FontAwesomeIcon icon={faUserGear} />
                                             </button>
@@ -222,9 +222,9 @@ const CategoryLayout: React.FC<{
                 </nav>
 
                 <Layout>
-                    <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000 }}>
+                    <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000, position: 'fixed', height: '100vh', overflowY: 'auto' }}>
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src='adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '10px', padding:'8px' }} />
+                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '10px', padding:'8px' }} />
                         </div>
                         <p className="p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
                             {data?.title}
@@ -251,7 +251,7 @@ const CategoryLayout: React.FC<{
                         </button>
                     </Sider>
 
-                    <Content className="p-7" style={{ paddingTop: 100 }}>
+                    <Content className="p-7" style={{ paddingTop: 100, marginLeft: '300px' }}>
                         {children}
                     </Content>
                 </Layout>

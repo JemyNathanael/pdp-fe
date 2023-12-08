@@ -80,7 +80,10 @@ const Home: React.FC = () => {
                 width: '100%',
                 padding: '24px',
                 boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.1)',
-                backgroundColor: '#3788FD'
+                backgroundColor: '#3788FD',
+                position: 'fixed',
+                top: 0,
+                zIndex: 1000
             }}>
                 <div className="hidden sm:block">
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
@@ -92,7 +95,7 @@ const Home: React.FC = () => {
                 </div>
                 <div className="flex items-center">
                     {status === 'authenticated' ?
-                        <div className="hidden md:block" style={{ margin: '0 16px', fontWeight: '600' }}>Halo, {displayUserName}</div>
+                        <div className="hidden md:block" style={{ margin: '0 32px', fontWeight: '600' }}>Halo, {displayUserName}</div>
                         : <div></div>
                     }
                     {role === "Admin" &&
@@ -102,7 +105,6 @@ const Home: React.FC = () => {
                                     padding: '4px 12px 3px',
                                     fontSize: '18px',
                                     fontWeight: '600',
-                                    marginLeft: '4px',
                                 }}>
                                     <FontAwesomeIcon icon={faUserGear} />
                                 </div>
@@ -118,8 +120,8 @@ const Home: React.FC = () => {
                                 });
                             }}>
                                 <div style={{
-                                    padding: '4px 14px 3px',
-                                    marginRight: '3px',
+                                    padding: '4px 12px 3px',
+                                    marginRight: '8px',
                                     fontSize: '18px',
                                     fontWeight: '600',
                                 }}>
@@ -149,7 +151,7 @@ const Home: React.FC = () => {
 
             </nav>
 
-            <div>
+            <div style={{ paddingTop: '100px', paddingBottom: '10px' }}>
                 <div className='justify-center text-center mt-4 font-bold' style={{ fontSize: '40px', color: 'black' }}>
                     Sistem Evaluasi Perlindungan Data Pribadi
                 </div>
