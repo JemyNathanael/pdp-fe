@@ -77,7 +77,7 @@ const Home: React.FC = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 width: '100%',
-                padding: '24px',
+                padding: '10px',
                 boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.1)',
                 backgroundColor: '#3788FD',
                 position: 'fixed',
@@ -85,7 +85,7 @@ const Home: React.FC = () => {
                 zIndex: 1000
             }}>
                 <div className="hidden sm:block">
-                    <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px' }} />
+                    <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 0px 0px 40px' }} />
                 </div>
                 <div className="">
                     <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />

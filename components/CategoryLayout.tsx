@@ -165,14 +165,14 @@ const CategoryLayout: React.FC<{
 
                 <nav className="bg-[#3788FD]" style={{
                     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                    padding: '16px',
+                    padding: '10px',
                     position: 'fixed',
                     width: '100%',
                     zIndex: 1,
                 }}>
                     <div className="flex flex-1 items-center">
-                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, marginBottom: '20px'}}>
-                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
+                        <div onClick={() => router.push('/')} style={{ flexGrow: 1}}>
+                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 0px 0px 40px' }} />
                         </div>
                         <div className="2xl:mr-72 xl:mr-48 lg:mr-7 md:mr-2">
                             <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
@@ -211,7 +211,7 @@ const CategoryLayout: React.FC<{
                 <Layout>
                     <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000, position: 'fixed', height: '100vh', overflowY: 'auto' }}>
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '10px', padding: '8px' }} />
+                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px', margin: 'auto' }} />
                         </div>
                         <div className="p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8', overflow: 'hidden' }}>
                             <p className={`moveLeft ${data?.title && data.title.length > 10 ? 'moveLeft' : ''}`}>
