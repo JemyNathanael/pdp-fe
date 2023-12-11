@@ -19,6 +19,7 @@ export const BackendApiUrl = {
     getChapters: baseUrl + '/api/v1/category',
     
     getHomeSearch: baseUrl + '/api/v1/Home',
+    getCategorySearch: baseUrl + '/api/v1/Category/search',
     
     createSubCategory: baseUrl + '/api/v1/category',
     updateSubCategory: baseUrl + '/api/v1/category',

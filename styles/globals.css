@@ -13,6 +13,11 @@
   background: linear-gradient(45deg, #416a67, #019ba3);
 }
 
+.ant-float-btn {
+ box-shadow: none;
+}
+
+
 .categoryHome {
   border: solid white 1px;
   flex-grow: 1;
@@ -76,7 +81,7 @@
 
 .checklistColumn {
     display: table-cell;
-    //background-color: red; /*Optional*/
+    background-color: red; /*Optional*/
 }
 
 .roundedRectangleButton {
@@ -92,7 +97,7 @@
   font-size: 16px;
   margin: 10px 10px;
   border-radius: 4px;
-  //font-weight: bold;
+  font-weight: bold;
   position: absolute;
   right: 0;
 }
@@ -110,7 +115,7 @@
   font-size: 16px;
   margin: 10px 10px;
   border-radius: 4px;
-  //font-weight: bold;
+  font-weight: bold;
 }
 
 .file-list {
