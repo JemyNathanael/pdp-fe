@@ -183,7 +183,7 @@ const ChecklistFiles: React.FC = () => {
                                 return false;
                             }} 
                             defaultFileList={[]}>
-                                <CategoryButton text='+ Upload File' mode='outlined' className='px-9' />
+                                <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
                             </Upload>
                         }
                     </div>
