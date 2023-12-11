@@ -232,7 +232,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                 }
                             </div>
                             <div className='flex flex-col'>
-                                <div className='flex-1'>
+                                <div className='flex-1' style={{maxWidth: '150px'}}>
                                     {canUpdateStatus &&
                                         <Upload name="File"
                                             beforeUpload={(file) => {
