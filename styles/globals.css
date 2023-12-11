@@ -143,7 +143,7 @@
   color: red !important;
 }
 
-.ant-result-success .ant-result-icon>.anticon {
+.ant-result-success .ant-result-icon > .anticon {
   color: #3788FD !important;
 }
 
@@ -167,34 +167,35 @@
   border-radius: 10px;
 }
 
-
 .moveLeft {
-  display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   position: relative;
+  text-overflow: ellipsis;
+
 }
 
-.moveLeft:hover {
-  animation: moveLeftAnimation 10s linear infinite; 
-}
-
-.moveLeftSubCategory {
-  display: inline-block;
+.moveLeftSubcategory {
   white-space: nowrap;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
+  width: 200px;
+  text-overflow: ellipsis;
 }
 
-.moveLeftSubCategory:hover {
-  animation: moveLeftAnimation 8s linear infinite; 
+.ant-tooltip .ant-tooltip-inner {
+  min-height: 32px;
+  width: max-content;
+  padding: 6px 6px;
+  white-space: nowrap;
+  color: white;
+  text-align: start;
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 6px;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
 }
 
-@keyframes moveLeftAnimation {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+.ant-tooltip-arrow {
+  visibility: hidden;
 }
