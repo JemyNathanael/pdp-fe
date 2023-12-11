@@ -141,3 +141,55 @@
 .ant-result-success .ant-result-icon>.anticon {
   color: #3788FD !important;
 }
+
+.custom-scrollbar {
+  max-height: 70vh;
+  overflow-y: auto;
+
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #3788fd;
+  border-radius: 10px;
+}
+
+
+.moveLeft {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+
+.moveLeft:hover {
+  animation: moveLeftAnimation 10s linear infinite; 
+}
+
+.moveLeftSubCategory {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+
+.moveLeftSubCategory:hover {
+  animation: moveLeftAnimation 8s linear infinite; 
+}
+
+@keyframes moveLeftAnimation {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
