@@ -213,12 +213,9 @@ const CategoryLayout: React.FC<{
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
                             <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '10px', padding: '8px' }} />
                         </div>
-                        <div className="p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8', overflow: 'hidden' }}>
-                            <p className={`moveLeft ${data?.title && data.title.length > 10 ? 'moveLeft' : ''}`}>
-                                {data?.title}
-                            </p>
-                        </div>
-
+                        <p className="moveLeft p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
+                            {data?.title}
+                        </p>
                         <div className="m-4" style={{ backgroundColor: '##000000' }}>
                             {firstSubCategories &&
                                 firstSubCategories.map((firstSub, i) =>

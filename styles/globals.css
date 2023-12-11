@@ -164,32 +164,18 @@
 
 
 .moveLeft {
-  display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   position: relative;
+  text-overflow: ellipsis;
+
 }
 
-.moveLeft:hover {
-  animation: moveLeftAnimation 10s linear infinite; 
-}
-
-.moveLeftSubCategory {
-  display: inline-block;
+.moveLeftSubcategory {
   white-space: nowrap;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
+  width: 200px;
+  text-overflow: ellipsis;
 }
 
-.moveLeftSubCategory:hover {
-  animation: moveLeftAnimation 8s linear infinite; 
-}
-
-@keyframes moveLeftAnimation {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
