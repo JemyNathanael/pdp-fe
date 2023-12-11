@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Head from 'next/head';
-import { ConfigProvider, Layout } from "antd";
+import { ConfigProvider, Layout, Tooltip } from "antd";
 import { faArrowRightFromBracket, faUserGear } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
@@ -171,8 +171,8 @@ const CategoryLayout: React.FC<{
                     zIndex: 1,
                 }}>
                     <div className="flex flex-1 items-center">
-                        <div onClick={() => router.push('/')} style={{ flexGrow: 1}}>
-                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 0px 0px 40px' }} />
+                        <div onClick={() => router.push('/')} style={{ flexGrow: 1 }}>
+                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin: '0px 0px 0px 40px' }} />
                         </div>
                         <div className="2xl:mr-72 xl:mr-48 lg:mr-7 md:mr-2">
                             <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
@@ -182,8 +182,7 @@ const CategoryLayout: React.FC<{
                             <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
                                 <ul className="lg:flex space-x-4 items-center">
                                     <li className="flex items-center">
-                                        <div 
-                                            className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px' hidden md:block" 
+                                        <div className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px' hidden md:block"
                                             style={{ fontSize: '16px' }}>
                                             {`Halo, ${displayUserName}`}
                                         </div>
@@ -213,9 +212,11 @@ const CategoryLayout: React.FC<{
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
                             <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px', margin: 'auto' }} />
                         </div>
-                        <p className="moveLeft p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
-                            {data?.title}
-                        </p>
+                        <Tooltip title={data?.title} placement="right">
+                            <p className="moveLeft p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
+                                {data?.title}
+                            </p>
+                        </Tooltip>
                         <div className="m-4" style={{ backgroundColor: '##000000' }}>
                             {firstSubCategories &&
                                 firstSubCategories.map((firstSub, i) =>
