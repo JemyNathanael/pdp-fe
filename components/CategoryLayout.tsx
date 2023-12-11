@@ -188,39 +188,41 @@ const CategoryLayout: React.FC<{
                     width: '100%',
                     zIndex: 1,
                 }}>
-                    <div className="flex flex-1 items-center">
-                        <div className="hidden sm:block logo" onClick={() => router.push('/')} style={{ flexGrow: 1}}>
-                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 0px 0px 40px' }} />
+                    <div className="flex items-center">
+                        <div className="hidden md:block logo" onClick={() => router.push('/')} style={{ flexGrow: 1}}>
+                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 70px 0px 40px' }} />
                         </div>
-                        <div className="2xl:mr-72 xl:mr-48 lg:mr-7 md:mr-2">
-                            <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
-                            <SearchResultNav searchResults={searchResults} />
-                        </div>
-                        <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-4 items-center">
-                            <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
-                            <ul className="lg:flex space-x-4 items-center">
-                                <li className="flex items-center">
-                                    <div className="text-white text-md cursor-pointer font-semibold pr-7 fontWeight: '600', paddingLeft:'2px'">
-                                        {`Halo, ${displayUserName}`}
-                                    </div>
-                                    {isAdmin && (
+                        <div className="flex justify-between w-full">
+                            <div style={{maxWidth: '100%'}} className="mr-2">
+                                <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
+                                <SearchResultNav searchResults={searchResults} />
+                            </div>
+                            <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-4 items-center">
+                                <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
+                                <ul className="lg:flex space-x-4 items-center">
+                                    <li className="flex items-center">
+                                        <div className="text-white text-md hidden lg:block cursor-pointer font-semibold pr-7 fontWeight: '600', paddingLeft:'2px'">
+                                            {`Halo, ${displayUserName}`}
+                                        </div>
+                                        {isAdmin && (
+                                            <button
+                                                onClick={goToManageUserPage}
+                                                className="text-white text-lg pr-3 ml-4 mr-1"
+                                                style={{fontSize:"20px"}}
+                                            >
+                                                <FontAwesomeIcon icon={faUserGear} />
+                                            </button>
+                                        )}
                                         <button
-                                            onClick={goToManageUserPage}
-                                            className="text-white text-lg pr-3 ml-4 mr-1"
+                                            onClick={handleLogout}
+                                            className="text-white text-lg pl-4 mt-1"
                                             style={{fontSize:"20px"}}
                                         >
-                                            <FontAwesomeIcon icon={faUserGear} />
+                                            <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
                                         </button>
-                                    )}
-                                    <button
-                                        onClick={handleLogout}
-                                        className="text-white text-lg pl-4 mt-1"
-                                        style={{fontSize:"20px"}}
-                                    >
-                                        <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
-                                    </button>
-                                </li>
-                            </ul>
+                                    </li>
+                                </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
