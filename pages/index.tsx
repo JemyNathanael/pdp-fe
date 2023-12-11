@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Title } from '../components/Title';
 import { Page } from '../types/Page';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition, faArrowRightFromBracket, faUserGear, faCalendar, faHandshake, faLaptop, faPeopleArrows, faPeopleGroup, faServer, faSigning, faCalendarDays, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faArrowRightFromBracket, faUserGear, faHandshake, faLaptop, faPeopleArrows, faPeopleGroup, faServer, faSigning, faCalendarDays, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import nProgress from 'nprogress';
 import { Authorize } from '@/components/Authorize';
@@ -48,21 +48,21 @@ const Home: React.FC = () => {
     }
     function getRelatedIcon(title: string): IconDefinition {
         title = title.toLowerCase()
-
-        if (title.includes('persetujuan')) {
-            return faHandshake
-        } else if (title.includes('kebocoran')) {
-            return faLaptop
-        } else if (title.includes('transfer')) {
-            return faPeopleArrows
-        } else if (title.includes('ketiga')) {
-            return faPeopleGroup
-        } else if (title.includes('hak')) {
+        
+        if(title.includes('hak')){
             return faServer
-        } else if (title.includes('retensi')) {
+        } else if(title.includes('hukum')){
+            return faHandshake
+        } else if(title.includes('keamanan')) {
+            return faPeopleGroup
+        } else if(title.includes('pemrosesan')) {
+            return faLaptop
+        } else if(title.includes('akuntabilitas')) {
             return faCalendarDays
+        } else if(title.includes('transfer')) {
+            return faPeopleArrows
         } else {
-            return faCalendar
+            return faHandshake
         }
     }
 
