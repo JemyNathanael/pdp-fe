@@ -35,7 +35,7 @@ const DefaultLayout: React.FC<{
         <>
             <nav className="bg-[#3788FD]" style={{
                 boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                padding: '16px',
+                padding: '10px',
                 position: 'fixed',
                 width: '100%',
                 top: 0,
@@ -43,7 +43,7 @@ const DefaultLayout: React.FC<{
             }}>
                 <div className="flex flex-1 items-center">
                     <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                        <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
+                        <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 0px 0px 40px' }} />
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-4 items-center">
                         <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
