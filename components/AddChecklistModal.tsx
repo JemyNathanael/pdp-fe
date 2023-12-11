@@ -22,7 +22,7 @@ interface AddChecklistResponse {
 
 const SuccessAddModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
     return (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
+        <div className="fixed inset-0 flex items-center z-10 justify-center backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
             <div className="flex flex-col p-6 sm:p-12 border items-center justify-center bg-white">
                 <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#3788FD", fontSize: "64px", marginBottom: "8px" }} />
                 <div className="w-full h-4 sm:h-8" />

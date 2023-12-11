@@ -23,7 +23,7 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
 
     const SuccessDeleteModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
         return (
-            <div className="fixed inset-0 flex items-center justify-center backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
+            <div className="fixed inset-0 flex items-center z-10 justify-center backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
                 <div className="flex flex-col p-6 sm:p-12 border items-center justify-center bg-white">
                     <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#3788FD", fontSize: "64px", marginBottom: "8px" }} />
                     <div className="w-full h-4 sm:h-8" />
@@ -50,6 +50,10 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
 
     return (
         <>
+            {
+                openSuccessModal &&
+                <SuccessDeleteModal onGoToHome={handleSuccessModalClose} />
+            }
             <Modal
                 title={
                     <div className="flex flex-col items-center">
@@ -88,10 +92,6 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
                     </p>
                 </div>
             </Modal>
-            {
-                openSuccessModal &&
-                <SuccessDeleteModal onGoToHome={handleSuccessModalClose} />
-            }
         </>
     );
 }
