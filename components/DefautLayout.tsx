@@ -56,7 +56,7 @@ const DefaultLayout: React.FC<{
                                         <button
                                             onClick={goToManageUserPage}
                                             className="text-white text-lg pr-3 ml-4 mr-1"
-                                            style={{fontSize:"2vw"}}
+                                            style={{fontSize:"20px"}}
                                         >
                                             <FontAwesomeIcon icon={faUserGear} />
                                         </button>
@@ -64,7 +64,7 @@ const DefaultLayout: React.FC<{
                                     <button
                                         onClick={handleLogout}
                                         className="text-white text-lg pl-4 mt-1"
-                                        style={{fontSize:"2vw"}}
+                                        style={{fontSize:"20px"}}
                                     >
                                         <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
                                     </button>
