@@ -66,6 +66,8 @@ const CategoryLayout: React.FC<{
 
     const [firstSubCategories, setFirstSubCategories] = useState<CategorySidebarItemsModel[]>()
 
+    const [marginLeftValue, setMarginLeftValue] = useState<string>('300px');
+
     const router = useRouter();
     const categoryId = router.query['categoryId']?.toString() ?? '';
 
@@ -81,6 +83,14 @@ const CategoryLayout: React.FC<{
     const goToManageUserPage = () => {
         router.push('/ManageUser');
     }
+
+    const handleResize = () => {
+        if (window.innerWidth < 768) {
+            setMarginLeftValue('0');
+        } else {
+            setMarginLeftValue('300px');
+        }
+      };
 
     useEffect(() => {
         if (data) {
@@ -112,6 +122,14 @@ const CategoryLayout: React.FC<{
             setChaptersExpandedState(itemsCollapseStateMap);
         }
     }, [firstSubCategories])
+
+    useEffect(() => {
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
+      }, []);
 
     function changeCollapseStatusByIndex(index: number, state: boolean) {
         const tempStateMap = chaptersExpandedState;
@@ -171,8 +189,8 @@ const CategoryLayout: React.FC<{
                     zIndex: 1,
                 }}>
                     <div className="flex flex-1 items-center">
-                        <div onClick={() => router.push('/')} style={{ flexGrow: 1 }}>
-                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin: '0px 0px 0px 40px' }} />
+                        <div className="hidden sm:block logo" onClick={() => router.push('/')} style={{ flexGrow: 1}}>
+                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 0px 0px 40px' }} />
                         </div>
                         <div className="2xl:mr-72 xl:mr-48 lg:mr-7 md:mr-2">
                             <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
@@ -239,7 +257,7 @@ const CategoryLayout: React.FC<{
                         </button>
                     </Sider>
 
-                    <Content className="p-7" style={{ paddingTop: 130, marginLeft: '300px' }}>
+                    <Content className="p-7" style={{ paddingTop: 130, marginLeft: marginLeftValue}}>
                         {children}
                     </Content>
                 </Layout>
