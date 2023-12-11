@@ -15,6 +15,7 @@ export const BackendApiUrl = {
     updateChecklist: baseUrl + '/api/v1/Checklist/update-checklist',
     addChecklist: baseUrl + '/api/v1/Checklist',
     deleteChecklist: baseUrl + '/api/v1/Checklist',
+    getChecklistDescription: baseUrl + '/api/v1/Checklist/get-description',
     getChapters: baseUrl + '/api/v1/category',
     
     getHomeSearch: baseUrl + '/api/v1/Home',
@@ -90,6 +91,14 @@ export function GetChecklistTitle(verseId: string) {
     param.append('verseId', verseId.toString());
 
     return BackendApiUrl.getChecklistTitle + '?' + param.toString();
+}
+
+export function GetChecklistDescription(verseId: string) {
+    const param = new URLSearchParams();
+
+    param.append('verseId', verseId.toString());
+
+    return BackendApiUrl.getChecklistDescription + '?' + param.toString();
 }
 
 export function GetInformation(categoryId : string){
