@@ -101,7 +101,7 @@ const Home: React.FC = () => {
                             <button onClick={() => router.push('/ManageUser')}>
                                 <div style={{
                                     padding: '4px 12px 3px',
-                                    fontSize: '18px',
+                                    fontSize: '2vw',
                                     fontWeight: '600',
                                 }}>
                                     <FontAwesomeIcon icon={faUserGear} />
@@ -120,7 +120,7 @@ const Home: React.FC = () => {
                                 <div style={{
                                     padding: '4px 12px 3px',
                                     marginRight: '8px',
-                                    fontSize: '18px',
+                                    fontSize: '2vw',
                                     fontWeight: '600',
                                 }}>
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} />
