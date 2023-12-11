@@ -11,8 +11,8 @@ import { useSwrFetcherWithAccessToken } from "@/functions/useSwrFetcherWithAcces
 import { GetCategoryDetail } from "@/functions/BackendApiUrl";
 import useSWR from 'swr';
 import { Authorize } from "./Authorize";
-import SearchBarNavs from "./category/SearchBarNavs";
 import SearchResultNav from "./category/SearchResultNav";
+import SearchCategoryNavBar from "./category/SearchCategoryNavBar";
 
 const { Sider, Content } = Layout;
 
@@ -175,7 +175,7 @@ const CategoryLayout: React.FC<{
                             <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
                         </div>
                         <div className="2xl:mr-72 xl:mr-48 lg:mr-7 md:mr-2">
-                            <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
+                            <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
                             <SearchResultNav searchResults={searchResults} />
                         </div>
                         <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-4 items-center">
@@ -241,7 +241,7 @@ const CategoryLayout: React.FC<{
                         </button>
                     </Sider>
 
-                    <Content className="p-7" style={{ paddingTop: 100, marginLeft: '300px' }}>
+                    <Content className="p-7" style={{ paddingTop: 130, marginLeft: '300px' }}>
                         {children}
                     </Content>
                 </Layout>
