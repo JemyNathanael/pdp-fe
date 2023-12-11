@@ -3,13 +3,15 @@ import { Modal, Input } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
-import { BackendApiUrl, GetChecklistList } from '@/functions/BackendApiUrl';
+import { BackendApiUrl, GetChecklistDescription, GetChecklistList } from '@/functions/BackendApiUrl';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { mutate } from 'swr';
 import { useRouter } from 'next/router';
 import {faCircleXmark} from '@fortawesome/free-regular-svg-icons';
+import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
+import useSWR from 'swr';
 
 interface EditChecklistModalProps {
     visible: boolean;
@@ -28,6 +30,11 @@ interface UpdateChecklist {
 
 interface UpdateChecklistResponse {
     response: string;
+}
+
+interface ChecklistDesc{
+    id: string
+    checklistDescription: string
 }
 
 const SuccessUpdateModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
@@ -51,6 +58,9 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
     const { fetchPUT } = useFetchWithAccessToken();
     const router = useRouter();
     const verseId = router.query['verseId']?.toString() ?? '';
+    const swrFetcher = useSwrFetcherWithAccessToken();
+    const { data: dataDesc} = useSWR<ChecklistDesc>(GetChecklistDescription(checkId), swrFetcher);
+    console.log(dataDesc);
 
     const { handleSubmit, control, formState: { errors } } = useForm<UpdateChecklist>({
         resolver: zodResolver(schema),
@@ -96,7 +106,8 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
                             name="description"
                             control={control}
                             render={({ field }) => (
-                                <TextArea rows={2}
+                                <TextArea rows={4}
+                                    defaultValue={dataDesc?.checklistDescription}
                                     className='text-slate-500'
                                     {...field}>
                                 </TextArea>

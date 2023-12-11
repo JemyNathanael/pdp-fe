@@ -36,6 +36,10 @@ const DefaultLayout: React.FC<{
             <nav className="bg-[#3788FD]" style={{
                 boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
                 padding: '16px',
+                position: 'fixed',
+                width: '100%',
+                top: 0,
+                zIndex: 1
             }}>
                 <div className="flex flex-1 items-center">
                     <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
@@ -51,7 +55,7 @@ const DefaultLayout: React.FC<{
                                     {isAdmin && (
                                         <button
                                             onClick={goToManageUserPage}
-                                            className="text-white text-lg pr-3 ml-1 mr-1"
+                                            className="text-white text-lg pr-3 ml-4 mr-1"
                                         >
                                             <FontAwesomeIcon icon={faUserGear} />
                                         </button>
@@ -60,7 +64,7 @@ const DefaultLayout: React.FC<{
                                         onClick={handleLogout}
                                         className="text-white text-lg pl-4 mt-1"
                                     >
-                                        <FontAwesomeIcon  className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
+                                        <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
                                     </button>
                                 </li>
                             </ul>
@@ -68,7 +72,7 @@ const DefaultLayout: React.FC<{
                     </div>
                 </div>
             </nav>
-            <div className="mx-auto px-10 py-4">
+            <div className="mx-auto px-10 py-4" style={{ paddingTop: 100 }}>
                 {children}
             </div>
         </>
