@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Head from 'next/head';
-import { ConfigProvider, Layout } from "antd";
+import { ConfigProvider, Layout, Tooltip } from "antd";
 import { faArrowRightFromBracket, faUserGear } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
@@ -66,6 +66,8 @@ const CategoryLayout: React.FC<{
 
     const [firstSubCategories, setFirstSubCategories] = useState<CategorySidebarItemsModel[]>()
 
+    const [marginLeftValue, setMarginLeftValue] = useState<string>('300px');
+
     const router = useRouter();
     const categoryId = router.query['categoryId']?.toString() ?? '';
 
@@ -81,6 +83,14 @@ const CategoryLayout: React.FC<{
     const goToManageUserPage = () => {
         router.push('/ManageUser');
     }
+
+    const handleResize = () => {
+        if (window.innerWidth < 768) {
+            setMarginLeftValue('0');
+        } else {
+            setMarginLeftValue('300px');
+        }
+      };
 
     useEffect(() => {
         if (data) {
@@ -112,6 +122,14 @@ const CategoryLayout: React.FC<{
             setChaptersExpandedState(itemsCollapseStateMap);
         }
     }, [firstSubCategories])
+
+    useEffect(() => {
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
+      }, []);
 
     function changeCollapseStatusByIndex(index: number, state: boolean) {
         const tempStateMap = chaptersExpandedState;
@@ -171,7 +189,7 @@ const CategoryLayout: React.FC<{
                     zIndex: 1,
                 }}>
                     <div className="flex flex-1 items-center">
-                        <div onClick={() => router.push('/')} style={{ flexGrow: 1}}>
+                        <div className="hidden sm:block logo" onClick={() => router.push('/')} style={{ flexGrow: 1}}>
                             <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 0px 0px 40px' }} />
                         </div>
                         <div className="2xl:mr-72 xl:mr-48 lg:mr-7 md:mr-2">
@@ -182,8 +200,7 @@ const CategoryLayout: React.FC<{
                             <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
                                 <ul className="lg:flex space-x-4 items-center">
                                     <li className="flex items-center">
-                                        <div 
-                                            className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px' hidden md:block" 
+                                        <div className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px' hidden md:block"
                                             style={{ fontSize: '16px' }}>
                                             {`Halo, ${displayUserName}`}
                                         </div>
@@ -213,12 +230,11 @@ const CategoryLayout: React.FC<{
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
                             <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px', margin: 'auto' }} />
                         </div>
-                        <div className="p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8', overflow: 'hidden' }}>
-                            <p className={`moveLeft ${data?.title && data.title.length > 10 ? 'moveLeft' : ''}`}>
+                        <Tooltip title={data?.title} placement="right">
+                            <p className="moveLeft p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
                                 {data?.title}
                             </p>
-                        </div>
-
+                        </Tooltip>
                         <div className="m-4" style={{ backgroundColor: '##000000' }}>
                             {firstSubCategories &&
                                 firstSubCategories.map((firstSub, i) =>
@@ -241,7 +257,7 @@ const CategoryLayout: React.FC<{
                         </button>
                     </Sider>
 
-                    <Content className="p-7" style={{ paddingTop: 130, marginLeft: '300px' }}>
+                    <Content className="p-7" style={{ paddingTop: 130, marginLeft: marginLeftValue}}>
                         {children}
                     </Content>
                 </Layout>
