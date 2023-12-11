@@ -84,20 +84,20 @@ const Home: React.FC = () => {
                 top: 0,
                 zIndex: 1000
             }}>
-                <div className="hidden sm:block">
+                <div className="hidden lg:block">
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 0px 0px 40px' }} />
                 </div>
-                <div className="">
+                <div style={{ maxWidth: '100%' }}>
                     <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
                     <SearchResultNav searchResults={searchResults} />
                 </div>
                 <div className="flex items-center">
                     {status === 'authenticated' ?
-                        <div className="hidden md:block" style={{ margin: '0 32px', fontWeight: '600' }}>Halo, {displayUserName}</div>
+                        <div className="hidden xl:block" style={{ margin: '0 px', fontWeight: '600' }}>Halo, {displayUserName}</div>
                         : <div></div>
                     }
                     {role === "Admin" &&
-                        <div className='mr-2'>
+                        <div className='mr-2 ml-10'>
                             <button onClick={() => router.push('/ManageUser')}>
                                 <div style={{
                                     padding: '4px 12px 3px',
