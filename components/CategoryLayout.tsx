@@ -198,28 +198,29 @@ const CategoryLayout: React.FC<{
                         </div>
                         <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-4 items-center">
                             <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
-                                <ul className="lg:flex space-x-4 items-center">
-                                    <li className="flex items-center">
-                                        <div className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px' hidden md:block"
-                                            style={{ fontSize: '16px' }}>
-                                            {`Halo, ${displayUserName}`}
-                                        </div>
-                                        {isAdmin && (
-                                            <button
-                                                onClick={goToManageUserPage}
-                                                className="text-white text-lg pr-3 ml-4 mr-1"
-                                            >
-                                                <FontAwesomeIcon icon={faUserGear} />
-                                            </button>
-                                        )}
+                            <ul className="lg:flex space-x-4 items-center">
+                                <li className="flex items-center">
+                                    <div className="text-white text-md cursor-pointer font-semibold pr-7 fontWeight: '600', paddingLeft:'2px'">
+                                        {`Halo, ${displayUserName}`}
+                                    </div>
+                                    {isAdmin && (
                                         <button
-                                            onClick={handleLogout}
-                                            className="text-white text-lg pl-4 mt-1"
+                                            onClick={goToManageUserPage}
+                                            className="text-white text-lg pr-3 ml-4 mr-1"
+                                            style={{fontSize:"2vw"}}
                                         >
-                                            <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
+                                            <FontAwesomeIcon icon={faUserGear} />
                                         </button>
-                                    </li>
-                                </ul>
+                                    )}
+                                    <button
+                                        onClick={handleLogout}
+                                        className="text-white text-lg pl-4 mt-1"
+                                        style={{fontSize:"2vw"}}
+                                    >
+                                        <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
+                                    </button>
+                                </li>
+                            </ul>
                             </div>
                         </div>
                     </div>
