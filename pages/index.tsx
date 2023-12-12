@@ -87,13 +87,13 @@ const Home: React.FC = () => {
                 <div className="hidden lg:block">
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 0px 0px 40px' }} />
                 </div>
-                <div style={{ maxWidth: '100%' }}>
+                <div style={{ maxWidth: '100%' }} className='mr-2'>
                     <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
                     <SearchResultNav searchResults={searchResults} />
                 </div>
                 <div className="flex items-center">
                     {status === 'authenticated' ?
-                        <div className="hidden xl:block" style={{ margin: '0 px', fontWeight: '600' }}>Halo, {displayUserName}</div>
+                        <div className="hidden lg:block" style={{ margin: '0 px', fontWeight: '600' }}>Halo, {displayUserName}</div>
                         : <div></div>
                     }
                     {role === "Admin" &&

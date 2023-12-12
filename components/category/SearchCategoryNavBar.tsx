@@ -44,12 +44,12 @@ const SearchCategoryNavBar = ({setSearchResults, searchResults}) => {
         if (viewportWidth >= 1300) {
             return '670px';
         } 
-        else if(viewportWidth <= 700) {
+        else if(viewportWidth <= 775) {
             return '300px';
         }
         else {
             const ratio = (viewportWidth - 1200) / (1200 - 800);
-            const width = 500 + (250 * ratio); // Adjust the values based on your preference
+            const width = 600 + (250 * ratio);
             return `${width}px`;
         }
     };
