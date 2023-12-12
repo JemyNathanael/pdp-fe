@@ -193,7 +193,7 @@ const CategoryLayout: React.FC<{
                             <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 70px 0px 40px' }} />
                         </div>
                         <div className="flex justify-between w-full">
-                            <div style={{maxWidth: '100%'}} className="mr-3">
+                            <div style={{maxWidth: '100%'}} className="mr-2">
                                 <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
                                 <SearchResultNav searchResults={searchResults} />
                             </div>
