@@ -1,4 +1,4 @@
-import { Dropdown, MenuProps, Select, Space } from "antd"
+import { Dropdown, MenuProps, Select, Space, notification} from "antd"
 import { CategoryUploadedFileView } from "./CategoryUploadedFileView";
 import { CategoryButton } from "./CategoryButton";
 import { useRouter } from "next/router";
@@ -59,6 +59,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const canSeeDropdown = ['Admin', 'Reader'];
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
+    const [notificationType, setNotificationType] = useState<string | null>(null);
 
     const handleFileUpload = async (index: number) => {
         const fileExt = tempData[index]?.fileName?.split('.').pop();
@@ -71,6 +72,23 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         }
     }
 
+    const showSuccessNotification = (type: string) => {
+        notification.success({
+          message: 'Success',
+          description: '',
+          placement: 'bottomRight',
+          className: 'custom-success-notification',
+          style: {
+            backgroundColor: '#3788FD',
+            opacity:0.9,
+            color: 'white',
+            width:'fit-content',
+            top:'60px'
+          },
+        });
+        setNotificationType(type);
+      };
+      
     const handleSave = async () => {
         const response = await fetchPUT(BackendApiUrl.saveFile, {
             checklistId: checklistId,
@@ -82,6 +100,9 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         });
         if (response) {
             mutate(GetChecklistList(verseId));
+            if (!notificationType || notificationType !== 'save') {
+                showSuccessNotification('save');
+            }
         }
     }
 
@@ -92,10 +113,9 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                     handleFileUpload(index);
                 }
             }
-            handleSave()
+            handleSave();
         }
     }
-
 
     useEffect(() => {
         setSelectOptions(dropdownOptions)
@@ -120,14 +140,19 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         });
     }
 
-    async function handleStatusChange(uploadStatusId: number) {
+    const handleStatusChange = async (uploadStatusId: number) => {
         const payload: UpdateUploadStatusModel = {
             ChecklistId: checklistId,
             UploadStatusId: uploadStatusId
         };
-
+    
         await fetchPUT(BackendApiUrl.updateChecklistUploadStatus, payload);
-    }
+    
+        // Cek tipe notifikasi sebelum menampilkan notifikasi
+        if (!notificationType || notificationType !== 'status') {
+            showSuccessNotification('status');
+        }
+    };
 
     const items: MenuProps['items'] = [
         {
