@@ -85,7 +85,7 @@ const CategoryLayout: React.FC<{
     }
 
     const handleResize = () => {
-        if (window.innerWidth < 768) {
+        if (window.innerWidth < 1024) {
             setMarginLeftValue('0');
         } else {
             setMarginLeftValue('300px');
