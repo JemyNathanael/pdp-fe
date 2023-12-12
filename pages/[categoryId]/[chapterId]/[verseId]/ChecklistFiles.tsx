@@ -180,7 +180,7 @@ const ChecklistFiles: React.FC = () => {
                                     return false;
                                 }}
                                 defaultFileList={[]}>
-                                <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
+                                <CategoryButton text='Upload File' mode='outlined' className='px-8' />
                             </Upload>
                         }
                         <CategoryButton text='Save' className='px-9' style={{ padding: '10px 0' }} onClick={handleSave} />
