@@ -120,13 +120,23 @@ const CategoryLayout: React.FC<{
     useEffect(() => {
         if (firstSubCategories) {
             const itemsCollapseStateMap = firstSubCategories.map(() => false);
-            const selectedChapterIndex = firstSubCategories.findIndex((chapter) => chapter.routePath === router.asPath);
-            setSelectedChapterIndex(selectedChapterIndex);
-            itemsCollapseStateMap[selectedChapterIndex] = true;
 
+            const categoryIdFromUrl = router.query['categoryId']?.toString() ?? '';
+            const firstSubCategoryIdFromUrl = router.query['chapterId']?.toString() ?? '';
+            const secondSubCategoryIdFromUrl = router.query['verseId']?.toString() ?? '';
+    
+            const selectedChapterIndex = firstSubCategories.findIndex(
+                (chapter) => chapter.routePath === `/${categoryIdFromUrl}/${firstSubCategoryIdFromUrl}`
+            );
+
+            const shouldKeepFirstSubCategoryExpanded = !!secondSubCategoryIdFromUrl;
+    
+            setSelectedChapterIndex(selectedChapterIndex);
+
+            itemsCollapseStateMap[selectedChapterIndex] = shouldKeepFirstSubCategoryExpanded;
             setChaptersExpandedState(itemsCollapseStateMap);
         }
-    }, [firstSubCategories, router.asPath, selectedChapterIndex]);
+    }, [firstSubCategories, router.query]);
 
     useEffect(() => {
         handleResize();
