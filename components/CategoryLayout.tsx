@@ -91,7 +91,7 @@ const CategoryLayout: React.FC<{
         } else {
             setMarginLeftValue('300px');
         }
-      };
+    };
 
     useEffect(() => {
         if (data) {
@@ -142,9 +142,9 @@ const CategoryLayout: React.FC<{
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => {
-          window.removeEventListener('resize', handleResize);
+            window.removeEventListener('resize', handleResize);
         };
-      }, []);
+    }, []);
 
     function changeCollapseStatusByIndex(index: number, state: boolean) {
         const tempStateMap = chaptersExpandedState;
@@ -204,39 +204,54 @@ const CategoryLayout: React.FC<{
                     zIndex: 1,
                 }}>
                     <div className="flex items-center">
-                        <div className="hidden md:block logo" onClick={() => router.push('/')} style={{ flexGrow: 1}}>
-                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 70px 0px 40px' }} />
+                        <div className="hidden md:block logo" onClick={() => router.push('/')} style={{ flexGrow: 1 }}>
+                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin: '0px 70px 0px 40px' }} />
                         </div>
                         <div className="flex justify-between w-full">
-                            <div style={{maxWidth: '100%'}} className="mr-2">
+                            <div style={{ maxWidth: '100%' }} className="mr-2">
                                 <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
                                 <SearchResultNav searchResults={searchResults} />
                             </div>
-                            <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-4 items-center">
-                                <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
-                                <ul className="lg:flex space-x-4 items-center">
-                                    <li className="flex items-center">
-                                        <div className="text-white text-md hidden lg:block cursor-pointer font-semibold pr-7 fontWeight: '600', paddingLeft:'2px'">
-                                            {`Halo, ${displayUserName}`}
-                                        </div>
-                                        {isAdmin && (
-                                            <button
-                                                onClick={goToManageUserPage}
-                                                className="text-white text-lg pr-3 ml-4 mr-1"
-                                                style={{fontSize:"20px"}}
-                                            >
-                                                <FontAwesomeIcon icon={faUserGear} />
-                                            </button>
-                                        )}
-                                        <button
-                                            onClick={handleLogout}
-                                            className="text-white text-lg pl-4 mt-1"
-                                            style={{fontSize:"20px"}}
-                                        >
-                                            <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
-                                        </button>
-                                    </li>
-                                </ul>
+                            <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 items-center">
+                                <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 items-center">
+                                    <ul className="lg:flex space-x-4 items-center">
+                                        <li className="flex items-center">
+                                            <div className="text-white text-base hidden lg:block cursor-pointer font-semibold fontWeight: '600'">
+                                                {`Halo, ${displayUserName}`}
+                                            </div>
+                                            {isAdmin && (
+                                                <div className='mr-2 ml-10'>
+                                                    <button
+                                                        onClick={goToManageUserPage}
+                                                        className="text-white"
+                                                    >
+                                                        <div style={{
+                                                            padding: '4px 12px 3px',
+                                                            fontSize: '20px',
+                                                            fontWeight: '600',
+                                                        }}>
+                                                            <FontAwesomeIcon icon={faUserGear} />
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            )}
+                                            <div>
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="text-white"
+                                                >
+                                                    <div style={{
+                                                        padding: '4px 12px 3px',
+                                                        marginRight: '8.5px',
+                                                        fontSize: '20px',
+                                                        fontWeight: '600',
+                                                    }}>
+                                                        <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -276,7 +291,7 @@ const CategoryLayout: React.FC<{
                         </button>
                     </Sider>
 
-                    <Content className="p-7" style={{ paddingTop: 130, marginLeft: marginLeftValue}}>
+                    <Content className="p-7" style={{ paddingTop: 130, marginLeft: marginLeftValue }}>
                         {children}
                     </Content>
                 </Layout>
