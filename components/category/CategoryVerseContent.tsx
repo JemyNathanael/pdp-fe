@@ -239,7 +239,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                                 handleChange(file, tempData);
                                                 return false;
                                             }}>
-                                            <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
+                                            <CategoryButton text='Upload File' mode='outlined' className='px-8' />
                                         </Upload>
                                     }
 
