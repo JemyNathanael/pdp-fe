@@ -172,23 +172,19 @@ const ChecklistFiles: React.FC = () => {
                 </div>
 
                 <div className='flex flex-1 flex-row-reverse mt-24'>
-                    <div>
-                        <CategoryButton text='Save' className='px-9 ml-8' onClick={handleSave} />
-                    </div>
-                    <div>
+                    <div className="flex items-center space-x-4">
                         {isRoleGrantedEditUploadStatus &&
                             <Upload name='File'
-                            beforeUpload={(file) => {
-                                handleChange(file, tempData);
-                                return false;
-                            }} 
-                            defaultFileList={[]}>
-                                <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
+                                beforeUpload={(file) => {
+                                    handleChange(file, tempData);
+                                    return false;
+                                }}
+                                defaultFileList={[]}>
+                                <CategoryButton text='Upload File' mode='outlined' className='px-8' />
                             </Upload>
                         }
+                        <CategoryButton text='Save' className='px-9' style={{ padding: '10px 0' }} onClick={handleSave} />
                     </div>
-                    
-                    
                 </div>
                
                 <p className='flex flex-1 flex-row-reverse mt-3 text-red-500 text-xs font-semibold'>

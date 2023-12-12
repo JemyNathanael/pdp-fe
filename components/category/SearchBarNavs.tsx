@@ -4,22 +4,21 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, useEffect } from 'react';
 
-const SearchBarNavs = ({setSearchResults, searchResults}) => {
+const SearchBarNavs = ({ setSearchResults, searchResults }) => {
     const [input, setInput] = useState<string>('');
     const swrFetcher = useSwrFetcherWithAccessToken();
 
     const handleSearch = async (value: string) => {
         const searchApiUrl = `${BackendApiUrl.getHomeSearch}?search=${value}`;
         try {
-            if(value == '')
-            {
+            if (value == '') {
                 setSearchResults([]);
             }
-            else{
+            else {
                 const response = await swrFetcher(searchApiUrl);
                 const options = response?.map((item) => ({
-                    value: item.id, 
-                    label: item.title, 
+                    value: item.id,
+                    label: item.title,
                     type: item['type'],
                     firstSubCategoryId: item['firstSubCategoryId'],
                     secondSubCategoryId: item['secondSubCategoryId'],
@@ -46,7 +45,7 @@ const SearchBarNavs = ({setSearchResults, searchResults}) => {
         }
     };
 
-     useEffect(() => {
+    useEffect(() => {
         const handleResize = () => {
             setInput(calculateInputWidth());
         };
@@ -65,18 +64,17 @@ const SearchBarNavs = ({setSearchResults, searchResults}) => {
 
     return (
         <div className="relative w-full">
-            <input 
-                placeholder='Search' 
-                className={`py-4 px-5 ml-3 mr-3 rounded-3xl text-black outline-none w-full ${
-                    searchResults.length === 0 ? '' : 'rounded-b-none'
-                }`}
+            <input
+                placeholder='Search'
+                className={`py-4 px-5 ml-3 mr-3 rounded-3xl text-black outline-none w-full ${searchResults.length === 0 ? '' : 'rounded-b-none'
+                    }`}
                 onChange={(e) => handleChange(e.target.value)}
                 style={{ paddingRight: '40px', width: inputWidth }}
             />
             <FontAwesomeIcon
                 icon={faSearch}
                 className='absolute right-3 top-4'
-                style={{ marginRight: '8px', color: 'gray', fontSize: '1.3rem'}}
+                style={{ marginRight: '8px', color: 'gray', fontSize: '1.3rem' }}
             />
         </div>
     );
