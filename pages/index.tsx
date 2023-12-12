@@ -150,8 +150,9 @@ const Home: React.FC = () => {
             </nav>
 
             <div style={{ paddingTop: '100px', paddingBottom: '10px' }}>
-                <div className='justify-center text-center mt-4 font-bold' style={{ fontSize: '40px', color: 'black' }}>
-                    Sistem Evaluasi Perlindungan Data Pribadi
+                <div className='justify-center text-center mt-4 font-bold' style={{ fontSize: '34px', color: 'black' }}>
+                    Sistem Evaluasi Kepatuhan UU No. 27 Tahun 2022 <br></br>
+                    (Perlindungan Data Pribadi)
                 </div>
                 <div className="flex justify-center">
                     <div className="grid grid-cols-12">
