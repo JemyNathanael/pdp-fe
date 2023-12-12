@@ -79,6 +79,7 @@ const CategoryLayout: React.FC<{
 
     const userRole = session?.user?.['role'][0];
     const [searchResults, setSearchResults] = useState([]); // Search Bar Result
+    const [selectedChapterIndex, setSelectedChapterIndex] = useState<number>(0);
     const isAdmin = userRole === "Admin";
     const goToManageUserPage = () => {
         router.push('/ManageUser');
@@ -115,13 +116,17 @@ const CategoryLayout: React.FC<{
             setFirstSubCategories(firstSubCategoriesItem);
         }
     }, [data, router.query])
-
+    // console.log("first category : ", firstSubCategories)
     useEffect(() => {
         if (firstSubCategories) {
             const itemsCollapseStateMap = firstSubCategories.map(() => false);
+            const selectedChapterIndex = firstSubCategories.findIndex((chapter) => chapter.routePath === router.asPath);
+            setSelectedChapterIndex(selectedChapterIndex);
+            itemsCollapseStateMap[selectedChapterIndex] = true;
+
             setChaptersExpandedState(itemsCollapseStateMap);
         }
-    }, [firstSubCategories])
+    }, [firstSubCategories, router.asPath, selectedChapterIndex]);
 
     useEffect(() => {
         handleResize();
@@ -249,6 +254,7 @@ const CategoryLayout: React.FC<{
                                         changeCollapseStatus={changeCollapseStatusByIndex}
                                         resetToggle={resetToggleFromButtonState}
                                         toggledFlag={toggledFromCollapseOrExpandAll}
+                                        selectedIndex = {selectedChapterIndex}
                                         currentIndex={i}
                                         key={i}
                                     />
