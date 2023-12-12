@@ -6,13 +6,14 @@ const SearchResultNav = ({ searchResults }) => {
 
     const calculateWidth = () => {
         const viewportWidth = window.innerWidth;
-        if (viewportWidth >= 750) {
+        if (viewportWidth >= 1300) {
             return '670px';
-        } else if (viewportWidth <= 450) {
-            return '450px';
-        } else {
-            const ratio = (viewportWidth - 450) / (750 - 450);
-            const width = 380 + (300 * ratio);
+        } else if (viewportWidth <= 775) {
+            return '300px';
+        } 
+        else {
+            const ratio = (viewportWidth - 1200) / (1200 - 800);
+            const width = 600 + (250 * ratio);
             return `${width}px`;
         }
     };
@@ -48,7 +49,7 @@ const SearchResultNav = ({ searchResults }) => {
     }
 
     return (
-        <div className='fixed z-10 ml-3 mr-3 bg-white rounded-b-3xl overflow-hidden shadow-lg'
+        <div className='fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg'
             style={{ width: containerWidth }}>
             {searchResults?.map((result) => (
                 <div className='flex flex-col px-5 py-3 border-b hover:bg-gray-200 cursor-pointer'
