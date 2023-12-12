@@ -79,6 +79,7 @@ const CategoryLayout: React.FC<{
 
     const userRole = session?.user?.['role'][0];
     const [searchResults, setSearchResults] = useState([]); // Search Bar Result
+    const [selectedChapterIndex, setSelectedChapterIndex] = useState<number>(0);
     const isAdmin = userRole === "Admin";
     const goToManageUserPage = () => {
         router.push('/ManageUser');
@@ -115,13 +116,27 @@ const CategoryLayout: React.FC<{
             setFirstSubCategories(firstSubCategoriesItem);
         }
     }, [data, router.query])
-
+    // console.log("first category : ", firstSubCategories)
     useEffect(() => {
         if (firstSubCategories) {
             const itemsCollapseStateMap = firstSubCategories.map(() => false);
+
+            const categoryIdFromUrl = router.query['categoryId']?.toString() ?? '';
+            const firstSubCategoryIdFromUrl = router.query['chapterId']?.toString() ?? '';
+            const secondSubCategoryIdFromUrl = router.query['verseId']?.toString() ?? '';
+    
+            const selectedChapterIndex = firstSubCategories.findIndex(
+                (chapter) => chapter.routePath === `/${categoryIdFromUrl}/${firstSubCategoryIdFromUrl}`
+            );
+
+            const shouldKeepFirstSubCategoryExpanded = !!secondSubCategoryIdFromUrl;
+    
+            setSelectedChapterIndex(selectedChapterIndex);
+
+            itemsCollapseStateMap[selectedChapterIndex] = shouldKeepFirstSubCategoryExpanded;
             setChaptersExpandedState(itemsCollapseStateMap);
         }
-    }, [firstSubCategories])
+    }, [firstSubCategories, router.query]);
 
     useEffect(() => {
         handleResize();
@@ -264,6 +279,7 @@ const CategoryLayout: React.FC<{
                                         changeCollapseStatus={changeCollapseStatusByIndex}
                                         resetToggle={resetToggleFromButtonState}
                                         toggledFlag={toggledFromCollapseOrExpandAll}
+                                        selectedIndex = {selectedChapterIndex}
                                         currentIndex={i}
                                         key={i}
                                     />
