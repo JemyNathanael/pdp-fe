@@ -205,13 +205,13 @@ const CategoryLayout: React.FC<{
                                                 {`Halo, ${displayUserName}`}
                                             </div>
                                             {isAdmin && (
-                                                <div className='mr-2 ml-10'>
+                                                <div className='ml-8'>
                                                     <button
                                                         onClick={goToManageUserPage}
                                                         className="text-white"
                                                     >
                                                         <div style={{
-                                                            padding: '4px 12px 3px',
+                                                            padding: '4px 8px 3px',
                                                             fontSize: '20px',
                                                             fontWeight: '600',
                                                         }}>
@@ -220,13 +220,13 @@ const CategoryLayout: React.FC<{
                                                     </button>
                                                 </div>
                                             )}
-                                            <div>
+                                            <div className='pl-6'>
                                                 <button
                                                     onClick={handleLogout}
                                                     className="text-white"
                                                 >
                                                     <div style={{
-                                                        padding: '4px 12px 3px',
+                                                        padding: '4px 8px 3px',
                                                         marginRight: '8.5px',
                                                         fontSize: '20px',
                                                         fontWeight: '600',

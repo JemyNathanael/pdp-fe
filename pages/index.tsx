@@ -97,10 +97,10 @@ const Home: React.FC = () => {
                         : <div></div>
                     }
                     {role === "Admin" &&
-                        <div className='mr-2 ml-10'>
+                        <div className='ml-8'>
                             <button onClick={() => router.push('/ManageUser')}>
                                 <div style={{
-                                    padding: '4px 12px 3px',
+                                    padding: '4px 8px 3px',
                                     fontSize: '20px',
                                     fontWeight: '600',
                                 }}>
@@ -110,7 +110,7 @@ const Home: React.FC = () => {
                         </div>
                     }
                     {status === 'authenticated' ?
-                        <div>
+                        <div className='pl-6'>
                             <button onClick={() => {
                                 nProgress.start();
                                 signOut({
@@ -118,7 +118,7 @@ const Home: React.FC = () => {
                                 });
                             }}>
                                 <div style={{
-                                    padding: '4px 12px 3px',
+                                    padding: '4px 8px 3px',
                                     marginRight: '8px',
                                     fontSize: '20px',
                                     fontWeight: '600',
