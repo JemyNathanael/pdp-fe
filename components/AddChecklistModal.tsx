@@ -36,6 +36,7 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ onCancel, visible
     const [successModalVisible, setSuccessModalVisible] = useState(false);
     const [isDescriptionFilled, setIsDescriptionFilled] = useState(false);
     const { fetchPOST } = useFetchWithAccessToken();
+    const [form] = Form.useForm();
 
     const onFinish = async (formData: AddChecklistResponse) => {
         const payload = {
@@ -49,6 +50,7 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ onCancel, visible
             mutate(GetChecklistList(payload.VerseId?.toString()))
             onCancel();
         }
+        form.resetFields();
     };
 
     const handleSuccessModalClose = () => {
@@ -71,7 +73,7 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ onCancel, visible
                 <h3 className='text-xl sm:text-2xl text-center font-body font-bold mt-6'>Add Checklist</h3>
                 <div className='p-5'>
                     <h4 className='text-md sm:text-lg font-body font-bold mb-2 sm:mb-3'>Description</h4>
-                    <Form onFinish={onFinish}>
+                    <Form form={form} onFinish={onFinish}>
                         <Form.Item
                             label=""
                             name="description"
