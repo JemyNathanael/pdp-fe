@@ -206,7 +206,7 @@ const CategoryLayout: React.FC<{
                 }}>
                     <div className="flex items-center">
                         <div className="hidden md:block logo" onClick={() => router.push('/')} style={{ flexGrow: 1 }}>
-                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin: '0px 70px 0px 40px' }} />
+                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin: '0px 70px 0px 40px' }} className="cursor-pointer" />
                         </div>
                         <div className="flex justify-between w-full">
                             <div style={{ maxWidth: '100%' }} className="mr-2">
@@ -262,7 +262,7 @@ const CategoryLayout: React.FC<{
                 <Layout>
                     <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000, position: 'fixed', height: '100vh', overflowY: 'auto' }}>
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px', margin: 'auto' }} />
+                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px', margin: 'auto' }} className="cursor-pointer" />
                         </div>
                         <Tooltip title={data?.title} placement="right">
                             <Link href={`/${categoryId}`}>
