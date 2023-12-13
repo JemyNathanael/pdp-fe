@@ -115,6 +115,7 @@ const Chapter: React.FC = () => {
                     <div className='my-auto mx-5 p-2'>
                     <Progress
                             type="dashboard"
+                            percent={chapterProgress?.percent}
                             gapDegree={70}
                             strokeWidth={16}
                             strokeColor={getColorForIndex(chapterProgress?.percent)}
