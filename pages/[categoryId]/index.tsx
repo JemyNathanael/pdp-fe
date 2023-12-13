@@ -84,7 +84,7 @@ const Category: React.FC = () => {
         }else{
             return '#CC0404';
         }
-      };
+    };
 
     return (
         <div>
@@ -93,7 +93,7 @@ const Category: React.FC = () => {
                     <div className='my-auto mx-5 p-2'>
                     <Progress
                             type="dashboard"
-                            percent={80}
+                            percent={(Number.isNaN(chartData?.percent)) ? 0 : chartData?.percent}
                             gapDegree={70}
                             strokeWidth={16}
                             strokeColor={getColorForIndex(chartData?.percent)}
@@ -105,7 +105,9 @@ const Category: React.FC = () => {
                                         <div className="text-2xl  rounded-full font-bold
                                              text-white w-20 h-20 flex items-center justify-center p-10"
                                              style={{backgroundColor: getColorForIndex(chartData?.percent)}}
-                                        >{chartData?.percent}%</div>
+                                        >
+                                            {(Number.isNaN(chartData?.percent) ? 0 : chartData?.percent)}%
+                                        </div>
                                         <div className="absolute text-2xl font-bold top-24" style={{color:getColorForIndex(chartData?.percent)}}>
                                             Total
                                         </div>
