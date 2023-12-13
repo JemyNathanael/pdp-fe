@@ -59,28 +59,29 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const canSeeDropdown = ['Admin', 'Reader'];
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
-    const [isNotificationVisible, setNotificationVisible] = useState(false);
+    const [notificationMap, setNotificationMap] = useState<Map<string, boolean>>(new Map());
 
-    const showSuccessNotification = () => {
-        if (!isNotificationVisible) {
-            notification.success({
-                message: 'Berhasil',
-                description: '',
-                placement: 'bottomRight',
-                className: 'custom-success-notification',
-                style: {
-                    backgroundColor: '#3788FD',
-                    opacity: 0.9,
-                    color: 'white',
-                    width: 'fit-content',
-                    top: '60px',
-                },
-                duration: 2,
-            });
 
-            setNotificationVisible(true);
+    const showSuccessNotification = (checklistId: string) => {
+        if (!notificationMap.get(checklistId)) {
+          notification.success({
+            message: 'Berhasil',
+            description: '',
+            placement: 'bottomRight',
+            className: 'custom-success-notification',
+            style: {
+              backgroundColor: '#3788FD',
+              opacity: 0.9,
+              color: 'white',
+              width: 'fit-content',
+              top: '60px',
+            },
+            duration: 2,
+          });
+      
+          setNotificationMap((prevMap) => new Map(prevMap.set(checklistId, true)));
         }
-    };
+      };
 
     const handleFileUpload = async (index: number) => {
         const fileExt = tempData[index]?.fileName?.split('.').pop();
@@ -95,20 +96,19 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
     const handleSave = async () => {
         const response = await fetchPUT(BackendApiUrl.saveFile, {
-            checklistId: checklistId,
-            fileDatas: tempData.map((item) => ({
-                FileId: item.id,
-                FileName: item.fileName,
-                ContentType: item.contentType
-            }))
+          checklistId: checklistId,
+          fileDatas: tempData.map((item) => ({
+            FileId: item.id,
+            FileName: item.fileName,
+            ContentType: item.contentType,
+          })),
         });
         if (response) {
-            mutate(GetChecklistList(verseId));
+          mutate(GetChecklistList(verseId));
         }
-
-        showSuccessNotification();
-        
-    }
+      
+        showSuccessNotification(checklistId);
+      };
 
     if (isSaving) {
         if (tempData) {
@@ -147,14 +147,13 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
     const handleStatusChange = async (uploadStatusId: number) => {
         const payload: UpdateUploadStatusModel = {
-            ChecklistId: checklistId,
-            UploadStatusId: uploadStatusId
+          ChecklistId: checklistId,
+          UploadStatusId: uploadStatusId,
         };
-
+      
         await fetchPUT(BackendApiUrl.updateChecklistUploadStatus, payload);
-        showSuccessNotification();
-        setNotificationVisible(false);
-    };
+        showSuccessNotification(checklistId);
+      };
 
     const items: MenuProps['items'] = [
         {
