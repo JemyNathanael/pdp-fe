@@ -115,7 +115,7 @@ const Chapter: React.FC = () => {
                     <div className='my-auto mx-5 p-2'>
                     <Progress
                             type="dashboard"
-                            percent={chapterProgress?.percent}
+                            percent={(Number.isNaN(chapterProgress?.percent)) ? 0 : chapterProgress?.percent}
                             gapDegree={70}
                             strokeWidth={16}
                             strokeColor={getColorForIndex(chapterProgress?.percent)}
@@ -127,7 +127,9 @@ const Chapter: React.FC = () => {
                                         <div className="text-2xl  rounded-full font-bold
                                              text-white w-20 h-20 flex items-center justify-center p-10"
                                              style={{backgroundColor: getColorForIndex(chapterProgress?.percent)}}
-                                        >{chapterProgress?.percent}%</div>
+                                        >
+                                            {(Number.isNaN(chapterProgress?.percent)) ? 0 : chapterProgress?.percent}%
+                                        </div>
                                         <div className="absolute text-2xl font-bold top-24" style={{color:getColorForIndex(chapterProgress?.percent)}}>
                                             Total
                                         </div>
