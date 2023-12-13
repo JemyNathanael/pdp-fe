@@ -60,7 +60,6 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
     const verseId = router.query['verseId']?.toString() ?? '';
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data: dataDesc} = useSWR<ChecklistDesc>(GetChecklistDescription(checkId), swrFetcher);
-    console.log(dataDesc);
 
     const { handleSubmit, control, formState: { errors } } = useForm<UpdateChecklist>({
         resolver: zodResolver(schema),
