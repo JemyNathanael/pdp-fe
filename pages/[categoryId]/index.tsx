@@ -93,7 +93,6 @@ const Category: React.FC = () => {
                     <div className='my-auto mx-5 p-2'>
                     <Progress
                             type="dashboard"
-                            percent={80}
                             gapDegree={70}
                             strokeWidth={16}
                             strokeColor={getColorForIndex(chartData?.percent)}
