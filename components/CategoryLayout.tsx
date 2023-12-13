@@ -13,6 +13,7 @@ import useSWR from 'swr';
 import { Authorize } from "./Authorize";
 import SearchResultNav from "./category/SearchResultNav";
 import SearchCategoryNavBar from "./category/SearchCategoryNavBar";
+import Link from "next/link";
 
 const { Sider, Content } = Layout;
 
@@ -264,9 +265,11 @@ const CategoryLayout: React.FC<{
                             <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px', margin: 'auto' }} />
                         </div>
                         <Tooltip title={data?.title} placement="right">
-                            <p className="moveLeft p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
-                                {data?.title}
-                            </p>
+                            <Link href={`/${categoryId}`}>
+                                <p className="moveLeft p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
+                                    {data?.title}
+                                </p>
+                            </Link>
                         </Tooltip>
                         <div className="m-4" style={{ backgroundColor: '##000000' }}>
                             {firstSubCategories &&
