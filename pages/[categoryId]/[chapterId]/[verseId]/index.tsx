@@ -13,7 +13,7 @@ import { DefaultOptionType } from 'antd/es/select';
 import { useSession } from 'next-auth/react';
 import { RcFile } from 'antd/es/upload';
 import Link from 'next/link';
-import { Row } from 'antd';
+import { Row, Progress} from 'antd';
 
 interface ChecklistList {
     id: string;
@@ -45,6 +45,12 @@ interface Indexing{
     subCategoryTitle: string;
 }
 
+interface Percentage{
+    totalItems: number | undefined;
+    value: number;
+    percent: number;
+}
+
 const VersePage: Page = () => {
 
     const router = useRouter();
@@ -63,6 +69,20 @@ const VersePage: Page = () => {
 
     const isRoleGrantedEditUploadStatus = canEditUploadStatusRole.includes(role) ? true : false;
 
+    const [checklistPercentage, setChecklistPercentage] = useState<Percentage>();
+
+    const getColorForIndex = (percent) => {
+        if(percent == 100){
+            return '#3A86FF';
+        }else if(percent >= 81 && percent <= 99){
+            return '#27AE60'
+        }else if(percent >= 51 && percent <= 80){
+            return '#FFC300';
+        }else{
+            return '#CC0404';
+        }
+      };
+
     useEffect(() => {
         // map upload status dropdown from API to DefaultOptionType from ant design
         const uploadStatusDropdownMap = dropdownUploadStatusData?.map((currentStatus) => {
@@ -75,6 +95,25 @@ const VersePage: Page = () => {
 
         setUploadStatusDropdown(uploadStatusDropdownMap);
         setChecklist(checklistData?.checklistList);
+
+        let count = 0;
+        let percentage = 0;
+        const totalChecklist = checklistData?.checklistList.length;
+        checklistData?.checklistList?.map((checklist) => {
+            if(checklist.uploadStatusId == 1){
+                count++;
+            }
+        })
+        if(totalChecklist != null){
+            percentage = Math.round((count / totalChecklist) * 100);
+        }
+        const checklistPercentage : Percentage = {
+            totalItems : totalChecklist,
+            value: count,
+            percent: percentage
+        }
+        setChecklistPercentage(checklistPercentage);
+        
     }, [checklistData?.checklistList, dropdownUploadStatusData])
 
     // May need adjustment after integration
@@ -116,6 +155,14 @@ const VersePage: Page = () => {
                 </Link>
                 <p style={{fontSize:'large',color:'#3788FD', fontWeight:600, marginLeft:'4px'}}> / {indexData?.checklistTitle}</p>
             </Row>
+            <br />
+            <div>
+                <div style={{display:"flex", justifyContent:"space-between"}}>
+                    <p style={{fontWeight:"bold", color:getColorForIndex(checklistPercentage?.percent)}}>{checklistPercentage?.percent}%</p>
+                    <p>{checklistPercentage?.value}/{checklistPercentage?.totalItems}</p>
+                </div>
+                <Progress percent={checklistPercentage?.percent} strokeColor={getColorForIndex(checklistPercentage?.percent)} showInfo={false}/>
+            </div>
             <br />
                 {(checklist && uploadStatusDropdown) &&
                     checklist.map((checklist, i) =>
