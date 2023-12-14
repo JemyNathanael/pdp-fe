@@ -11,13 +11,14 @@ interface DeleteChecklistModalProps {
     onCancel: () => void;
     verseId: string;
     checkId: string;
+    categoryId: string;
 }
 
 interface SuccessModalProps {
     onGoToHome: () => void;
 }
 
-const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, checkId, verseId }) => {
+const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, checkId, verseId, categoryId }) => {
     const { fetchDELETE } = useFetchWithAccessToken();
     const [openModal, setOpenModal] = useState(true);
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
@@ -38,7 +39,7 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
     const handleSuccessModalClose = () => {
         setOpenSuccessModal(false);
         mutate(GetChecklistList(verseId));
-        router.push('/');
+        router.push(`/${categoryId}`);
         onCancel();
     };
 
