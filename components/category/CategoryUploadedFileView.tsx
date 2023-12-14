@@ -38,7 +38,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
 
     async function DownloadFile() {
         try {
-            fetch(`${BackendApiUrl.getDownloadFile}?filename=${fileId}`, {
+            fetch(`${BackendApiUrl.getDownloadFile}?filename=${fileId}.${fileExtension}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
