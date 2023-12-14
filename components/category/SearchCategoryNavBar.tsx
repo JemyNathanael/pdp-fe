@@ -2,15 +2,15 @@ import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAcces
 import { BackendApiUrl } from "@/functions/BackendApiUrl";
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const SearchBarNavs = ({ setSearchResults, searchResults }) => {
+const SearchCategoryNavBar = ({ setSearchResults, searchResults }) => {
     const [input, setInput] = useState<string>('');
     const swrFetcher = useSwrFetcherWithAccessToken();
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleSearch = async (value: string) => {
-        const searchApiUrl = `${BackendApiUrl.getHomeSearch}?search=${value}`;
+        const searchApiUrl = `${BackendApiUrl.getCategorySearch}?search=${value}`;
         try {
             if (value == '') {
                 setSearchResults([]);
@@ -32,12 +32,18 @@ const SearchBarNavs = ({ setSearchResults, searchResults }) => {
             console.log(error);
         }
     }
+    const handleChange = (value: string) => {
+        setInput(value);
+        handleSearch(value);
+    }
+
 
     const calculateInputWidth = () => {
         const viewportWidth = window.innerWidth;
         if (viewportWidth >= 1300) {
             return '670px';
-        } else if (viewportWidth <= 775) {
+        }
+        else if (viewportWidth <= 775) {
             return '300px';
         }
         else {
@@ -56,13 +62,7 @@ const SearchBarNavs = ({ setSearchResults, searchResults }) => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
     const inputWidth = calculateInputWidth();
-
-    const handleChange = (value: string) => {
-        setInput(value);
-        handleSearch(value);
-    }
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -98,4 +98,4 @@ const SearchBarNavs = ({ setSearchResults, searchResults }) => {
     );
 }
 
-export default SearchBarNavs
+export default SearchCategoryNavBar;
