@@ -4,6 +4,7 @@ import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAcces
 import useSWR from 'swr';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
+import { useRouter } from 'next/router';
 
 interface ChapterModel {
     id: string
@@ -26,7 +27,7 @@ const DeleteSubCategoryModal: React.FC<{
 }> = (props) => {
 
     const [form] = Form.useForm();
-
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [isResultOpen, setIsResultOpen] = useState(false);
 
@@ -62,8 +63,7 @@ const DeleteSubCategoryModal: React.FC<{
 
     const handleCancelResult = () => {
         setIsResultOpen(false)
-
-        location.reload();
+        router.push('/');
     }
 
     const onFinish = async () => {
