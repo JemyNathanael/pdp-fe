@@ -40,7 +40,6 @@ const SearchCategoryNavBar = ({ setSearchResults, searchResults }) => {
 
     const calculateInputWidth = () => {
         const viewportWidth = window.innerWidth;
-        // console.log('🔥🔥🔥 ', viewportWidth);
         if (viewportWidth >= 1300) {
             return '670px';
         }

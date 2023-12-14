@@ -42,7 +42,7 @@ const SearchBarNavs = ({ setSearchResults, searchResults }) => {
         }
         else {
             const ratio = (viewportWidth - 1200) / (1200 - 800);
-            const width = 600 + (250 * ratio); // Adjust the values based on your preference
+            const width = 600 + (250 * ratio);
             return `${width}px`;
         }
     };
