@@ -63,7 +63,7 @@ const DeleteSubCategoryModal: React.FC<{
 
     const handleCancelResult = () => {
         setIsResultOpen(false)
-        router.push('/');
+        router.push(`/${props.categoryId}`);
     }
 
     const onFinish = async () => {
