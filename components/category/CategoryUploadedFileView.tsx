@@ -77,10 +77,10 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             style={{
-                backgroundColor: isHovered ? '#3788FD' : '#FFFFFF', // Change background color on hover
-                border: `3px solid ${isHovered ? '#FFFFFF' : '#3788FD'}`, // Change border color on hover
-                boxShadow: isHovered ? '0 20px 40px rgba(0, 0, 0, 0.2)' : 'none', // Add shadow on hover
-        transition: 'box-shadow 0.3s',
+                backgroundColor: isHovered ? '#3788FD' : '#FFFFFF',
+                border: `3px solid ${isHovered ? '#FFFFFF' : '#3788FD'}`,
+                boxShadow: isHovered ? '0 20px 40px rgba(0, 0, 0, 0.2)' : 'none',
+                transition: 'box-shadow 0.3s',
             }}
         >
             {!canEditUploadStatusRole.includes(role) ? true :
@@ -110,27 +110,26 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
                 </Button>
             </div>
             {!isHovered ? (
-            <div className='text-xs text-center text-[#3788FD] p-1 border-[#3788FD] border-t-[3px]'>
-                <button onClick={DownloadFile}>
-                    {FilenameValidation}
-                </button>
-            </div>
+                <div className='text-xs text-center text-[#3788FD] p-1 border-[#3788FD] border-t-[3px]'>
+                    <button onClick={DownloadFile}>
+                        {FilenameValidation}
+                    </button>
+                </div>
             ) : (
                 <div className='text-xs text-center text-[#FFFFFF] p-1 border-[#FFFFFF] border-t-[3px]'>
-                <button
-                    onClick={DownloadFile}
-                    style={{
-                        borderColor: '#3788FD',
-                        padding: '4px',
-                        borderRadius: '5px',
-                        color: isHovered ? '#FFFFFF' : '#3788FD', // Text color changes on hover
-                        backgroundColor: isHovered ? '#3788FD' : 'transparent', // Optional: Change background color on hover
-                        cursor: 'pointer',
-                    }}
-                >
-                    {FilenameValidation}
-                </button>
-            </div>
+                    <button
+                        onClick={DownloadFile}
+                        style={{
+                            borderColor: '#3788FD',
+                            padding: '4px',
+                            borderRadius: '5px',
+                            color: isHovered ? '#FFFFFF' : '#3788FD',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        {FilenameValidation}
+                    </button>
+                </div>
             )}
         </div>
     );
