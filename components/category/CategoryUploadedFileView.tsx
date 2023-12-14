@@ -3,16 +3,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile, faFileExcel, faFileImage, faFilePdf, faFileWord, faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { IconDefinition, faCircle } from '@fortawesome/free-solid-svg-icons';
 import { useSession } from 'next-auth/react';
+import { BackendApiUrl } from '@/functions/BackendApiUrl';
+import { useAuthorizationContext } from '@/functions/AuthorizationContext';
 import { Popover, Button } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 
 interface UploadedFileViewProps {
+    fileId: string;
     filename: string;
     currentIndex: number;
     removeFileByIndex: (index: number) => void;
 }
 
-export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ filename, currentIndex, removeFileByIndex }) => {
+export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ fileId, filename, currentIndex, removeFileByIndex }) => {
     const MaxFileNameLength = 15;
     const FilenameValidation =
         filename.length > MaxFileNameLength
@@ -40,6 +43,33 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     const canEditUploadStatusRole = ['Admin', 'Auditor', 'Uploader'];
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
+    const { accessToken } = useAuthorizationContext();
+
+    async function DownloadFile() {
+        try {
+            fetch(`${BackendApiUrl.getDownloadFile}?filename=${fileId}.${fileExtension}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            }).then(blobData => {
+                const url = window.URL.createObjectURL(blobData);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+        } catch (error) {
+            console.error('Error downloading file:', error);
+        }
+    }
 
     return (
         <div
@@ -58,6 +88,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
             <div className='flex flex-1 items-center justify-center'>
                 <Popover content='Download'>
                     <Button
+                        onClick={DownloadFile}
                         type='link'
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
@@ -75,7 +106,10 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
                 </Popover>
             </div>
             <div className='text-xs text-center text-[#3788FD] p-1 border-[#3788FD] border-t-[3px]'>
-                {FilenameValidation}
+                <button onClick={DownloadFile}>
+                    {FilenameValidation}
+                </button>
+
             </div>
         </div>
     );
