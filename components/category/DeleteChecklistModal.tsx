@@ -3,6 +3,7 @@ import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Modal } from "antd";
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { mutate } from 'swr';
 
@@ -20,6 +21,7 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
     const { fetchDELETE } = useFetchWithAccessToken();
     const [openModal, setOpenModal] = useState(true);
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
+    const router = useRouter();
 
     const SuccessDeleteModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
         return (
@@ -36,6 +38,7 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
     const handleSuccessModalClose = () => {
         setOpenSuccessModal(false);
         mutate(GetChecklistList(verseId));
+        router.push('/');
         onCancel();
     };
 

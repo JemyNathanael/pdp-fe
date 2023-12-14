@@ -40,7 +40,6 @@ interface ResponseTest {
     data: string;
 }
 
-
 export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving }) => {
     const router = useRouter();
     const { fetchPUT, fetchGET } = useFetchWithAccessToken();
@@ -60,29 +59,26 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
     const [fileList, setFileList] = useState<UploadFile[]>([]);
-    const [notificationMap, setNotificationMap] = useState<Map<string, boolean>>(new Map());
-
+    const [notificationMap] = useState<Map<string, boolean>>(new Map());
 
     const showSuccessNotification = (checklistId: string) => {
         if (!notificationMap.get(checklistId)) {
-          notification.success({
-            message: 'Berhasil',
-            description: '',
-            placement: 'bottomRight',
-            className: 'custom-success-notification',
-            style: {
-              backgroundColor: '#3788FD',
-              opacity: 0.9,
-              color: 'white',
-              width: 'fit-content',
-              top: '60px',
-            },
-            duration: 2,
-          });
-      
-          setNotificationMap((prevMap) => new Map(prevMap.set(checklistId, true)));
+            notification.success({
+                message: 'Success',
+                description: '',
+                placement: 'bottomRight',
+                className: 'custom-success-notification',
+                style: {
+                    backgroundColor: '#3788FD',
+                    opacity: 0.9,
+                    color: 'white',
+                    width: 'fit-content',
+                    top: '-60px',
+                },
+                duration:2
+            });
         }
-      };
+    };
 
     const handleFileUpload = async (index: number) => {
         const fileExt = tempData[index]?.fileName?.split('.').pop();
@@ -97,19 +93,20 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
     const handleSave = async () => {
         const response = await fetchPUT(BackendApiUrl.saveFile, {
-          checklistId: checklistId,
-          fileDatas: tempData.map((item) => ({
-            FileId: item.id,
-            FileName: item.fileName,
-            ContentType: item.contentType,
-          })),
+            checklistId: checklistId,
+            fileDatas: tempData.map((item) => ({
+                FileId: item.id,
+                FileName: item.fileName,
+                ContentType: item.contentType,
+            })),
         });
+
         if (response) {
-          mutate(GetChecklistList(verseId));
+            mutate(GetChecklistList(verseId));
         }
-      
+
         showSuccessNotification(checklistId);
-      };
+    };
 
     if (isSaving) {
         if (tempData) {
@@ -121,7 +118,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
             handleSave()
         }
     }
-
 
     useEffect(() => {
         setSelectOptions(dropdownOptions)
@@ -148,13 +144,13 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
     const handleStatusChange = async (uploadStatusId: number) => {
         const payload: UpdateUploadStatusModel = {
-          ChecklistId: checklistId,
-          UploadStatusId: uploadStatusId,
+            ChecklistId: checklistId,
+            UploadStatusId: uploadStatusId,
         };
-      
         await fetchPUT(BackendApiUrl.updateChecklistUploadStatus, payload);
         showSuccessNotification(checklistId);
-      };
+    };
+
 
     const items: MenuProps['items'] = [
         {
@@ -271,7 +267,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                 }
                             </div>
                             <div className='flex flex-col'>
-                                <div className='flex-1' style={{ maxWidth: '150px' }}>
+                                <div className='flex-1' style={{  maxWidth: '150px'  }}>
                                     {canUpdateStatus &&
                                         <Upload name="File"
                                             fileList={fileList}
