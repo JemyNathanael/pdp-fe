@@ -61,27 +61,31 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const role = session?.user?.['role'][0];
     const [notificationMap, setNotificationMap] = useState<Map<string, boolean>>(new Map());
 
+    useEffect(() => {
+        setSelectOptions(dropdownOptions);
+    }, [dropdownOptions]);
 
     const showSuccessNotification = (checklistId: string) => {
         if (!notificationMap.get(checklistId)) {
-          notification.success({
-            message: 'Berhasil',
-            description: '',
-            placement: 'bottomRight',
-            className: 'custom-success-notification',
-            style: {
-              backgroundColor: '#3788FD',
-              opacity: 0.9,
-              color: 'white',
-              width: 'fit-content',
-              top: '60px',
-            },
-            duration: 2,
-          });
-      
-          setNotificationMap((prevMap) => new Map(prevMap.set(checklistId, true)));
+            notification.success({
+                message: 'Success',
+                description: '',
+                placement: 'bottomRight',
+                className: 'custom-success-notification',
+                style: {
+                    backgroundColor: '#3788FD',
+                    opacity: 0.9,
+                    color: 'white',
+                    width: 'fit-content',
+                    top: '-60px',
+                },
+                // duration: 2,
+                // onClose: () => {
+                //     setNotificationMap((prevMap) => new Map(prevMap.set(checklistId, true)));
+                // },
+            });
         }
-      };
+    };
 
     const handleFileUpload = async (index: number) => {
         const fileExt = tempData[index]?.fileName?.split('.').pop();
@@ -96,19 +100,20 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
     const handleSave = async () => {
         const response = await fetchPUT(BackendApiUrl.saveFile, {
-          checklistId: checklistId,
-          fileDatas: tempData.map((item) => ({
-            FileId: item.id,
-            FileName: item.fileName,
-            ContentType: item.contentType,
-          })),
+            checklistId: checklistId,
+            fileDatas: tempData.map((item) => ({
+                FileId: item.id,
+                FileName: item.fileName,
+                ContentType: item.contentType,
+            })),
         });
+
         if (response) {
-          mutate(GetChecklistList(verseId));
+            mutate(GetChecklistList(verseId));
         }
-      
+
         showSuccessNotification(checklistId);
-      };
+    };
 
     if (isSaving) {
         if (tempData) {
@@ -147,13 +152,16 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
     const handleStatusChange = async (uploadStatusId: number) => {
         const payload: UpdateUploadStatusModel = {
-          ChecklistId: checklistId,
-          UploadStatusId: uploadStatusId,
+            ChecklistId: checklistId,
+            UploadStatusId: uploadStatusId,
         };
-      
+
+        console.log("Handling status change:", payload);
+
         await fetchPUT(BackendApiUrl.updateChecklistUploadStatus, payload);
         showSuccessNotification(checklistId);
-      };
+    };
+
 
     const items: MenuProps['items'] = [
         {
@@ -219,7 +227,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                         <div className='text-base flex items-center'>
                             <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>
                                 <div className='py-1'>
-                                    <p style={{ whiteSpace: 'pre-line' , textAlign: 'justify'}}>{title}</p>
+                                    <p style={{ whiteSpace: 'pre-line', textAlign: 'justify' }}>{title}</p>
                                 </div>
                             </Dropdown>
                             {canSeeEllipsis.includes(role) &&
@@ -258,7 +266,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                 }
                             </div>
                             <div className='flex flex-col'>
-                                <div className='flex-1' style={{maxWidth: '150px'}}>
+                                <div className='flex-1' style={{ maxWidth: '150px' }}>
                                     {canUpdateStatus &&
                                         <Upload name="File"
                                             beforeUpload={(file) => {
