@@ -5,6 +5,7 @@ import { IconDefinition, faCircle } from '@fortawesome/free-solid-svg-icons';
 import { useSession } from 'next-auth/react';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
+import { useAuthorizationContext } from '@/functions/AuthorizationContext';
 
 interface UploadedFileViewProps {
     fileId: string;
@@ -34,18 +35,29 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     const canEditUploadStatusRole = ['Admin', 'Auditor', 'Uploader'];
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
-    const { fetchGET } = useFetchWithAccessToken();
+    const { accessToken } = useAuthorizationContext();
 
     async function DownloadFile() {
         try {
-            const responseUrl = await fetchGET<string>(`${BackendApiUrl.getDownloadFile}?filename=${fileId}`);
-            const link = document.createElement('a');
-            link.href = responseUrl.toString();
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
+            fetch(`${BackendApiUrl.getDownloadFile}?filename=${fileId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            }).then(blobData => {
+                const url = window.URL.createObjectURL(blobData);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
         } catch (error) {
             console.error('Error downloading file:', error);
         }
