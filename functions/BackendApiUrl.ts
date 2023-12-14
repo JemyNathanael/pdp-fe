@@ -30,7 +30,8 @@ export const BackendApiUrl = {
     uploadFileInformation: baseUrl + '/api/v1/Blob/upload-file-information',
     presignedPutObject:baseUrl + '/api/v1/Blob/presigned-put-object',
     saveFile:baseUrl + '/api/v1/Checklist/save-file',
-    getInformation: baseUrl + '/api/v1/category/get-chapter'
+    getInformation: baseUrl + '/api/v1/category/get-chapter',
+    getDownloadFile:baseUrl + '/api/v1/Checklist/get-download-file',
 }
 
 export function GetUser(
