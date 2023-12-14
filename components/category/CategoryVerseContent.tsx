@@ -219,6 +219,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
                                                 <div className='mr-8' key={i}>
                                                     <CategoryUploadedFileView
+                                                        fileId={file.id}
                                                         currentIndex={i}
                                                         filename={file.fileName}
                                                         removeFileByIndex={() => removeFileByIndex(i)}
