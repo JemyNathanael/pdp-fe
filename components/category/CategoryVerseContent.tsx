@@ -59,7 +59,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const canSeeDropdown = ['Admin', 'Reader'];
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
-    const [notificationMap, setNotificationMap] = useState<Map<string, boolean>>(new Map());
+    const [notificationMap] = useState<Map<string, boolean>>(new Map());
 
     useEffect(() => {
         setSelectOptions(dropdownOptions);
