@@ -13,6 +13,12 @@ interface UploadedFileViewProps {
 }
 
 export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ filename, currentIndex, removeFileByIndex }) => {
+    const MaxFileNameLength = 15;
+    const FilenameValidation =
+        filename.length > MaxFileNameLength
+            ? `${filename.substring(0, MaxFileNameLength - 4)}...${filename.substring(filename.lastIndexOf('.') + 1)}`
+            : filename;
+
     const fileExtension = filename.substring(filename.lastIndexOf('.') + 1, filename.length).toLowerCase();
     const icon = extensionToIcon(fileExtension);
     const [isHovered, setIsHovered] = useState(false);
@@ -57,7 +63,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
                         onMouseLeave={() => setIsHovered(false)}
                     >
                         {isHovered ? (
-                            <DownloadOutlined style={{ fontSize: '45px' }}/>
+                            <DownloadOutlined style={{ fontSize: '45px' }} />
                         ) : (
                             <FontAwesomeIcon
                                 icon={icon}
@@ -69,7 +75,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
                 </Popover>
             </div>
             <div className='text-xs text-center text-[#3788FD] p-1 border-[#3788FD] border-t-[3px]'>
-                {filename}
+                {FilenameValidation}
             </div>
         </div>
     );
