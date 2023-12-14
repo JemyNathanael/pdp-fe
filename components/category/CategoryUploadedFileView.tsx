@@ -13,10 +13,10 @@ interface UploadedFileViewProps {
 }
 
 export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ filename, currentIndex, removeFileByIndex }) => {
-    const MAX_FILENAME_LENGTH = 15;
+    const MaxFileNameLength = 15;
     const FilenameValidation =
-        filename.length > MAX_FILENAME_LENGTH
-            ? `${filename.substring(0, MAX_FILENAME_LENGTH - 4)}...${filename.substring(filename.lastIndexOf('.') + 1)}`
+        filename.length > MaxFileNameLength
+            ? `${filename.substring(0, MaxFileNameLength - 4)}...${filename.substring(filename.lastIndexOf('.') + 1)}`
             : filename;
 
     const fileExtension = filename.substring(filename.lastIndexOf('.') + 1, filename.length).toLowerCase();
