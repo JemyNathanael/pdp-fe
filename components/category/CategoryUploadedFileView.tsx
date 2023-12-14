@@ -82,6 +82,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
             <div className='flex flex-1 items-center justify-center'>
                 <Popover content='Download'>
                     <Button
+                        onClick={DownloadFile}
                         type='link'
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
