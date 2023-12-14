@@ -25,8 +25,8 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
 
     const SuccessDeleteModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
         return (
-            <div className="fixed inset-0 flex items-center justify-center bg-opacity-10 bg-secondary-100 backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
-                <div className="flex flex-col p-6 sm:p-12 border items-center justify-center">
+            <div className="fixed inset-0 flex items-center z-10 justify-center backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
+                <div className="flex flex-col p-6 sm:p-12 border items-center justify-center bg-white">
                     <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#3788FD", fontSize: "64px", marginBottom: "8px" }} />
                     <div className="w-full h-4 sm:h-8" />
                     <h3 className="text-xl sm:text-2xl text-accent-100 font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Successfully Deleted Checklist!</h3>
@@ -53,6 +53,10 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
 
     return (
         <>
+            {
+                openSuccessModal &&
+                <SuccessDeleteModal onGoToHome={handleSuccessModalClose} />
+            }
             <Modal
                 title={
                     <div className="flex flex-col items-center">
@@ -65,7 +69,7 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
                 open={openModal}
                 centered
                 onCancel={() => setOpenModal(false)}
-                closable={false} 
+                closable={false}
                 footer={[
                     <div key={3} className="flex justify-center space-x-4">
                         <button
@@ -91,10 +95,6 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
                     </p>
                 </div>
             </Modal>
-            {
-                openSuccessModal &&
-                <SuccessDeleteModal onGoToHome={handleSuccessModalClose} />
-            }
         </>
     );
 }

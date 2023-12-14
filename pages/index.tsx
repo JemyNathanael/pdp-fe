@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Title } from '../components/Title';
 import { Page } from '../types/Page';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition, faArrowRightFromBracket, faUserGear, faCalendar, faHandshake, faLaptop, faPeopleArrows, faPeopleGroup, faServer, faSigning, faCalendarDays, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faArrowRightFromBracket, faUserGear, faHandshake, faLaptop, faPeopleArrows, faPeopleGroup, faServer, faSigning, faCalendarDays, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import nProgress from 'nprogress';
 import { Authorize } from '@/components/Authorize';
@@ -48,21 +48,21 @@ const Home: React.FC = () => {
     }
     function getRelatedIcon(title: string): IconDefinition {
         title = title.toLowerCase()
-
-        if (title.includes('persetujuan')) {
-            return faHandshake
-        } else if (title.includes('kebocoran')) {
-            return faLaptop
-        } else if (title.includes('transfer')) {
-            return faPeopleArrows
-        } else if (title.includes('ketiga')) {
-            return faPeopleGroup
-        } else if (title.includes('hak')) {
+        
+        if(title.includes('hak')){
             return faServer
-        } else if (title.includes('retensi')) {
+        } else if(title.includes('hukum')){
+            return faHandshake
+        } else if(title.includes('keamanan')) {
+            return faPeopleGroup
+        } else if(title.includes('pemrosesan')) {
+            return faLaptop
+        } else if(title.includes('akuntabilitas')) {
             return faCalendarDays
+        } else if(title.includes('transfer')) {
+            return faPeopleArrows
         } else {
-            return faCalendar
+            return faHandshake
         }
     }
 
@@ -84,24 +84,24 @@ const Home: React.FC = () => {
                 top: 0,
                 zIndex: 1000
             }}>
-                <div className="hidden sm:block">
+                <div className="hidden lg:block">
                     <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 0px 0px 40px' }} />
                 </div>
-                <div className="">
+                <div style={{ maxWidth: '100%' }} className='mr-2'>
                     <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
                     <SearchResultNav searchResults={searchResults} />
                 </div>
                 <div className="flex items-center">
                     {status === 'authenticated' ?
-                        <div className="hidden md:block" style={{ margin: '0 32px', fontWeight: '600' }}>Halo, {displayUserName}</div>
+                        <div className="hidden lg:block" style={{ margin: '0 px', fontWeight: '600' }}>Halo, {displayUserName}</div>
                         : <div></div>
                     }
                     {role === "Admin" &&
-                        <div className='mr-2'>
+                        <div className='ml-8'>
                             <button onClick={() => router.push('/ManageUser')}>
                                 <div style={{
-                                    padding: '4px 12px 3px',
-                                    fontSize: '18px',
+                                    padding: '4px 8px 3px',
+                                    fontSize: '20px',
                                     fontWeight: '600',
                                 }}>
                                     <FontAwesomeIcon icon={faUserGear} />
@@ -110,7 +110,7 @@ const Home: React.FC = () => {
                         </div>
                     }
                     {status === 'authenticated' ?
-                        <div>
+                        <div className='pl-6'>
                             <button onClick={() => {
                                 nProgress.start();
                                 signOut({
@@ -118,9 +118,9 @@ const Home: React.FC = () => {
                                 });
                             }}>
                                 <div style={{
-                                    padding: '4px 12px 3px',
+                                    padding: '4px 8px 3px',
                                     marginRight: '8px',
-                                    fontSize: '18px',
+                                    fontSize: '20px',
                                     fontWeight: '600',
                                 }}>
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} />
@@ -150,8 +150,9 @@ const Home: React.FC = () => {
             </nav>
 
             <div style={{ paddingTop: '100px', paddingBottom: '10px' }}>
-                <div className='justify-center text-center mt-4 font-bold' style={{ fontSize: '40px', color: 'black' }}>
-                    Sistem Evaluasi Perlindungan Data Pribadi
+                <div className='justify-center text-center mt-4 font-bold' style={{ fontSize: '34px', color: 'black' }}>
+                    Sistem Evaluasi Kepatuhan UU No. 27 Tahun 2022 <br></br>
+                    (Perlindungan Data Pribadi)
                 </div>
                 <div className="flex justify-center">
                     <div className="grid grid-cols-12">

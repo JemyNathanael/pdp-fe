@@ -39,8 +39,8 @@ interface ChecklistDesc{
 
 const SuccessUpdateModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-opacity-10 bg-secondary-100 backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
-            <div className="flex flex-col p-6 sm:p-12 border items-center justify-center">
+        <div className="fixed inset-0 flex items-center z-10 justify-center backdrop-filter backdrop-blur-md" onClick={onGoToHome}>
+            <div className="flex flex-col p-6 sm:p-12 border items-center justify-center bg-white">
                 <FontAwesomeIcon icon={faCircleCheck} style={{ color: "#3788FD", fontSize: "64px", marginBottom: "8px" }} />
                 <div className="w-full h-4 sm:h-8" />
                 <h3 className="text-xl sm:text-2xl text-accent-100 font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Successfully Updated Checklist</h3>
@@ -60,7 +60,6 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
     const verseId = router.query['verseId']?.toString() ?? '';
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data: dataDesc} = useSWR<ChecklistDesc>(GetChecklistDescription(checkId), swrFetcher);
-    console.log(dataDesc);
 
     const { handleSubmit, control, formState: { errors } } = useForm<UpdateChecklist>({
         resolver: zodResolver(schema),

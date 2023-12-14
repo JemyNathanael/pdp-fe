@@ -16,15 +16,15 @@ export const BackendApiUrl = {
     addChecklist: baseUrl + '/api/v1/Checklist',
     deleteChecklist: baseUrl + '/api/v1/Checklist',
     getChecklistDescription: baseUrl + '/api/v1/Checklist/get-description',
-    getChapters: baseUrl + '/api/v1/category',
-    
     getHomeSearch: baseUrl + '/api/v1/Home',
+    getCategorySearch: baseUrl + '/api/v1/Category/search',
     
     createSubCategory: baseUrl + '/api/v1/category',
     updateSubCategory: baseUrl + '/api/v1/category',
     deleteSubCategory: baseUrl + '/api/v1/category',
     getSubCategory: baseUrl + '/api/v1/category',
     getChecklistTitle: baseUrl + '/api/v1/category/get-title',
+    getProgress: baseUrl + '/api/v1/category/get-progress',
     getSubCategoryList: baseUrl + '/api/Dropdown/sub-category-list',
     uploadFile: baseUrl + '/api/v1/Blob/upload-file',
     uploadFileInformation: baseUrl + '/api/v1/Blob/upload-file-information',
@@ -108,4 +108,11 @@ export function GetInformation(categoryId : string){
 
     return BackendApiUrl.getInformation + '?' + param.toString();
 
+}
+export function GetProgress(categoryId: string) {
+    const param = new URLSearchParams();
+
+    param.append('categoryId', categoryId.toString());
+
+    return BackendApiUrl.getProgress + '?' + param.toString();
 }

@@ -8,7 +8,7 @@ import { CategoryUploadedFileView } from '@/components/category/CategoryUploaded
 import { useRouter } from 'next/router';
 import { CategoryButton } from '@/components/category/CategoryButton';
 import { Authorize } from '@/components/Authorize';
-import { Upload } from 'antd';
+import { Row, Upload } from 'antd';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import useSWR, { mutate } from 'swr';
 import { v4 as uuidv4 } from 'uuid';
@@ -46,10 +46,10 @@ interface ResponseTest {
 
 const ChecklistFiles: React.FC = () => {
     const router = useRouter();
-    const {id} = router.query;
+    const { id } = router.query;
 
     const [files, setFiles] = useState<ChecklistList[]>();
-    const canEditUploadStatusRole = ['Admin', 'Auditor'];
+    const canEditUploadStatusRole = ['Admin', 'Auditor', 'Uploader'];
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
     const verseId = router.query['verseId']?.toString() ?? '';
@@ -153,7 +153,7 @@ const ChecklistFiles: React.FC = () => {
             </div>
 
             <div className='flex-1'>
-                <p className='text-base mb-10' style={{ whiteSpace: 'pre-line' , textAlign: 'justify'}}>
+                <p className='text-base mb-10' style={{ whiteSpace: 'pre-line', textAlign: 'justify' }}>
                     {currChecklist?.description}
                 </p>
                 <div className='flex flex-wrap gap-16'>
@@ -172,27 +172,28 @@ const ChecklistFiles: React.FC = () => {
                 </div>
 
                 <div className='flex flex-1 flex-row-reverse mt-24'>
-                    <div>
-                        <CategoryButton text='Save' className='px-9 ml-8' onClick={handleSave} />
+                    <div className="flex items-center space-x-4" >
+                        <Row>
+                            {isRoleGrantedEditUploadStatus &&
+                                <div className='flex-1' style={{ maxWidth: '150px' }}>
+                                    <Upload name='File'
+                                        beforeUpload={(file) => {
+                                            handleChange(file, tempData);
+                                            return false;
+                                        }}
+                                        defaultFileList={[]}>
+                                        <CategoryButton text='Upload File' mode='outlined' className='px-8' />
+                                    </Upload>
+                                </div>
+                            }
+                            <CategoryButton text='Save' className='px-9' style={{ padding: '10px 0', maxHeight: '41px', marginLeft: '20px' }} onClick={handleSave}  />
+                        </Row>
+
                     </div>
-                    <div>
-                        {isRoleGrantedEditUploadStatus &&
-                            <Upload name='File'
-                            beforeUpload={(file) => {
-                                handleChange(file, tempData);
-                                return false;
-                            }} 
-                            defaultFileList={[]}>
-                                <CategoryButton text='+ Upload File' mode='outlined' className='px-9' />
-                            </Upload>
-                        }
-                    </div>
-                    
-                    
                 </div>
-               
+
                 <p className='flex flex-1 flex-row-reverse mt-3 text-red-500 text-xs font-semibold'>
-                    *Format Files: PDF, PNG, docx, and xlsx 
+                    *Format Files: PDF, PNG, docx, and xlsx
                 </p>
             </div>
 
