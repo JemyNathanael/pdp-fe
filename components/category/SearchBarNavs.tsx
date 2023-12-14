@@ -80,7 +80,7 @@ const SearchBarNavs = ({ setSearchResults, searchResults }) => {
     return (
         <div className="relative w-full">
             <input
-                ref={inputRef}
+                //ref={inputRef}
                 placeholder="Search"
                 className={`py-4 px-5 rounded-3xl text-black outline-none w-full ${searchResults.length === 0 ? '' : 'rounded-b-none'
                     }`}
