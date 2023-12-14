@@ -61,10 +61,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const role = session?.user?.['role'][0];
     const [notificationMap] = useState<Map<string, boolean>>(new Map());
 
-    useEffect(() => {
-        setSelectOptions(dropdownOptions);
-    }, [dropdownOptions]);
-
     const showSuccessNotification = (checklistId: string) => {
         if (!notificationMap.get(checklistId)) {
             notification.success({
@@ -79,10 +75,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                     width: 'fit-content',
                     top: '-60px',
                 },
-                // duration: 2,
-                // onClose: () => {
-                //     setNotificationMap((prevMap) => new Map(prevMap.set(checklistId, true)));
-                // },
             });
         }
     };
@@ -155,9 +147,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
             ChecklistId: checklistId,
             UploadStatusId: uploadStatusId,
         };
-
-        console.log("Handling status change:", payload);
-
         await fetchPUT(BackendApiUrl.updateChecklistUploadStatus, payload);
         showSuccessNotification(checklistId);
     };
