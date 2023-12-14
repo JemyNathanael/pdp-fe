@@ -40,7 +40,6 @@ interface ResponseTest {
     data: string;
 }
 
-
 export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving }) => {
     const router = useRouter();
     const { fetchPUT, fetchGET } = useFetchWithAccessToken();
@@ -75,6 +74,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                     width: 'fit-content',
                     top: '-60px',
                 },
+                duration:2
             });
         }
     };
@@ -117,7 +117,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
             handleSave()
         }
     }
-
 
     useEffect(() => {
         setSelectOptions(dropdownOptions)
