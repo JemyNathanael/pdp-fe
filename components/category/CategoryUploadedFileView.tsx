@@ -4,7 +4,6 @@ import { faFile, faFileExcel, faFileImage, faFilePdf, faFileWord, faCircleXmark 
 import { IconDefinition, faCircle } from '@fortawesome/free-solid-svg-icons';
 import { useSession } from 'next-auth/react';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
-import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import { useAuthorizationContext } from '@/functions/AuthorizationContext';
 
 interface UploadedFileViewProps {
