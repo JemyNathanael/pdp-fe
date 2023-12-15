@@ -66,21 +66,22 @@ const SearchBarNavs = ({ setSearchResults, searchResults }) => {
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (inputRef.current && !inputRef.current.contains(event.target)) {
+                setInput('');
                 setSearchResults([]);
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('click', handleClickOutside);
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('click', handleClickOutside);
         };
     }, [setSearchResults]);
 
     return (
         <div className="relative w-full">
             <input
-                //ref={inputRef}
+                ref={inputRef}
                 placeholder="Search"
                 className={`py-4 px-5 rounded-3xl text-black outline-none w-full ${searchResults.length === 0 ? '' : 'rounded-b-none'
                     }`}
