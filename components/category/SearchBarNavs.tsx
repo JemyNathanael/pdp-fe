@@ -66,7 +66,6 @@ const SearchBarNavs = ({ setSearchResults, searchResults }) => {
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (inputRef.current && !inputRef.current.contains(event.target)) {
-                setInput('');
                 setSearchResults([]);
             }
         };
