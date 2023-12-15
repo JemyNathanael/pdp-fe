@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 
 const SearchBarNavs = ({ setSearchResults, searchResults }) => {
     const [input, setInput] = useState<string>('');
+    const [inputResize, setInputResize] = useState<string>('670px');
     const swrFetcher = useSwrFetcherWithAccessToken();
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -49,15 +50,13 @@ const SearchBarNavs = ({ setSearchResults, searchResults }) => {
 
     useEffect(() => {
         const handleResize = () => {
-            setInput(calculateInputWidth());
+            setInputResize(calculateInputWidth());
         };
         window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
-    const inputWidth = calculateInputWidth();
 
     const handleChange = (value: string) => {
         setInput(value);
@@ -71,10 +70,10 @@ const SearchBarNavs = ({ setSearchResults, searchResults }) => {
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('click', handleClickOutside);
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('click', handleClickOutside);
         };
     }, [setSearchResults]);
 
@@ -86,7 +85,7 @@ const SearchBarNavs = ({ setSearchResults, searchResults }) => {
                 className={`py-4 px-5 rounded-3xl text-black outline-none w-full ${searchResults.length === 0 ? '' : 'rounded-b-none'
                     }`}
                 onChange={(e) => handleChange(e.target.value)}
-                style={{ paddingRight: '40px', width: inputWidth }}
+                style={{ paddingRight: '40px', width: inputResize }}
                 value={input}
             />
             <FontAwesomeIcon

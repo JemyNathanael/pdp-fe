@@ -5,7 +5,7 @@ import { IconDefinition, faCircle } from '@fortawesome/free-solid-svg-icons';
 import { useSession } from 'next-auth/react';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
 import { useAuthorizationContext } from '@/functions/AuthorizationContext';
-import { Popover, Button } from 'antd';
+import { Button } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 
 interface UploadedFileViewProps {
@@ -76,6 +76,12 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
             className='bg-white border-[#3788FD] border-[3px] h-[136px] w-[122px] rounded-md flex flex-col relative'
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            style={{
+                backgroundColor: isHovered ? '#3788FD' : '#FFFFFF',
+                border: `3px solid ${isHovered ? '#FFFFFF' : '#3788FD'}`,
+                boxShadow: isHovered ? '0 20px 40px rgba(0, 0, 0, 0.2)' : 'none',
+                transition: 'box-shadow 0.3s',
+            }}
         >
             {!canEditUploadStatusRole.includes(role) ? true :
                 <button onClick={() => removeFileByIndex(currentIndex)}>
@@ -86,31 +92,45 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
                 </button>
             }
             <div className='flex flex-1 items-center justify-center'>
-                <Popover content='Download'>
-                    <Button
+                <Button
+                    onClick={DownloadFile}
+                    type='link'
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                >
+                    {isHovered ? (
+                        <DownloadOutlined style={{ fontSize: '45px', color: '#FFFFFF' }} />
+                    ) : (
+                        <FontAwesomeIcon
+                            icon={icon}
+                            className='text-[#3788FD]'
+                            size={'3x'}
+                        />
+                    )}
+                </Button>
+            </div>
+            {!isHovered ? (
+                <div className='text-xs text-center text-[#3788FD] p-1 border-[#3788FD] border-t-[3px]'>
+                    <button onClick={DownloadFile}>
+                        {FilenameValidation}
+                    </button>
+                </div>
+            ) : (
+                <div className='text-xs text-center text-[#FFFFFF] p-1 border-[#FFFFFF] border-t-[3px]'>
+                    <button
                         onClick={DownloadFile}
-                        type='link'
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
+                        style={{
+                            borderColor: '#3788FD',
+                            padding: '4px',
+                            borderRadius: '5px',
+                            color: isHovered ? '#FFFFFF' : '#3788FD',
+                            cursor: 'pointer',
+                        }}
                     >
-                        {isHovered ? (
-                            <DownloadOutlined style={{ fontSize: '45px' }} />
-                        ) : (
-                            <FontAwesomeIcon
-                                icon={icon}
-                                className='text-[#3788FD]'
-                                size={'3x'}
-                            />
-                        )}
-                    </Button>
-                </Popover>
-            </div>
-            <div className='text-xs text-center text-[#3788FD] p-1 border-[#3788FD] border-t-[3px]'>
-                <button onClick={DownloadFile}>
-                    {FilenameValidation}
-                </button>
-
-            </div>
+                        {FilenameValidation}
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
