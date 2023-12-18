@@ -6,22 +6,18 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 const SearchChecklistNavBar = ({setSearchResults, searchResults}) => {
-    // console.log('🔥🔥')
-    // // console.log(searchResults);
-    // console.log(setSearchResults);
 const [input, setInput] = useState<string>('');
+const [inputResize, setInputResize] = useState<string>('670px');
 const inputRef = useRef<HTMLInputElement>(null);
 const swrFetcher = useSwrFetcherWithAccessToken();
 const router = useRouter();
 const secondSubCategoryId = router.query['verseId'];
-// console.log(secondSubCategoryId);
 
 const handleChange = (value: string) => {
     setInput(value);
     handleSearch(value);
 }
 
-// console.log(searchResults);
 const handleSearch = async (value: string) => {
     const searchApiUrl = `${BackendApiUrl.getChecklistSearch}?search=${value}&secondSubCategoryId=${secondSubCategoryId}`;
     // console.log(searchApiUrl);
@@ -31,14 +27,11 @@ const handleSearch = async (value: string) => {
         }
         else {
             const response = await swrFetcher(searchApiUrl);
-            // console.log(response);
             const options = response?.map((item) => ({
                 value: item.checklistId,
-                label: (item.description.length > 100) ? `${item.description.slice(0, 100)}...` : item.description,
+                label: item.description,
                 blobDatas: item.blobDatas,
             }));
-            // console.log(options);
-            console.log(options);
             setSearchResults(options);
             // console.log(input);
         }
@@ -61,10 +54,9 @@ const calculateInputWidth = () => {
         return `${width}px`;
     }
 };
-const [containerWidth, setContainerWidth] = useState(calculateInputWidth());
 useEffect(() => {
     const handleResize = () => {
-        setContainerWidth(calculateInputWidth());
+        setInputResize(calculateInputWidth());
     };
     window.addEventListener('resize', handleResize);
     return () => {
@@ -78,9 +70,9 @@ useEffect(() => {
             setSearchResults([]);
         }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
     return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('click', handleClickOutside);
     };
 }, [setSearchResults]);
 
@@ -92,7 +84,7 @@ return (
                 className={`py-4 px-5 rounded-3xl text-black outline-none w-full ${searchResults.length === 0 ? '' : 'rounded-b-none'
                     }`}
                 onChange={(e) => handleChange(e.target.value)}
-                style={{ paddingRight: '40px', width: containerWidth }}
+                style={{ paddingRight: '40px', width: inputResize }}
                 value={input}
             />
             <FontAwesomeIcon
@@ -100,7 +92,7 @@ return (
                 className='absolute right-3 top-4'
                 style={{ marginRight: '8px', color: 'gray', fontSize: '1.3rem' }}
             />
-        </div>
+    </div>
 )};
 
 export default SearchChecklistNavBar;
