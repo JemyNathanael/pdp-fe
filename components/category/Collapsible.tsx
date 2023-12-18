@@ -80,15 +80,7 @@ const Collapsible: React.FC<IProps> = ({
         setIsOpen(false);
         changeCollapseStatus(currentIndex, false);
       }
-    } else {
-      if(currentIndex === selectedIndex) {
-        setIsOpen(true);
-        changeCollapseStatus(currentIndex, true);
-      } else {
-        setIsOpen(false);
-        changeCollapseStatus(currentIndex, false);
-      }
-    }
+    } 
 
   }, [changeCollapseStatus, currentIndex, open, resetToggle, toggledFlag, selectedIndex]);
 
@@ -98,6 +90,8 @@ const Collapsible: React.FC<IProps> = ({
   };
 
   const handleTitleRouting = () => {
+    setIsOpen(true);
+    changeCollapseStatus(currentIndex, true);
     router.push(routePath);
   }
 
