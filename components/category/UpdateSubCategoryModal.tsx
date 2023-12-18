@@ -7,8 +7,6 @@ import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCircleXmark} from '@fortawesome/free-regular-svg-icons';
 
-const { TextArea } = Input
-
 interface ChapterModel {
     id: string
     title: string
@@ -243,25 +241,7 @@ const UpdateSubCategoryModal: React.FC<{
                                     />
                                 </div>
                             </Form.Item>
-
                             <br />
-
-                            <Form.Item<UpdateSubCategoryType>
-                                name="description"
-                                rules={[{}]}
-                            >
-                                <div>
-                                    <p style={{
-                                        fontSize: '24px',
-                                        fontWeight: 'bold',
-                                        marginBottom: '8px'
-                                    }}>Description</p>
-                                    <TextArea rows={4} placeholder='Insert description' style={{ fontSize: '18px' }}
-                                        value=""
-                                    />
-                                </div>
-                            </Form.Item>
-
                             <br />
                         </>
                     }

@@ -334,27 +334,7 @@ const AddSubCategoryModal: React.FC<{
                             />
                         </div>
                     </Form.Item>
-
                     <br />
-
-                    <Form.Item<AddSubCategoryType>
-                        name="description"
-                        rules={[{}]}
-                    >
-                        <div>
-                            <p style={{
-                                fontSize: '24px',
-                                fontWeight: 'bold',
-                                marginBottom: '8px'
-                            }}>Description</p>
-                            <TextArea
-                                rows={4}
-                                placeholder='Insert description'
-                                style={{ fontSize: '18px' }} />
-                        </div>
-                    </Form.Item>
-
-
                     <br />
 
                     {

@@ -161,6 +161,7 @@ const ChecklistFiles: React.FC = () => {
                         files.map((file, i) =>
                             file.blobList.map((blob, j) => (
                                 <CategoryUploadedFileView
+                                    fileId={blob.id}
                                     key={`${i}-${j}`}
                                     currentIndex={i}
                                     filename={blob.fileName}
