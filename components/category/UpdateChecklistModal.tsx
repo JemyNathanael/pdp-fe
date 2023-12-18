@@ -9,7 +9,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { mutate } from 'swr';
 import { useRouter } from 'next/router';
-import {faCircleXmark} from '@fortawesome/free-regular-svg-icons';
+import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import useSWR from 'swr';
 
@@ -32,7 +32,7 @@ interface UpdateChecklistResponse {
     response: string;
 }
 
-interface ChecklistDesc{
+interface ChecklistDesc {
     id: string
     checklistDescription: string
 }
@@ -59,7 +59,7 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
     const router = useRouter();
     const verseId = router.query['verseId']?.toString() ?? '';
     const swrFetcher = useSwrFetcherWithAccessToken();
-    const { data: dataDesc} = useSWR<ChecklistDesc>(GetChecklistDescription(checkId), swrFetcher);
+    const { data: dataDesc } = useSWR<ChecklistDesc>(GetChecklistDescription(checkId), swrFetcher);
 
     const { handleSubmit, control, formState: { errors } } = useForm<UpdateChecklist>({
         resolver: zodResolver(schema),
@@ -95,7 +95,7 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
                 width={750}
                 onCancel={onCancel}
                 footer={null}
-                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd", fontSize:'24px'}} />}
+                closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{ color: "#3788fd", fontSize: '24px' }} />}
             >
                 <h3 className='text-xl sm:text-2xl text-center font-body font-bold mt-6'>Update Checklist</h3>
                 <div className='p-5'>
@@ -105,7 +105,8 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
                             name="description"
                             control={control}
                             render={({ field }) => (
-                                <TextArea rows={4}
+                                <TextArea 
+                                    rows={10}
                                     defaultValue={dataDesc?.checklistDescription}
                                     className='text-slate-500'
                                     {...field}>

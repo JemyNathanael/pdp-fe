@@ -85,7 +85,7 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ onCancel, visible
                             ]}
                         >
                             <TextArea
-                                rows={2}
+                                rows={10}
                                 className='text-slate-500'
                                 onChange={(e) => setIsDescriptionFilled(!!e.target.value.trim())}
                             />
