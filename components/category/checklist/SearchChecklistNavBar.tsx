@@ -37,7 +37,7 @@ const handleSearch = async (value: string) => {
         }
     }
     catch (error) {
-        console.log(error);
+        setSearchResults([]);
     }
 }
 const calculateInputWidth = () => {
