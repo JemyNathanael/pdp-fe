@@ -4,15 +4,18 @@ import { faFile, faFileExcel, faFileImage, faFilePdf, faFileWord, faCircleXmark 
 import { IconDefinition, faCircle } from '@fortawesome/free-solid-svg-icons';
 import { useSession } from 'next-auth/react';
 import { BackendApiUrl } from '@/functions/BackendApiUrl';
-import { useAuthorizationContext } from '@/functions/AuthorizationContext';
 import { Button } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
+import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 
 interface UploadedFileViewProps {
     fileId: string;
     filename: string;
     currentIndex: number;
     removeFileByIndex: (index: number) => void;
+}
+interface ResponseTest {
+    data: string;
 }
 
 export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ fileId, filename, currentIndex, removeFileByIndex }) => {
@@ -43,29 +46,30 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     const canEditUploadStatusRole = ['Admin', 'Auditor', 'Uploader'];
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
-    const { accessToken } = useAuthorizationContext();
+    const { fetchGET } = useFetchWithAccessToken();
 
     async function DownloadFile() {
         try {
-            fetch(`${BackendApiUrl.getDownloadFile}?filename=${fileId}.${fileExtension}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            }).then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.blob();
-            }).then(blobData => {
-                const url = window.URL.createObjectURL(blobData);
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', filename);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            })
+            const { data } = await fetchGET<ResponseTest>(`${BackendApiUrl.getDownloadFile}?filename=${fileId}.${fileExtension}`);
+            if (data) {
+                fetch(data.data, {
+                    method: 'GET',
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob();
+                })
+                    .then(blobData => {
+                        const url = window.URL.createObjectURL(blobData);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', filename);
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    })
+            }
         } catch (error) {
             console.error('Error downloading file:', error);
         }
