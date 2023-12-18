@@ -60,7 +60,8 @@ const SearchChecklistResult = ({searchResults}) => {
   }
   // console.log("ini halaman search checklist, ", searchResults);
   return (
-    <div className='fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg' style={{ width: containerWidth }}>
+    <div className='fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg overflow-y-scroll' 
+        style={{ width: containerWidth, maxHeight: '550px' }}>
       {searchResults?.map((result) => (
         <div 
           className='flex flex-col py-3 border-b' 
