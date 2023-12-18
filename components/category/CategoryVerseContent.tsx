@@ -205,7 +205,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         <>
             {
                 deleteModal &&
-                <DeleteChecklistModal checkId={checklistId} onCancel={handleCancel} verseId={verseId ? verseId : ''} categoryId={categoryId}/>
+                <DeleteChecklistModal checkId={checklistId} onCancel={handleCancel} verseId={verseId ? verseId : ''}/>
             }
 
             <UpdateCheklistModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
