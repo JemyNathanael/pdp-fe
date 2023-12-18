@@ -103,8 +103,6 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
                     <Button
                         onClick={DownloadFile}
                         type='link'
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
                     >
                         {isHovered ? (
                             <DownloadOutlined style={{ fontSize: '45px', color: '#FFFFFF' }} />
