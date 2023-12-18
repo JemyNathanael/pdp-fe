@@ -80,6 +80,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
             className='bg-white border-[#3788FD] border-[3px] h-[136px] w-[122px] rounded-md flex flex-col relative'
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={DownloadFile}
             style={{
                 backgroundColor: isHovered ? '#3788FD' : '#FFFFFF',
                 border: `3px solid ${isHovered ? '#FFFFFF' : '#3788FD'}`,
