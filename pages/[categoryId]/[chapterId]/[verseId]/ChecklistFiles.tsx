@@ -137,6 +137,8 @@ const ChecklistFiles: React.FC = () => {
                 }))
             });
             if (response) {
+                setFileList([]);
+                setTempData([]);
                 mutate(GetChecklistList(verseId));
             }
         }
