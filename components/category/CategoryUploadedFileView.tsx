@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile, faFileExcel, faFileImage, faFilePdf, faFileWord, faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { IconDefinition, faCircle } from '@fortawesome/free-solid-svg-icons';
@@ -14,12 +14,13 @@ interface UploadedFileViewProps {
     currentIndex: number;
     removeFileByIndex: (index: number) => void;
     canSave: () => void ;
+    highlightedBlob: string;
 }
 interface ResponseTest {
     data: string;
 }
 
-export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ fileId, filename, currentIndex, removeFileByIndex, canSave }) => {
+export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ fileId, filename, currentIndex, removeFileByIndex, canSave, highlightedBlob }) => {
     const MaxFileNameLength = 15;
     const FilenameValidation =
         filename.length > MaxFileNameLength
@@ -48,6 +49,16 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
     const { fetchGET } = useFetchWithAccessToken();
+    const [isHighlighted, setIsHighlighted] = useState(false);
+
+    useEffect(() => {
+        setIsHighlighted(highlightedBlob === fileId);
+        const timeoutId = setTimeout(() => {
+            setIsHighlighted(false);
+        }, 2000);
+        return () => clearTimeout(timeoutId);
+    }, [highlightedBlob, fileId]);
+
     function RemoveFile(currentIndex){
         removeFileByIndex(currentIndex);
         canSave();
@@ -99,9 +110,9 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
                 onClick={DownloadFile}
                 style={{
                     backgroundColor: isHovered ? '#3788FD' : '#FFFFFF',
-                    border: `3px solid ${isHovered ? '#FFFFFF' : '#3788FD'}`,
-                    boxShadow: isHovered ? '0 20px 40px rgba(0, 0, 0, 0.2)' : 'none',
-                    transition: 'box-shadow 0.3s',
+                    border: `solid ${isHighlighted ? '4px #FF0000' : (isHovered ? '3px #FFFFFF' : '3px #3788FD')}`,
+                    boxShadow: `${isHighlighted ? '0 20px 40px rgba(0, 0, 0, 0.2)' : (isHovered ? '0 20px 40px rgba(0, 0, 0, 0.2)' : 'none')}`,
+                    transition: 'box-shadow',
                 }}
             >
                 <div className='flex flex-1 items-center justify-center'>
