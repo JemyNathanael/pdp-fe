@@ -82,7 +82,10 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
 
     return (
         <div>
-            <div className='relative z-10'>
+            <div 
+            className='relative'
+            style={{ zIndex: 1}}
+            >
                 {!canEditUploadStatusRole.includes(role) ? true :
                     <button onClick={() => RemoveFile(currentIndex)}>
                         <div className='relative mr-[-130px] mt-[-5px]'>
