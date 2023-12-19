@@ -57,10 +57,6 @@ const SearchChecklistResult = ({searchResults}) => {
     const parts = filename.split(".");
     return parts.length > 1 ? parts[parts.length - 1] : "";
   }
-  
-  const handleChecklist = (result) => {
-    console.log("checklist", result);
-  }
 
   return (
     <div className='fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg overflow-y-scroll' 
@@ -69,9 +65,10 @@ const SearchChecklistResult = ({searchResults}) => {
         <div 
           className='flex flex-col py-3 border-b' 
           key={`${result.value}-${result.label}`}>
-            <div className="hover:bg-gray-200 cursor-pointer rounded-lg mx-3 px-2 py-1" 
-              onClick={() => handleChecklist(result)}>
-              <p className='text-lg text-gray-800'>{result.label.length > 150 ? `${result.label.slice(0, 120)}...` : result.label}</p>
+            <div className="hover:bg-gray-200 cursor-pointer rounded-lg mx-3 px-2 py-1">
+              <Link href="">
+                <p className='text-lg text-gray-800'>{result.label.length > 150 ? `${result.label.slice(0, 120)}...` : result.label}</p>
+              </Link>
             </div>
             {result.blobDatas?.map((blobData) => (
               <div className="flex flex-col px-5 py-1" key={blobData.blobId}>
@@ -79,8 +76,8 @@ const SearchChecklistResult = ({searchResults}) => {
                   <p className='text-lg text-gray-800'>
                     <Link href={`${router.asPath}/ChecklistFiles?id=${result.value}&highlightBlob=${blobData.blobId}`}
                       className="hover:bg-gray-200 rounded-lg px-2 py-1 text-">
-                      <FontAwesomeIcon icon={extensionToIcon(getFileExtension(blobData.fileName))} className="mr-2" color="blue" />
-                      <span className="text-black">{blobData.fileName}</span>
+                        <FontAwesomeIcon icon={extensionToIcon(getFileExtension(blobData.fileName))} className="mr-2" color="blue" />
+                        <span className="text-black">{blobData.fileName}</span>
                     </Link>
                   </p>
                 </div>
