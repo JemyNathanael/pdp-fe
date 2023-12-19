@@ -76,10 +76,11 @@ const SearchChecklistResult = ({searchResults}) => {
             {result.blobDatas?.map((blobData) => (
               <div className="flex flex-col px-5 py-1" key={blobData.blobId}>
                 <div className="mx-5">
-                  <p className='text-lg text-gray-800 cursor-pointer hover:bg-gray-200 px-2 rounded-lg'>
-                    <FontAwesomeIcon icon={extensionToIcon(getFileExtension(blobData.fileName))} className="mr-2" color="blue" />
-                    <Link href={`${router.asPath}/ChecklistFiles?id=${result.value}&highlightBlob=${blobData.blobId}`}>
-                      {blobData.fileName}
+                  <p className='text-lg text-gray-800'>
+                    <Link href={`${router.asPath}/ChecklistFiles?id=${result.value}&highlightBlob=${blobData.blobId}`}
+                      className="hover:bg-gray-200 rounded-lg px-2 py-1 text-">
+                      <FontAwesomeIcon icon={extensionToIcon(getFileExtension(blobData.fileName))} className="mr-2" color="blue" />
+                      <span className="text-black">{blobData.fileName}</span>
                     </Link>
                   </p>
                 </div>
