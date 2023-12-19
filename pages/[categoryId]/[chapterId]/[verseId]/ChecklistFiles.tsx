@@ -180,6 +180,8 @@ const ChecklistFiles: React.FC = () => {
                                     currentIndex={i}
                                     filename={blob.fileName}
                                     removeFileByIndex={() => removeFileFromChecklist(i, j)}
+                                    canSave={() => setIsUploading(false)}
+                                    
                                 />
                             ))
                         )

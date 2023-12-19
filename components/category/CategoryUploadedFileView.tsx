@@ -13,12 +13,13 @@ interface UploadedFileViewProps {
     filename: string;
     currentIndex: number;
     removeFileByIndex: (index: number) => void;
+    canSave: () => void ;
 }
 interface ResponseTest {
     data: string;
 }
 
-export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ fileId, filename, currentIndex, removeFileByIndex }) => {
+export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ fileId, filename, currentIndex, removeFileByIndex, canSave }) => {
     const MaxFileNameLength = 15;
     const FilenameValidation =
         filename.length > MaxFileNameLength
@@ -47,6 +48,10 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
     const { fetchGET } = useFetchWithAccessToken();
+    function RemoveFile(currentIndex){
+        removeFileByIndex(currentIndex);
+        canSave();
+    }
 
     async function DownloadFile() {
         try {
@@ -80,7 +85,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
             className='bg-white border-[#3788FD] border-[3px] h-[136px] w-[122px] rounded-md flex flex-col relative'
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={DownloadFile}
+            
             style={{
                 backgroundColor: isHovered ? '#3788FD' : '#FFFFFF',
                 border: `3px solid ${isHovered ? '#FFFFFF' : '#3788FD'}`,
@@ -89,14 +94,14 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
             }}
         >
             {!canEditUploadStatusRole.includes(role) ? true :
-                <button onClick={() => removeFileByIndex(currentIndex)}>
+                <button onClick={() => RemoveFile(currentIndex)}>
                     <div className='relative mr-[-8px] mt-[-10px]'>
                         <FontAwesomeIcon className='text-white text-[20px] absolute top-0 right-0 ' icon={faCircle} />
                         <FontAwesomeIcon className='text-[#FF0000] text-[20px] absolute top-0 right-0 ' icon={faCircleXmark} />
                     </div>
                 </button>
             }
-            <div className='flex flex-1 items-center justify-center'>
+            <div onClick={DownloadFile} className='flex flex-1 items-center justify-center'>
                 <Button
                     onClick={DownloadFile}
                     type='link'
