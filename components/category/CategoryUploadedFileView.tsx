@@ -77,10 +77,10 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
 
     return (
         <div>
-            <div className='relative z-10'>
+            <div className='relative'>
                 {!canEditUploadStatusRole.includes(role) ? true :
                     <button onClick={() => removeFileByIndex(currentIndex)}>
-                        <div className='relative mr-[-130px] mt-[-5px]'>
+                        <div className='relative mr-[-130px] mt-[-10px]'>
                             <FontAwesomeIcon className='text-white text-[20px] absolute top-0 right-0 ' icon={faCircle} />
                             <FontAwesomeIcon className='text-[#FF0000] text-[20px] absolute top-0 right-0 ' icon={faCircleXmark} />
                         </div>
