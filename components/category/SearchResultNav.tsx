@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useState, useEffect } from 'react';
 
@@ -19,6 +20,7 @@ const SearchResultNav = ({ searchResults }) => {
     };
 
     const [containerWidth, setContainerWidth] = useState(calculateWidth());
+    const router = useRouter();
 
     useEffect(() => {
         const handleResize = () => {
@@ -33,20 +35,23 @@ const SearchResultNav = ({ searchResults }) => {
     }, []);
 
     const handleClick = (result) => {
-        console.log(result);
+        // console.log("console log di category search", result);
         if (result.type == 'Category') {
             // <Link href={`/${result.value}`}/>
-            window.location.href = `/${result.value}`;
+            router.push(`/${result.value}`);
         }
         else if (result.type == 'First Sub-Category') {
             // <Link href={`/${result.value}/${result.firstSubCategoryId}`} />
-            window.location.href = `/${result.value}/${result.firstSubCategoryId}`;
+            // window.location.href = `/${result.value}/${result.firstSubCategoryId}`;
+            router.push(`/${result.value}/${result.firstSubCategoryId}`);
         }
         if (result.type == 'Second Sub-Category') {
             // <Link href={`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`} />
-            window.location.href = `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`;
+            // window.location.href = `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`;
+            router.push(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
         }
     }
+    // console.log("ini halaman search category, ", searchResults);
 
     return (
         <div className='fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg'
