@@ -181,6 +181,8 @@ const VersePage: Page = () => {
                                 isSaving={isSaving}
                                 canSave={() => 
                                     setIsUploading(false) }
+                                isSavingVoid={() => setIsSaving(false)}
+                                setIsUploading={() => setIsUploading(true)}
                             />
                         </div>
                     )
