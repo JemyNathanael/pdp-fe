@@ -8,14 +8,14 @@ import { CategoryUploadedFileView } from '@/components/category/CategoryUploaded
 import { useRouter } from 'next/router';
 import { CategoryButton } from '@/components/category/CategoryButton';
 import { Authorize } from '@/components/Authorize';
-import { Row, Upload } from 'antd';
+import { Row, Upload, message } from 'antd';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import useSWR, { mutate } from 'swr';
 import { v4 as uuidv4 } from 'uuid';
 import { BackendApiUrl, GetChecklistList } from '@/functions/BackendApiUrl';
 import { useSession } from 'next-auth/react';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
-import { RcFile } from 'antd/es/upload';
+import { RcFile, UploadFile } from 'antd/es/upload';
 
 
 
@@ -53,6 +53,7 @@ const ChecklistFiles: React.FC = () => {
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
     const verseId = router.query['verseId']?.toString() ?? '';
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
 
     const isRoleGrantedEditUploadStatus = canEditUploadStatusRole.includes(role) ? true : false;
     const { fetchPUT, fetchGET } = useFetchWithAccessToken();
@@ -62,6 +63,7 @@ const ChecklistFiles: React.FC = () => {
     const currChecklist = checklistData?.checklistList.find(item => item.id === id);
     const blobList = currChecklist?.blobList ?? [];
     const [tempData, setTempData] = useState<BlobListModel[]>(currChecklist?.blobList ?? []);
+    const [isUploading, setIsUploading] = useState<boolean>(true);
 
     function navigateBackToVerse() {
         router.back();
@@ -84,6 +86,7 @@ const ChecklistFiles: React.FC = () => {
                     uploadStatusId: checklist.uploadStatusId,
                     blobList: tempFiles,
                 }
+                setTempData(tempFiles);
                 return newChecklist
             })
 
@@ -91,10 +94,21 @@ const ChecklistFiles: React.FC = () => {
         }
     }
 
+    const isValidFile = file => {
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'xlx', 'doc', 'xlsx', 'docx'];
+        const extension = file.name.split('.').pop().toLowerCase();
+        return imageExtensions.includes(extension);
+    };
+
+    const onRemove = (file: RcFile) => {
+        const newFileList = fileList.filter((item) => item.uid !== file.uid);
+        setFileList(newFileList);
+    };
 
     useEffect(() => {
-        setFiles(checklistData?.checklistList.filter(item => item.id == id))
-    }, [checklistData?.checklistList, id]);
+        setFiles(checklistData?.checklistList.filter(item => item.id == id)),
+        setTempData(currChecklist?.blobList ?? []);
+    }, [checklistData?.checklistList, id, currChecklist]);
 
     const handleFileUpload = async (index: number) => {
         const fileExt = tempData[index]?.fileName?.split('.').pop();
@@ -166,6 +180,8 @@ const ChecklistFiles: React.FC = () => {
                                     currentIndex={i}
                                     filename={blob.fileName}
                                     removeFileByIndex={() => removeFileFromChecklist(i, j)}
+                                    canSave={() => setIsUploading(false)}
+                                    
                                 />
                             ))
                         )
@@ -178,16 +194,27 @@ const ChecklistFiles: React.FC = () => {
                             {isRoleGrantedEditUploadStatus &&
                                 <div className='flex-1' style={{ maxWidth: '150px' }}>
                                     <Upload name='File'
+                                        fileList={fileList}
+                                        onRemove={onRemove}
                                         beforeUpload={(file) => {
-                                            handleChange(file, tempData);
-                                            return false;
+                                            if (!isValidFile(file)) {
+                                                message.error('You can only upload files with jpg, jpeg, png, pdf, xlx, doc, xlsx, or docx format!');
+                                                return false;
+                                            }
+                                            else {
+                                                handleChange(file, tempData);
+                                                setIsUploading(false);
+                                                setFileList([...fileList, file]);
+                                                return false;
+                                            }
+
                                         }}
                                         defaultFileList={[]}>
-                                        <CategoryButton text='Upload File' mode='outlined' className='px-8' />
+                                        <CategoryButton disabled={false} text='Upload File' mode='outlined' className='px-8' />
                                     </Upload>
                                 </div>
                             }
-                            <CategoryButton text='Save' className='px-9' style={{ padding: '10px 0', maxHeight: '41px', marginLeft: '20px' }} onClick={handleSave}  />
+                            <CategoryButton disabled={isUploading} text='Save' className='px-9' style={{ padding: '10px 0', maxHeight: '41px', marginLeft: '20px' }} onClick={handleSave}  />
                         </Row>
 
                     </div>
