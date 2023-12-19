@@ -13,12 +13,13 @@ interface UploadedFileViewProps {
     filename: string;
     currentIndex: number;
     removeFileByIndex: (index: number) => void;
+    canSave: () => void ;
 }
 interface ResponseTest {
     data: string;
 }
 
-export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ fileId, filename, currentIndex, removeFileByIndex }) => {
+export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ fileId, filename, currentIndex, removeFileByIndex, canSave }) => {
     const MaxFileNameLength = 15;
     const FilenameValidation =
         filename.length > MaxFileNameLength
@@ -47,6 +48,10 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
     const { fetchGET } = useFetchWithAccessToken();
+    function RemoveFile(currentIndex){
+        removeFileByIndex(currentIndex);
+        canSave();
+    }
 
     async function DownloadFile() {
         try {
@@ -79,7 +84,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
         <div>
             <div className='relative'>
                 {!canEditUploadStatusRole.includes(role) ? true :
-                    <button onClick={() => removeFileByIndex(currentIndex)}>
+                    <button onClick={() => RemoveFile(currentIndex)}>
                         <div className='relative mr-[-130px] mt-[-10px]'>
                             <FontAwesomeIcon className='text-white text-[20px] absolute top-0 right-0 ' icon={faCircle} />
                             <FontAwesomeIcon className='text-[#FF0000] text-[20px] absolute top-0 right-0 ' icon={faCircleXmark} />
