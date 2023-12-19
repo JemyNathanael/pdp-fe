@@ -259,6 +259,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                                         currentIndex={i}
                                                         filename={file.fileName}
                                                         removeFileByIndex={() => removeFileByIndex(i)}
+                                                        canSave={() => canSave()}
                                                     />
                                                 </div>
                                             )

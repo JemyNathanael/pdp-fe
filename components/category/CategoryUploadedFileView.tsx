@@ -13,12 +13,13 @@ interface UploadedFileViewProps {
     filename: string;
     currentIndex: number;
     removeFileByIndex: (index: number) => void;
+    canSave: () => void ;
 }
 interface ResponseTest {
     data: string;
 }
 
-export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ fileId, filename, currentIndex, removeFileByIndex }) => {
+export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ fileId, filename, currentIndex, removeFileByIndex, canSave }) => {
     const MaxFileNameLength = 15;
     const FilenameValidation =
         filename.length > MaxFileNameLength
@@ -47,6 +48,10 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
     const { fetchGET } = useFetchWithAccessToken();
+    function RemoveFile(currentIndex){
+        removeFileByIndex(currentIndex);
+        canSave();
+    }
 
     async function DownloadFile() {
         try {
@@ -76,66 +81,68 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     }
 
     return (
-        <div
-            className='bg-white border-[#3788FD] border-[3px] h-[136px] w-[122px] rounded-md flex flex-col relative'
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={DownloadFile}
-            style={{
-                backgroundColor: isHovered ? '#3788FD' : '#FFFFFF',
-                border: `3px solid ${isHovered ? '#FFFFFF' : '#3788FD'}`,
-                boxShadow: isHovered ? '0 20px 40px rgba(0, 0, 0, 0.2)' : 'none',
-                transition: 'box-shadow 0.3s',
-            }}
-        >
-            {!canEditUploadStatusRole.includes(role) ? true :
-                <button onClick={() => removeFileByIndex(currentIndex)}>
-                    <div className='relative mr-[-8px] mt-[-10px]'>
-                        <FontAwesomeIcon className='text-white text-[20px] absolute top-0 right-0 ' icon={faCircle} />
-                        <FontAwesomeIcon className='text-[#FF0000] text-[20px] absolute top-0 right-0 ' icon={faCircleXmark} />
-                    </div>
-                </button>
-            }
-            <div className='flex flex-1 items-center justify-center'>
-                <Button
-                    onClick={DownloadFile}
-                    type='link'
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                >
-                    {isHovered ? (
-                        <DownloadOutlined style={{ fontSize: '45px', color: '#FFFFFF' }} />
-                    ) : (
-                        <FontAwesomeIcon
-                            icon={icon}
-                            className='text-[#3788FD]'
-                            size={'3x'}
-                        />
-                    )}
-                </Button>
+        <div>
+            <div className='relative'>
+                {!canEditUploadStatusRole.includes(role) ? true :
+                    <button onClick={() => RemoveFile(currentIndex)}>
+                        <div className='relative mr-[-130px] mt-[-10px]'>
+                            <FontAwesomeIcon className='text-white text-[20px] absolute top-0 right-0 ' icon={faCircle} />
+                            <FontAwesomeIcon className='text-[#FF0000] text-[20px] absolute top-0 right-0 ' icon={faCircleXmark} />
+                        </div>
+                    </button>
+                }
             </div>
-            {!isHovered ? (
-                <div className='text-xs text-center text-[#3788FD] p-1 border-[#3788FD] border-t-[3px]'>
-                    <button onClick={DownloadFile}>
-                        {FilenameValidation}
-                    </button>
-                </div>
-            ) : (
-                <div className='text-xs text-center text-[#FFFFFF] p-1 border-[#FFFFFF] border-t-[3px]'>
-                    <button
+            <div
+                className='bg-white border-[#3788FD] border-[3px] h-[136px] w-[122px] rounded-md flex flex-col relative'
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                onClick={DownloadFile}
+                style={{
+                    backgroundColor: isHovered ? '#3788FD' : '#FFFFFF',
+                    border: `3px solid ${isHovered ? '#FFFFFF' : '#3788FD'}`,
+                    boxShadow: isHovered ? '0 20px 40px rgba(0, 0, 0, 0.2)' : 'none',
+                    transition: 'box-shadow 0.3s',
+                }}
+            >
+                <div className='flex flex-1 items-center justify-center'>
+                    <Button
                         onClick={DownloadFile}
-                        style={{
-                            borderColor: '#3788FD',
-                            padding: '4px',
-                            borderRadius: '5px',
-                            color: isHovered ? '#FFFFFF' : '#3788FD',
-                            cursor: 'pointer',
-                        }}
+                        type='link'
                     >
-                        {FilenameValidation}
-                    </button>
+                        {isHovered ? (
+                            <DownloadOutlined style={{ fontSize: '45px', color: '#FFFFFF' }} />
+                        ) : (
+                            <FontAwesomeIcon
+                                icon={icon}
+                                className='text-[#3788FD]'
+                                size={'3x'}
+                            />
+                        )}
+                    </Button>
                 </div>
-            )}
+                {!isHovered ? (
+                    <div className='text-xs text-center text-[#3788FD] p-1 border-[#3788FD] border-t-[3px]'>
+                        <button onClick={DownloadFile}>
+                            {FilenameValidation}
+                        </button>
+                    </div>
+                ) : (
+                    <div className='text-xs text-center text-[#FFFFFF] p-1 border-[#FFFFFF] border-t-[3px]'>
+                        <button
+                            onClick={DownloadFile}
+                            style={{
+                                borderColor: '#3788FD',
+                                padding: '4px',
+                                borderRadius: '5px',
+                                color: isHovered ? '#FFFFFF' : '#3788FD',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            {FilenameValidation}
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
