@@ -183,7 +183,7 @@ const ChecklistFiles: React.FC = () => {
                                     filename={blob.fileName}
                                     removeFileByIndex={() => removeFileFromChecklist(i, j)}
                                     canSave={() => setIsUploading(false)}
-                                    
+                                    highlightedBlob={router.query['highlightBlob']?.toString() ?? ''}
                                 />
                             ))
                         )
