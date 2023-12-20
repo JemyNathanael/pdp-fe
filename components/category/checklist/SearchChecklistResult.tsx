@@ -64,8 +64,8 @@ const SearchChecklistResult = ({searchResults}) => {
     if(checklistElement) {
       checklistElement.scrollIntoView({
           behavior: "smooth",
-          block: "start",
-          inline: "nearest"
+          block: "center",
+          inline: "start",
         });
     }
   }

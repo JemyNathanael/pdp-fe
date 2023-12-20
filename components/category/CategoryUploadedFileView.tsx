@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile, faFileExcel, faFileImage, faFilePdf, faFileWord, faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { IconDefinition, faCircle } from '@fortawesome/free-solid-svg-icons';
@@ -49,15 +49,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
     const { fetchGET } = useFetchWithAccessToken();
-    const [isHighlighted, setIsHighlighted] = useState(false);
-
-    useEffect(() => {
-        setIsHighlighted(highlightedBlob === fileId);
-        const timeoutId = setTimeout(() => {
-            setIsHighlighted(false);
-        }, 2000);
-        return () => clearTimeout(timeoutId);
-    }, [highlightedBlob, fileId]);
+    const [isHighlighted, setIsHighlighted] = useState<boolean>(highlightedBlob === fileId);
 
     function RemoveFile(currentIndex){
         removeFileByIndex(currentIndex);
@@ -91,6 +83,11 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
         }
     }
 
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+        setIsHighlighted(false);
+    }
+
     return (
         <div>
             <div 
@@ -108,7 +105,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
             </div>
             <div
                 className='bg-white border-[#3788FD] border-[3px] h-[136px] w-[122px] rounded-md flex flex-col relative'
-                onMouseEnter={() => setIsHovered(true)}
+                onMouseEnter={() => handleMouseEnter()}
                 onMouseLeave={() => setIsHovered(false)}
                 onClick={DownloadFile}
                 style={{
