@@ -181,11 +181,14 @@ const VersePage: Page = () => {
                                 blobList={checklist.blobList}
                                 removeFileFromChecklist={removeFileFromChecklist}
                                 checklistIndex={i}
+                                checklistLength={checklistData?.checklistList.length}
                                 dropdownOptions={uploadStatusDropdown}
                                 canUpdateStatus={isRoleGrantedEditUploadStatus}
                                 isSaving={isSaving}
                                 canSave={() =>
                                     setIsUploading(false)}
+                                isSavingVoid={() => setIsSaving(false)}
+                                setIsUploading={() => setIsUploading(true)}
                             />
                         </div>
                     )

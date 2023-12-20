@@ -8,7 +8,7 @@ import { CategoryUploadedFileView } from '@/components/category/CategoryUploaded
 import { useRouter } from 'next/router';
 import { CategoryButton } from '@/components/category/CategoryButton';
 import { Authorize } from '@/components/Authorize';
-import { Row, Upload, message } from 'antd';
+import { Row, Upload, message, notification } from 'antd';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
 import useSWR, { mutate } from 'swr';
 import { v4 as uuidv4 } from 'uuid';
@@ -120,6 +120,7 @@ const ChecklistFiles: React.FC = () => {
             });
         }
     }
+    
 
     const handleSave = async () => {
         if (tempData) {
@@ -133,17 +134,36 @@ const ChecklistFiles: React.FC = () => {
                 fileDatas: tempData.map((item) => ({
                     FileId: item.id,
                     FileName: item.fileName,
-                    ContentType: item.contentType
-                }))
+                    ContentType: item.contentType,
+                })),
             });
+    
             if (response) {
+                setFileList([]);
+                setTempData([]);
                 mutate(GetChecklistList(verseId));
+                showSuccessNotification();
             }
         }
-    }
+    };
+    
 
-
-
+    const showSuccessNotification = () => {
+        notification.success({
+            message: 'Success',
+            placement: 'bottomRight',
+            className: 'custom-success-notification',
+            style: {
+                backgroundColor: '#3788FD',
+                opacity: 0.9,
+                color: 'white',
+                width: 'fit-content',
+                top: '-60px',
+            },
+            duration: 2,
+        });
+    };
+    
     const handleChange = (file: RcFile, blobData: BlobListModel[]) => {
         const fileId = uuidv4();
 
@@ -181,7 +201,7 @@ const ChecklistFiles: React.FC = () => {
                                     filename={blob.fileName}
                                     removeFileByIndex={() => removeFileFromChecklist(i, j)}
                                     canSave={() => setIsUploading(false)}
-                                    
+                                    highlightedBlob={router.query['highlightBlob']?.toString() ?? ''}
                                 />
                             ))
                         )

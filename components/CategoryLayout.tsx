@@ -205,7 +205,7 @@ const CategoryLayout: React.FC<{
                     padding: '10px',
                     position: 'fixed',
                     width: '100%',
-                    zIndex: 1,
+                    zIndex: 2,
                 }}>
                     <div className="flex items-center">
                         <div className="hidden md:block logo" onClick={() => router.push('/')} style={{ flexGrow: 1 }}>

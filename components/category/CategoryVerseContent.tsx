@@ -25,11 +25,14 @@ interface CategoryVerseContentProps {
     title: string;
     blobList: BlobListModel[];
     checklistIndex: number;
+    checklistLength: number | undefined;
     dropdownOptions: DefaultOptionType[];
     canUpdateStatus: boolean;
     removeFileFromChecklist: (checklistIndex: number, fileIndex: number) => void;
     isSaving: boolean;
     canSave: () => void;
+    isSavingVoid: () => void;
+    setIsUploading: () => void;
 }
 
 interface UpdateUploadStatusModel {
@@ -41,7 +44,7 @@ interface ResponseTest {
     data: string;
 }
 
-export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving, canSave }) => {
+export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, checklistLength, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving, canSave, isSavingVoid, setIsUploading }) => {
     const router = useRouter();
     const { fetchPUT, fetchGET } = useFetchWithAccessToken();
 
@@ -105,10 +108,14 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
             })),
         });
         if (response) {
+            setFileList([]);
+            setTempData([]);
             mutate(GetChecklistList(verseId));
         }
-
-    }, [checklistId, fetchPUT, tempData, verseId]);
+        showSuccessNotification(checklistId);
+        isSavingVoid();
+        setIsUploading();
+    }, [checklistId, fetchPUT, isSavingVoid, setIsUploading, showSuccessNotification, tempData, verseId]);
 
     useEffect(() => {
         setSelectOptions(dropdownOptions);
@@ -158,7 +165,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     };
 
 
-    const items: MenuProps['items'] = [
+     const items: MenuProps['items'] = [
         {
             key: 'update',
             label: 'Update Checklist',
@@ -169,12 +176,15 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
             label: 'Add Checklist',
             onClick: () => setAddModal(true)
         },
-        {
+    ];
+    
+    if (checklistLength && checklistLength > 1) {
+        items.push({
             key: 'delete',
             label: 'Delete',
             onClick: () => setDeleteModal(true)
-        },
-    ]
+        });
+    }
 
     const handleCancel = () => {
         setUpdateModal(false);
@@ -237,7 +247,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
                             <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>
-                                <div className='py-1'>
+                                <div className='py-1' id={checklistId}>
                                     <p style={{ whiteSpace: 'pre-line', textAlign: 'justify' }}>{title}</p>
                                 </div>
                             </Dropdown>
@@ -269,6 +279,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                                         filename={file.fileName}
                                                         removeFileByIndex={() => removeFileByIndex(i)}
                                                         canSave={() => setCanSave()}
+                                                        highlightedBlob={''}
                                                     />
                                                 </div>
                                             )
