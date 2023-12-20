@@ -143,6 +143,7 @@ const ChecklistFiles: React.FC = () => {
                 setTempData([]);
                 mutate(GetChecklistList(verseId));
                 showSuccessNotification();
+                setIsUploading(true);
             }
         }
     };
