@@ -62,6 +62,7 @@ const VersePage: Page = () => {
     const { data: checklistData } = useSWR<ChecklistModel>(GetChecklistList(verseId), swrFetcher);
     const { data: dropdownUploadStatusData } = useSWR<UploadStatusDropdownModel[]>(BackendApiUrl.getUploadStatus, swrFetcher);
     const { data: indexData} = useSWR<Indexing>(GetChecklistTitle(verseId), swrFetcher);
+    const [isUploading, setIsUploading] = useState<boolean>(true);
 
     const canEditUploadStatusRole = ['Admin', 'Auditor', 'Uploader'];
     const { data: session } = useSession();
@@ -178,6 +179,10 @@ const VersePage: Page = () => {
                                 dropdownOptions={uploadStatusDropdown}
                                 canUpdateStatus={isRoleGrantedEditUploadStatus}
                                 isSaving={isSaving}
+                                canSave={() => 
+                                    setIsUploading(false) }
+                                isSavingVoid={() => setIsSaving(false)}
+                                setIsUploading={() => setIsUploading(true)}
                             />
                         </div>
                     )
@@ -185,7 +190,7 @@ const VersePage: Page = () => {
             </div>
             {isRoleGrantedEditUploadStatus &&
                 <div className='flex flex-row-reverse mr-5'>
-                    <CategoryButton text='Save' className='px-10' onClick={() => setIsSaving(true)} />
+                    <CategoryButton disabled={isUploading} text='Save' className='px-10' onClick={() => setIsSaving(true)} />
                 </div>
             }
         </Authorize>
