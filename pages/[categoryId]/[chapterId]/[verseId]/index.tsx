@@ -154,7 +154,7 @@ const VersePage: Page = () => {
     return (
         <Authorize>
             <Title>Ayat</Title>
-            <div className=''>
+            <div className='mb-10'>
                 <Row>
                     <Link href={router.asPath.replace(verseId, "")}>
                         <p style={{ fontSize: 'large', fontWeight: 600, color: "grey" }}>{indexData?.subCategoryTitle} </p>

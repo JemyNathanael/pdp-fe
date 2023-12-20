@@ -64,11 +64,8 @@ const SearchChecklistResult = ({searchResults}) => {
     if (checklistElement) {
       const navbarHeight = 10;
       const paddingAdjustment = -95; // You can adjust this value to fine-tune the position
-    
-      // Calculate the target scroll position
       const targetScrollPosition = checklistElement.getBoundingClientRect().top + window.scrollY - navbarHeight + paddingAdjustment;
-    
-      // Scroll to the target position with smooth behavior
+
       window.scrollTo({
         top: targetScrollPosition,
         behavior: "smooth",
