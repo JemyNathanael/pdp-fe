@@ -15,22 +15,24 @@ export const BackendApiUrl = {
     updateChecklist: baseUrl + '/api/v1/Checklist/update-checklist',
     addChecklist: baseUrl + '/api/v1/Checklist',
     deleteChecklist: baseUrl + '/api/v1/Checklist',
-    getChapters: baseUrl + '/api/v1/category',
-    
+    getChecklistDescription: baseUrl + '/api/v1/Checklist/get-description',
     getHomeSearch: baseUrl + '/api/v1/Home',
+    getCategorySearch: baseUrl + '/api/v1/Category/search',
+    getChecklistSearch: baseUrl + '/api/v1/Checklist/search',
     
     createSubCategory: baseUrl + '/api/v1/category',
     updateSubCategory: baseUrl + '/api/v1/category',
     deleteSubCategory: baseUrl + '/api/v1/category',
     getSubCategory: baseUrl + '/api/v1/category',
     getChecklistTitle: baseUrl + '/api/v1/category/get-title',
+    getProgress: baseUrl + '/api/v1/category/get-progress',
     getSubCategoryList: baseUrl + '/api/Dropdown/sub-category-list',
-
     uploadFile: baseUrl + '/api/v1/Blob/upload-file',
     uploadFileInformation: baseUrl + '/api/v1/Blob/upload-file-information',
     presignedPutObject:baseUrl + '/api/v1/Blob/presigned-put-object',
     saveFile:baseUrl + '/api/v1/Checklist/save-file',
-    getInformation: baseUrl + '/api/v1/category/get-chapter'
+    getInformation: baseUrl + '/api/v1/category/get-chapter',
+    getDownloadFile:baseUrl + '/api/v1/Checklist/get-download-file',
 }
 
 export function GetUser(
@@ -93,6 +95,14 @@ export function GetChecklistTitle(verseId: string) {
     return BackendApiUrl.getChecklistTitle + '?' + param.toString();
 }
 
+export function GetChecklistDescription(verseId: string) {
+    const param = new URLSearchParams();
+
+    param.append('verseId', verseId.toString());
+
+    return BackendApiUrl.getChecklistDescription + '?' + param.toString();
+}
+
 export function GetInformation(categoryId : string){
     const param = new URLSearchParams();
 
@@ -100,4 +110,11 @@ export function GetInformation(categoryId : string){
 
     return BackendApiUrl.getInformation + '?' + param.toString();
 
+}
+export function GetProgress(categoryId: string) {
+    const param = new URLSearchParams();
+
+    param.append('categoryId', categoryId.toString());
+
+    return BackendApiUrl.getProgress + '?' + param.toString();
 }

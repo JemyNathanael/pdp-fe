@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Head from 'next/head';
-import { ConfigProvider, Layout } from "antd";
+import { ConfigProvider, Layout, Tooltip } from "antd";
 import { faArrowRightFromBracket, faUserGear } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
@@ -11,6 +11,11 @@ import { useSwrFetcherWithAccessToken } from "@/functions/useSwrFetcherWithAcces
 import { GetCategoryDetail } from "@/functions/BackendApiUrl";
 import useSWR from 'swr';
 import { Authorize } from "./Authorize";
+import SearchResultNav from "./category/SearchResultNav";
+import SearchCategoryNavBar from "./category/SearchCategoryNavBar";
+import Link from "next/link";
+import SearchChecklistNavBar from "./category/checklist/SearchChecklistNavBar";
+import SearchChecklistResult from "./category/checklist/SearchChecklistResult";
 
 const { Sider, Content } = Layout;
 
@@ -64,20 +69,33 @@ const CategoryLayout: React.FC<{
 
     const [firstSubCategories, setFirstSubCategories] = useState<CategorySidebarItemsModel[]>()
 
+    const [marginLeftValue, setMarginLeftValue] = useState<string>('300px');
+
     const router = useRouter();
     const categoryId = router.query['categoryId']?.toString() ?? '';
 
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const displayUserName = session?.user?.name;
 
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data } = useSWR<CategoryDetailModel>(GetCategoryDetail(categoryId), swrFetcher);
 
     const userRole = session?.user?.['role'][0];
+    const [searchResults, setSearchResults] = useState([]); // Search Bar Result
+    const [selectedChapterIndex, setSelectedChapterIndex] = useState<number>(0);
     const isAdmin = userRole === "Admin";
+    const isChecklistPage = router.pathname === '/[categoryId]/[chapterId]/[verseId]';
     const goToManageUserPage = () => {
         router.push('/ManageUser');
     }
+
+    const handleResize = () => {
+        if (window.innerWidth < 1024) {
+            setMarginLeftValue('0');
+        } else {
+            setMarginLeftValue('300px');
+        }
+    };
 
     useEffect(() => {
         if (data) {
@@ -102,13 +120,35 @@ const CategoryLayout: React.FC<{
             setFirstSubCategories(firstSubCategoriesItem);
         }
     }, [data, router.query])
-
+    // console.log("first category : ", firstSubCategories)
     useEffect(() => {
         if (firstSubCategories) {
             const itemsCollapseStateMap = firstSubCategories.map(() => false);
+
+            const categoryIdFromUrl = router.query['categoryId']?.toString() ?? '';
+            const firstSubCategoryIdFromUrl = router.query['chapterId']?.toString() ?? '';
+            const secondSubCategoryIdFromUrl = router.query['verseId']?.toString() ?? '';
+    
+            const selectedChapterIndex = firstSubCategories.findIndex(
+                (chapter) => chapter.routePath === `/${categoryIdFromUrl}/${firstSubCategoryIdFromUrl}`
+            );
+
+            const shouldKeepFirstSubCategoryExpanded = !!secondSubCategoryIdFromUrl;
+    
+            setSelectedChapterIndex(selectedChapterIndex);
+
+            itemsCollapseStateMap[selectedChapterIndex] = shouldKeepFirstSubCategoryExpanded;
             setChaptersExpandedState(itemsCollapseStateMap);
         }
-    }, [firstSubCategories])
+    }, [firstSubCategories, router.query]);
+
+    useEffect(() => {
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     function changeCollapseStatusByIndex(index: number, state: boolean) {
         const tempStateMap = chaptersExpandedState;
@@ -134,18 +174,14 @@ const CategoryLayout: React.FC<{
         }
     }
 
-    function onClickLogout() {
-        nProgress.start();
-        signOut({
-            callbackUrl: '/api/end-session'
-        });
+    const handleLogout = () => {
+        if (status === 'authenticated') {
+            nProgress.start();
+            signOut({
+                callbackUrl: '/api/end-session',
+            });
+        }
     }
-
-    const logoutButton = () => (
-        <button onClick={onClickLogout} className="pl-4 mt-1">
-            <FontAwesomeIcon className="mr-2" icon={faArrowRightFromBracket} color="white" fontSize="18px"></FontAwesomeIcon>
-        </button>
-    )
 
     return (
         <ConfigProvider theme={{
@@ -164,71 +200,87 @@ const CategoryLayout: React.FC<{
                     <link key="favicon" rel="icon" href="/favicon.ico" />
                 </Head>
 
-                {/* <Header className="bg-[#3788FD] flex items-center" style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", padding: '16px', margin: 0, position: 'fixed', width: '100%', zIndex: 1, height: '90px' }}>
-                    <div className="flex flex-1 items-center">
-
-                        <div className="p-6 flex flex-1 flex-row-reverse items-center">
-
-                            {logoutButton()}
-                            {isAdmin &&
-                                <button onClick={goToManageUserPage} style={{ color: 'white', fontSize: '18px', paddingRight: '4px' }}>
-                                    <FontAwesomeIcon icon={faUserGear} />
-                                </button>
-                            }
-                            <div className="mr-6 text-white font-semibold" style={{fontSize:'18px'}}>
-                                Halo, {displayUserName}
-                            </div>
-                        </div>
-                    </div>
-                </Header> */}
-
                 <nav className="bg-[#3788FD]" style={{
                     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                    padding: '16px',
+                    padding: '10px',
                     position: 'fixed',
                     width: '100%',
-                    zIndex: 1,
+                    zIndex: 2,
                 }}>
-                    <div className="flex flex-1 items-center">
-                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '120px', margin: '8px' }} />
+                    <div className="flex items-center">
+                        <div className="hidden md:block logo" onClick={() => router.push('/')} style={{ flexGrow: 1 }}>
+                            <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin: '0px 70px 0px 40px' }} className="cursor-pointer" />
                         </div>
-                        <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-4 items-center">
-                            <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 mr-2 items-center">
-                                <ul className="lg:flex space-x-4 items-center">
-                                    <li className="flex items-center">
-                                        <div className="text-white cursor-pointer font-semibold pr-7 fontWeight: '700', paddingLeft:'2px'" style={{fontSize:'16px'}}>
-                                            {`Halo, ${displayUserName}`}
-                                        </div>
-                                        {isAdmin && (
-                                            <button
-                                                onClick={goToManageUserPage}
-                                                className="text-white text-lg pr-3 ml-1 mr-1"
-                                            >
-                                                <FontAwesomeIcon icon={faUserGear} />
-                                            </button>
-                                        )}
-                                        <button
-                                            onClick={logoutButton}
-                                            className="text-white text-lg pl-4 mt-1"
-                                        >
-                                            <FontAwesomeIcon className="mr-1 pb-0.5" icon={faArrowRightFromBracket} />
-                                        </button>
-                                    </li>
-                                </ul>
+                        <div className="flex justify-between w-full">
+                            {isChecklistPage ? (
+                                <div style={{ maxWidth: '100%' }} className="mr-2">
+                                    <SearchChecklistNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
+                                    <SearchChecklistResult searchResults={searchResults} />
+                                </div>
+                            ) : (
+                                <div style={{ maxWidth: '100%' }} className="mr-2">
+                                    <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
+                                    <SearchResultNav searchResults={searchResults} />
+                                </div>
+                            )}
+                            <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 items-center">
+                                <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 items-center">
+                                    <ul className="lg:flex space-x-4 items-center">
+                                        <li className="flex items-center">
+                                            <div className="text-white text-base hidden lg:block cursor-pointer font-semibold fontWeight: '600'">
+                                                {`Halo, ${displayUserName}`}
+                                            </div>
+                                            {isAdmin && (
+                                                <div className='ml-8'>
+                                                    <button
+                                                        onClick={goToManageUserPage}
+                                                        className="text-white"
+                                                    >
+                                                        <div style={{
+                                                            padding: '4px 8px 3px',
+                                                            fontSize: '20px',
+                                                            fontWeight: '600',
+                                                        }}>
+                                                            <FontAwesomeIcon icon={faUserGear} />
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            )}
+                                            <div className='pl-6'>
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="text-white"
+                                                >
+                                                    <div style={{
+                                                        padding: '4px 8px 3px',
+                                                        marginRight: '8.5px',
+                                                        fontSize: '20px',
+                                                        fontWeight: '600',
+                                                    }}>
+                                                        <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </nav>
 
                 <Layout>
-                    <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000 }}>
+                    <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000, position: 'fixed', height: '100vh', overflowY: 'auto' }}>
                         <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src='adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '160px', margin: '10px', padding:'8px' }} />
+                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px', margin: 'auto' }} className="cursor-pointer" />
                         </div>
-                        <p className="p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
-                            {data?.title}
-                        </p>
+                        <Tooltip title={data?.title} placement="right">
+                            <Link href={`/${categoryId}`}>
+                                <p className="moveLeft p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
+                                    {data?.title}
+                                </p>
+                            </Link>
+                        </Tooltip>
                         <div className="m-4" style={{ backgroundColor: '##000000' }}>
                             {firstSubCategories &&
                                 firstSubCategories.map((firstSub, i) =>
@@ -240,6 +292,7 @@ const CategoryLayout: React.FC<{
                                         changeCollapseStatus={changeCollapseStatusByIndex}
                                         resetToggle={resetToggleFromButtonState}
                                         toggledFlag={toggledFromCollapseOrExpandAll}
+                                        selectedIndex = {selectedChapterIndex}
                                         currentIndex={i}
                                         key={i}
                                     />
@@ -251,7 +304,7 @@ const CategoryLayout: React.FC<{
                         </button>
                     </Sider>
 
-                    <Content className="p-7" style={{ paddingTop: 100 }}>
+                    <Content className="p-7" style={{ paddingTop: 130, marginLeft: marginLeftValue }}>
                         {children}
                     </Content>
                 </Layout>

@@ -1,4 +1,4 @@
-import { Dropdown, MenuProps, Select, Space } from "antd"
+import { Dropdown, MenuProps, Select, Space, message, notification } from "antd"
 import { CategoryUploadedFileView } from "./CategoryUploadedFileView";
 import { CategoryButton } from "./CategoryButton";
 import { useRouter } from "next/router";
@@ -10,13 +10,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import UpdateCheklistModal from "./UpdateChecklistModal";
 import AddChecklistModal from "../AddChecklistModal";
-import { RcFile } from "antd/es/upload";
+import { RcFile, UploadFile } from "antd/es/upload";
 import { useFetchWithAccessToken } from "@/functions/useFetchWithAccessToken";
 import { BackendApiUrl, GetChecklistList } from "@/functions/BackendApiUrl";
 import { BlobListModel } from "@/pages/[categoryId]/[chapterId]/[verseId]";
 import DeleteChecklistModal from "./DeleteChecklistModal";
 import { v4 as uuidv4 } from 'uuid';
 import { mutate } from "swr";
+import { useSession } from 'next-auth/react';
 
 interface CategoryVerseContentProps {
     checklistId: string,
@@ -28,6 +29,9 @@ interface CategoryVerseContentProps {
     canUpdateStatus: boolean;
     removeFileFromChecklist: (checklistIndex: number, fileIndex: number) => void;
     isSaving: boolean;
+    canSave: () => void;
+    isSavingVoid: () => void;
+    setIsUploading: () => void;
 }
 
 interface UpdateUploadStatusModel {
@@ -39,8 +43,7 @@ interface ResponseTest {
     data: string;
 }
 
-
-export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving }) => {
+export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving, canSave, isSavingVoid, setIsUploading }) => {
     const router = useRouter();
     const { fetchPUT, fetchGET } = useFetchWithAccessToken();
 
@@ -52,6 +55,34 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const [addModal, setAddModal] = useState<boolean>(false)
     const [deleteModal, setDeleteModal] = useState<boolean>(false)
     const [tempData, setTempData] = useState<BlobListModel[]>(blobList);
+
+
+    const canEditStatusRole = ['Admin', 'Auditor'];
+    const canSeeEllipsis = ['Admin', 'Reader'];
+    const canSeeDropdown = ['Admin', 'Reader'];
+    const { data: session } = useSession();
+    const role = session?.user?.['role'][0];
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const [notificationMap] = useState<Map<string, boolean>>(new Map());
+
+    const showSuccessNotification = (checklistId: string) => {
+        if (!notificationMap.get(checklistId)) {
+            notification.success({
+                message: 'Success',
+                description: '',
+                placement: 'bottomRight',
+                className: 'custom-success-notification',
+                style: {
+                    backgroundColor: '#3788FD',
+                    opacity: 0.9,
+                    color: 'white',
+                    width: 'fit-content',
+                    top: '-60px',
+                },
+                duration: 2
+            });
+        }
+    };
 
     const handleFileUpload = async (index: number) => {
         const fileExt = tempData[index]?.fileName?.split('.').pop();
@@ -70,25 +101,32 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
             fileDatas: tempData.map((item) => ({
                 FileId: item.id,
                 FileName: item.fileName,
-                ContentType: item.contentType
-            }))
+                ContentType: item.contentType,
+            })),
         });
+
         if (response) {
+            setFileList([]);
+            setTempData([]);
             mutate(GetChecklistList(verseId));
         }
-    }
+        showSuccessNotification(checklistId);
+        isSavingVoid();
+        setIsUploading();
+    };
 
-    if (isSaving) {
-        if (tempData) {
-            for (const [index, value] of tempData.entries()) {
-                if (!blobList.includes(value)) {
-                    handleFileUpload(index);
+    useEffect(() => {
+        if (isSaving) {
+            if (tempData) {
+                for (const [index, value] of tempData.entries()) {
+                    if (!blobList.includes(value)) {
+                        handleFileUpload(index);
+                    }
                 }
+                handleSave()
             }
-            handleSave()
         }
-    }
-
+    });
 
     useEffect(() => {
         setSelectOptions(dropdownOptions)
@@ -105,17 +143,23 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     }
 
     function navigateToChecklistPage() {
-        router.push(router.asPath + '/ChecklistFiles');
+        const id = checklistId;
+        const queryParams = { id: id };
+        router.push({
+            pathname: `${router.asPath}/ChecklistFiles/`,
+            query: queryParams,
+        });
     }
 
-    async function handleStatusChange(uploadStatusId: number) {
+    const handleStatusChange = async (uploadStatusId: number) => {
         const payload: UpdateUploadStatusModel = {
             ChecklistId: checklistId,
-            UploadStatusId: uploadStatusId
+            UploadStatusId: uploadStatusId,
         };
-
         await fetchPUT(BackendApiUrl.updateChecklistUploadStatus, payload);
-    }
+        showSuccessNotification(checklistId);
+    };
+
 
     const items: MenuProps['items'] = [
         {
@@ -143,17 +187,28 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
     const handleChange = (file: RcFile, tempData: BlobListModel[]) => {
         const fileId = uuidv4();
-
         const newFile = {
             id: fileId,
             fileName: file.name,
             originFileObj: file,
             contentType: file.type,
         };
-
+        canSave();
         setTempData([...tempData, newFile]);
         return tempData.length;
+
     }
+
+    const isValidFile = file => {
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'xlx', 'doc', 'xlsx', 'docx'];
+        const extension = file.name.split('.').pop().toLowerCase();
+        return imageExtensions.includes(extension);
+    };
+
+    const onRemove = (file: RcFile) => {
+        const newFileList = fileList.filter((item) => item.uid !== file.uid);
+        setFileList(newFileList);
+    };
 
     return (
         <>
@@ -172,19 +227,19 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                         defaultValue={uploadStatus}
                         options={selectOptions}
                         onChange={(selection) => handleStatusChange(selection)}
-                        disabled={!canUpdateStatus}
+                        disabled={!canEditStatusRole.includes(role)}
                     />
                 </div>
 
                 <div className='flex-1'>
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
-                            <Dropdown menu={{ items }} trigger={canUpdateStatus ? ['contextMenu'] : []}>
+                            <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>
                                 <div className='py-1'>
-                                    <p style={{ whiteSpace: 'pre-line' , textAlign: 'justify'}}>{title}</p>
+                                    <p style={{ whiteSpace: 'pre-line', textAlign: 'justify' }}>{title}</p>
                                 </div>
                             </Dropdown>
-                            {canUpdateStatus &&
+                            {canSeeEllipsis.includes(role) &&
                                 <div className="flex-1 text-right">
                                     <Dropdown menu={{ items }} trigger={['click']}>
                                         <a onClick={(e) => e.preventDefault()}>
@@ -207,9 +262,12 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
 
                                                 <div className='mr-8' key={i}>
                                                     <CategoryUploadedFileView
+                                                        fileId={file.id}
                                                         currentIndex={i}
                                                         filename={file.fileName}
                                                         removeFileByIndex={() => removeFileByIndex(i)}
+                                                        canSave={() => canSave()}
+                                                        highlightedBlob={''}
                                                     />
                                                 </div>
                                             )
@@ -220,14 +278,24 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                 }
                             </div>
                             <div className='flex flex-col'>
-                                <div className='flex-1'>
+                                <div className='flex-1' style={{ maxWidth: '150px' }}>
                                     {canUpdateStatus &&
                                         <Upload name="File"
+                                            fileList={fileList}
+                                            onRemove={onRemove}
                                             beforeUpload={(file) => {
-                                                handleChange(file, tempData);
-                                                return false;
+                                                if (!isValidFile(file)) {
+                                                    message.error('You can only upload files with jpg, jpeg, png, pdf, xlx, doc, xlsx, or docx format!');
+                                                    return false;
+                                                }
+                                                else {
+                                                    handleChange(file, tempData);
+                                                    setFileList([...fileList, file]);
+                                                    return false;
+                                                }
+
                                             }}>
-                                            <CategoryButton text='+ Upload File' mode='outlined' className='px-8' />
+                                            <CategoryButton disabled={false} text='Upload File' mode='outlined' className='px-8' />
                                         </Upload>
                                     }
 

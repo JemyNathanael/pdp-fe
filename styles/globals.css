@@ -13,6 +13,11 @@
   background: linear-gradient(45deg, #416a67, #019ba3);
 }
 
+.ant-float-btn {
+ box-shadow: none;
+}
+
+
 .categoryHome {
   border: solid white 1px;
   flex-grow: 1;
@@ -76,7 +81,7 @@
 
 .checklistColumn {
     display: table-cell;
-    //background-color: red; /*Optional*/
+    background-color: red; /*Optional*/
 }
 
 .roundedRectangleButton {
@@ -92,7 +97,7 @@
   font-size: 16px;
   margin: 10px 10px;
   border-radius: 4px;
-  //font-weight: bold;
+  font-weight: bold;
   position: absolute;
   right: 0;
 }
@@ -110,7 +115,7 @@
   font-size: 16px;
   margin: 10px 10px;
   border-radius: 4px;
-  //font-weight: bold;
+  font-weight: bold;
 }
 
 .file-list {
@@ -138,6 +143,75 @@
   color: red !important;
 }
 
-.ant-result-success .ant-result-icon>.anticon {
+.ant-result-success .ant-result-icon > .anticon {
   color: #3788FD !important;
+}
+
+.custom-scrollbar {
+  max-height: 70vh;
+  overflow-y: auto;
+
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #3788fd;
+  border-radius: 10px;
+}
+
+.moveLeft {
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  text-overflow: ellipsis;
+
+}
+
+.moveLeftSubcategory {
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  width: 200px;
+  text-overflow: ellipsis;
+}
+
+.ant-tooltip .ant-tooltip-inner {
+  min-height: 32px;
+  width: max-content;
+  padding: 6px 6px;
+  white-space: nowrap;
+  color: white;
+  text-align: start;
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 6px;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ant-tooltip-arrow {
+  visibility: hidden;
+}
+
+.custom-success-notification .ant-notification-notice-icon-success {
+  display: none;
+}
+
+.custom-success-notification .ant-notification-notice-close {
+  margin-top:2px;
+  margin-left:10px;
+}
+.ant-notification-notice .ant-notification-notice-with-icon .ant-notification-notice-message {
+  margin-bottom: 2px;
+  margin-left: 10px;
+  margin-right:10px;
+  font-size: 16px;
+  color:white
 }
