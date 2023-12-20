@@ -178,7 +178,7 @@ const ChecklistFiles: React.FC = () => {
         setTempData([...blobData, newFile]);
         return tempData.length;
     }
-
+    console.log(router.query);
     return (
         <div className='flex flex-1'>
             <div>

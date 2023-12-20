@@ -16,6 +16,8 @@ import SearchCategoryNavBar from "./category/SearchCategoryNavBar";
 import Link from "next/link";
 import SearchChecklistNavBar from "./category/checklist/SearchChecklistNavBar";
 import SearchChecklistResult from "./category/checklist/SearchChecklistResult";
+import SearchFileNavBar from "./category/checklist/SearchFileNavBar";
+import SearchFileResult from "./category/checklist/SearchFileResult";
 
 const { Sider, Content } = Layout;
 
@@ -85,6 +87,8 @@ const CategoryLayout: React.FC<{
     const [selectedChapterIndex, setSelectedChapterIndex] = useState<number>(0);
     const isAdmin = userRole === "Admin";
     const isChecklistPage = router.pathname === '/[categoryId]/[chapterId]/[verseId]';
+    const isVersePage = router.pathname === '/[categoryId]/[chapterId]/[verseId]/ChecklistFiles';
+    const isCategoryPage = router.pathname === '/[categoryId]';
     const goToManageUserPage = () => {
         router.push('/ManageUser');
     }
@@ -182,7 +186,7 @@ const CategoryLayout: React.FC<{
             });
         }
     }
-
+    // console.log(router)
     return (
         <ConfigProvider theme={{
             components: {
@@ -212,17 +216,25 @@ const CategoryLayout: React.FC<{
                             <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin: '0px 70px 0px 40px' }} className="cursor-pointer" />
                         </div>
                         <div className="flex justify-between w-full">
-                            {isChecklistPage ? (
+                            {isChecklistPage && (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
                                     <SearchChecklistNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
                                     <SearchChecklistResult searchResults={searchResults} />
                                 </div>
-                            ) : (
+                            )}
+                            {isCategoryPage && (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
                                     <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
                                     <SearchResultNav searchResults={searchResults} />
                                 </div>
                             )}
+                            {isVersePage && (
+                                <div style={{ maxWidth: '100%' }} className="mr-2">
+                                    <SearchFileNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
+                                    <SearchFileResult searchResults={searchResults}/>
+                                </div>
+                            )}
+
                             <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 items-center">
                                 <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 items-center">
                                     <ul className="lg:flex space-x-4 items-center">
