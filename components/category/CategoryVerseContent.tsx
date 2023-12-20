@@ -4,7 +4,7 @@ import { CategoryButton } from "./CategoryButton";
 import { useRouter } from "next/router";
 import { Upload } from 'antd';
 import { DefaultOptionType } from "antd/es/select";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CategoryVerseFloatingButton } from "./CategoryVerseFloatingButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
@@ -25,12 +25,13 @@ interface CategoryVerseContentProps {
     title: string;
     blobList: BlobListModel[];
     checklistIndex: number;
+    checklistLength: number | undefined;
+    isSavingVoid: () => void;
     dropdownOptions: DefaultOptionType[];
     canUpdateStatus: boolean;
     removeFileFromChecklist: (checklistIndex: number, fileIndex: number) => void;
     isSaving: boolean;
     canSave: () => void;
-    isSavingVoid: () => void;
     setIsUploading: () => void;
 }
 
@@ -43,7 +44,7 @@ interface ResponseTest {
     data: string;
 }
 
-export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving, canSave, isSavingVoid, setIsUploading }) => {
+export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setIsUploading, isSavingVoid, checklistLength, checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving, canSave }) => {
     const router = useRouter();
     const { fetchPUT, fetchGET } = useFetchWithAccessToken();
 
@@ -64,15 +65,17 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const role = session?.user?.['role'][0];
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [notificationMap] = useState<Map<string, boolean>>(new Map());
+    const [isEdited, setIsEdited] = useState<boolean>(false);
 
-    const showSuccessNotification = (checklistId: string) => {
+    const showSuccessNotification = useCallback((checklistId: string) => {
         if (!notificationMap.get(checklistId)) {
             notification.success({
                 message: 'Success',
-                description: '',
+                description: 'Checklist ID: ' + checklistId,
                 placement: 'bottomRight',
                 className: 'custom-success-notification',
                 style: {
+                    textAlign: 'center',
                     backgroundColor: '#3788FD',
                     opacity: 0.9,
                     color: 'white',
@@ -82,9 +85,9 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                 duration: 2
             });
         }
-    };
+    }, [notificationMap]);
 
-    const handleFileUpload = async (index: number) => {
+    const handleFileUpload = useCallback(async (index: number) => {
         const fileExt = tempData[index]?.fileName?.split('.').pop();
         const { data } = await fetchGET<ResponseTest>(`${BackendApiUrl.presignedPutObject}?filename=${tempData[index]?.id}.${fileExt}`);
         if (data) {
@@ -93,9 +96,9 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                 body: tempData[index]?.originFileObj
             });
         }
-    }
+    }, [tempData, fetchGET])
 
-    const handleSave = async () => {
+    const handleSave = useCallback(async () => {
         const response = await fetchPUT(BackendApiUrl.saveFile, {
             checklistId: checklistId,
             fileDatas: tempData.map((item) => ({
@@ -104,16 +107,13 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                 ContentType: item.contentType,
             })),
         });
-
         if (response) {
-            setFileList([]);
-            setTempData([]);
             mutate(GetChecklistList(verseId));
         }
-        showSuccessNotification(checklistId);
         isSavingVoid();
         setIsUploading();
-    };
+
+    }, [fetchPUT, checklistId, tempData, isSavingVoid, setIsUploading, verseId]);
 
     useEffect(() => {
         if (isSaving) {
@@ -123,13 +123,20 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                         handleFileUpload(index);
                     }
                 }
-                handleSave()
+                if (fileList.length > 0 || isEdited) {
+                    setIsEdited(false);
+                    setFileList([]);
+                    handleSave();
+                    showSuccessNotification(checklistId);
+                }
             }
         }
-    });
+    }, [isSaving, tempData, blobList, handleFileUpload, fileList, isEdited, setIsEdited, setFileList, handleSave, showSuccessNotification, checklistId])
+
 
     useEffect(() => {
-        setSelectOptions(dropdownOptions)
+        setSelectOptions(dropdownOptions);
+
     }, [dropdownOptions])
 
 
@@ -178,6 +185,13 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
             onClick: () => setDeleteModal(true)
         },
     ]
+    if (checklistLength && checklistLength > 1) {
+        items.push({
+            key: 'delete',
+            label: 'Delete',
+            onClick: () => setDeleteModal(true)
+        });
+    }
 
     const handleCancel = () => {
         setUpdateModal(false);
@@ -210,6 +224,11 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         setFileList(newFileList);
     };
 
+    function setCanSave() {
+        canSave();
+        setIsEdited(true);
+    }
+
     return (
         <>
             {
@@ -231,7 +250,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                     />
                 </div>
 
-                <div className='flex-1'>
+                <div className='flex-1' id={checklistId}>
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
                             <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>
@@ -266,9 +285,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                                         currentIndex={i}
                                                         filename={file.fileName}
                                                         removeFileByIndex={() => removeFileByIndex(i)}
-                                                        canSave={() => canSave()}
-                                                        highlightedBlob={''}
-                                                    />
+                                                        canSave={() => setCanSave()} highlightedBlob={""} />
                                                 </div>
                                             )
                                         } else {
