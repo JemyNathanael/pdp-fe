@@ -154,7 +154,7 @@ const VersePage: Page = () => {
     return (
         <Authorize>
             <Title>Ayat</Title>
-            <div className='mb-10'>
+            <div className=''>
                 <Row>
                     <Link href={router.asPath.replace(verseId, "")}>
                         <p style={{ fontSize: 'large', fontWeight: 600, color: "grey" }}>{indexData?.subCategoryTitle} </p>
@@ -172,7 +172,7 @@ const VersePage: Page = () => {
                 <br />
                 {(checklist && uploadStatusDropdown) &&
                     checklist.map((checklist, i) =>
-                        <div key={i} className='mb-16'>
+                        <div key={i} className='mb-16' id={checklist.id}>
 
                             <CategoryVerseContent
                                 checklistId={checklist.id}
