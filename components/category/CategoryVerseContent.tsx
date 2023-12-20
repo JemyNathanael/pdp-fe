@@ -165,6 +165,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
         };
         await fetchPUT(BackendApiUrl.updateChecklistUploadStatus, payload);
         showSuccessNotification(checklistId);
+        mutate(GetChecklistList(verseId));
     };
 
 
@@ -178,11 +179,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
             key: 'add',
             label: 'Add Checklist',
             onClick: () => setAddModal(true)
-        },
-        {
-            key: 'delete',
-            label: 'Delete',
-            onClick: () => setDeleteModal(true)
         },
     ]
     if (checklistLength && checklistLength > 1) {
