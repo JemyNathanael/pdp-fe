@@ -4,7 +4,7 @@ import { CategoryButton } from "./CategoryButton";
 import { useRouter } from "next/router";
 import { Upload } from 'antd';
 import { DefaultOptionType } from "antd/es/select";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CategoryVerseFloatingButton } from "./CategoryVerseFloatingButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
@@ -53,7 +53,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const [addModal, setAddModal] = useState<boolean>(false)
     const [deleteModal, setDeleteModal] = useState<boolean>(false)
     const [tempData, setTempData] = useState<BlobListModel[]>(blobList);
-    
+
 
     const canEditStatusRole = ['Admin', 'Auditor'];
     const canSeeEllipsis = ['Admin', 'Reader'];
@@ -62,27 +62,29 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     const role = session?.user?.['role'][0];
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [notificationMap] = useState<Map<string, boolean>>(new Map());
+    const [isEdited, setIsEdited] = useState<boolean>(false);
 
-    const showSuccessNotification = (checklistId: string) => {
+    const showSuccessNotification = useCallback((checklistId: string) => {
         if (!notificationMap.get(checklistId)) {
             notification.success({
                 message: 'Success',
-                description: '',
+                description: 'Checklist ID: ' + checklistId,
                 placement: 'bottomRight',
                 className: 'custom-success-notification',
                 style: {
+                    textAlign: 'center',
                     backgroundColor: '#3788FD',
                     opacity: 0.9,
                     color: 'white',
                     width: 'fit-content',
                     top: '-60px',
                 },
-                duration:2
+                duration: 2
             });
         }
-    };
+    }, [notificationMap]);
 
-    const handleFileUpload = async (index: number) => {
+    const handleFileUpload = useCallback(async (index: number) => {
         const fileExt = tempData[index]?.fileName?.split('.').pop();
         const { data } = await fetchGET<ResponseTest>(`${BackendApiUrl.presignedPutObject}?filename=${tempData[index]?.id}.${fileExt}`);
         if (data) {
@@ -91,9 +93,9 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                 body: tempData[index]?.originFileObj
             });
         }
-    }
+    }, [tempData, fetchGET])
 
-    const handleSave = async () => {
+    const handleSave = useCallback(async () => {
         const response = await fetchPUT(BackendApiUrl.saveFile, {
             checklistId: checklistId,
             fileDatas: tempData.map((item) => ({
@@ -102,28 +104,30 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                 ContentType: item.contentType,
             })),
         });
-
         if (response) {
             mutate(GetChecklistList(verseId));
         }
 
-        showSuccessNotification(checklistId);
-    };
-
-    if (isSaving) {
-        if (tempData) {
-            for (const [index, value] of tempData.entries()) {
-                if (!blobList.includes(value)) {
-                    handleFileUpload(index);
-                }
-            }
-            handleSave()
-        }
-    }
+    }, [checklistId, fetchPUT, tempData, verseId]);
 
     useEffect(() => {
-        setSelectOptions(dropdownOptions)
-    }, [dropdownOptions])
+        setSelectOptions(dropdownOptions);
+        if (isSaving) {
+            if (tempData) {
+                for (const [index, value] of tempData.entries()) {
+                    if (!blobList.includes(value)) {
+                        handleFileUpload(index);
+                    }
+                }
+                if (fileList.length > 0 || isEdited) {
+                    setIsEdited(false);
+                    setFileList([]);
+                    handleSave();
+                    showSuccessNotification(checklistId);
+                }
+            }
+        }
+    }, [dropdownOptions, isSaving, tempData, blobList, handleFileUpload, fileList, isEdited, setIsEdited, setFileList, handleSave, showSuccessNotification, checklistId])
 
 
     function removeFileByIndex(fileIndex: number) {
@@ -203,11 +207,16 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
         setFileList(newFileList);
     };
 
+    function setCanSave() {
+        canSave();
+        setIsEdited(true);
+    }
+
     return (
         <>
             {
                 deleteModal &&
-                <DeleteChecklistModal checkId={checklistId} onCancel={handleCancel} verseId={verseId ? verseId : ''}/>
+                <DeleteChecklistModal checkId={checklistId} onCancel={handleCancel} verseId={verseId ? verseId : ''} />
             }
 
             <UpdateCheklistModal visible={updateModal} checkId={checklistId} onCancel={handleCancel} />
@@ -224,7 +233,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                     />
                 </div>
 
-                <div className='flex-1'>
+                <div className='flex-1' id={checklistId}>
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
                             <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>
@@ -259,7 +268,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                                         currentIndex={i}
                                                         filename={file.fileName}
                                                         removeFileByIndex={() => removeFileByIndex(i)}
-                                                        canSave={() => canSave()}
+                                                        canSave={() => setCanSave()}
                                                     />
                                                 </div>
                                             )
@@ -270,7 +279,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                                 }
                             </div>
                             <div className='flex flex-col'>
-                                <div className='flex-1' style={{  maxWidth: '150px'  }}>
+                                <div className='flex-1' style={{ maxWidth: '150px' }}>
                                     {canUpdateStatus &&
                                         <Upload name="File"
                                             fileList={fileList}
