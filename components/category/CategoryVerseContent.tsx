@@ -235,7 +235,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
                             <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>
-                                <div className='py-1'>
+                                <div className='py-1' id={checklistId}>
                                     <p style={{ whiteSpace: 'pre-line', textAlign: 'justify' }}>{title}</p>
                                 </div>
                             </Dropdown>
