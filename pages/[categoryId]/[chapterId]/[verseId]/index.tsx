@@ -172,7 +172,7 @@ const VersePage: Page = () => {
                 <br />
                 {(checklist && uploadStatusDropdown) &&
                     checklist.map((checklist, i) =>
-                        <div key={i} className='mb-16'>
+                        <div key={i} className='mb-16' id={checklist.id}>
 
                             <CategoryVerseContent
                                 checklistId={checklist.id}

@@ -246,7 +246,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
                     />
                 </div>
 
-                <div className='flex-1' id={checklistId}>
+                <div className='flex-1'>
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
                             <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>

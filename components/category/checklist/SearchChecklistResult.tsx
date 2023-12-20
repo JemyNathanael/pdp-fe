@@ -61,12 +61,15 @@ const SearchChecklistResult = ({searchResults}) => {
   const handleResultClick = (result) => {
     const checklistId = result.value;
     const checklistElement = document.getElementById(`${checklistId}`);
-    if(checklistElement) {
-      checklistElement.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "start",
-        });
+    if (checklistElement) {
+      const navbarHeight = 10;
+      const paddingAdjustment = -95;
+      const targetScrollPosition = checklistElement.getBoundingClientRect().top + window.scrollY - navbarHeight + paddingAdjustment;
+
+      window.scrollTo({
+        top: targetScrollPosition,
+        behavior: "smooth",
+      });
     }
   }
   // console.log(router)
