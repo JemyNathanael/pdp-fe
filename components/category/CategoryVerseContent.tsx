@@ -25,6 +25,7 @@ interface CategoryVerseContentProps {
     title: string;
     blobList: BlobListModel[];
     checklistIndex: number;
+    checklistLength: number | undefined;
     dropdownOptions: DefaultOptionType[];
     canUpdateStatus: boolean;
     removeFileFromChecklist: (checklistIndex: number, fileIndex: number) => void;
@@ -43,7 +44,7 @@ interface ResponseTest {
     data: string;
 }
 
-export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving, canSave, isSavingVoid, setIsUploading }) => {
+export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, checklistLength, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving, canSave, isSavingVoid, setIsUploading }) => {
     const router = useRouter();
     const { fetchPUT, fetchGET } = useFetchWithAccessToken();
 
@@ -161,7 +162,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     };
 
 
-    const items: MenuProps['items'] = [
+     const items: MenuProps['items'] = [
         {
             key: 'update',
             label: 'Update Checklist',
@@ -172,12 +173,15 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
             label: 'Add Checklist',
             onClick: () => setAddModal(true)
         },
-        {
+    ];
+    
+    if (checklistLength && checklistLength > 1) {
+        items.push({
             key: 'delete',
             label: 'Delete',
             onClick: () => setDeleteModal(true)
-        },
-    ]
+        });
+    }
 
     const handleCancel = () => {
         setUpdateModal(false);
@@ -234,24 +238,24 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                 <div className='flex-1'>
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
-                            <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>
-                                <div className='py-1'>
-                                    <p style={{ whiteSpace: 'pre-line', textAlign: 'justify' }}>{title}</p>
-                                </div>
-                            </Dropdown>
-                            {canSeeEllipsis.includes(role) &&
-                                <div className="flex-1 text-right">
-                                    <Dropdown menu={{ items }} trigger={['click']}>
-                                        <a onClick={(e) => e.preventDefault()}>
-                                            <Space>
-                                                <div className="cursor-pointer font-bold text-black pl-10">
-                                                    <FontAwesomeIcon icon={faEllipsisV} />
-                                                </div>
-                                            </Space>
-                                        </a>
-                                    </Dropdown>
-                                </div>
-                            }
+                                <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>
+                                    <div className='py-1'>
+                                        <p style={{ whiteSpace: 'pre-line', textAlign: 'justify' }}>{title}</p>
+                                    </div>
+                                </Dropdown>
+                                {canSeeEllipsis.includes(role) &&
+                                    <div className="flex-1 text-right">
+                                        <Dropdown menu={{ items }} trigger={['click']}>
+                                            <a onClick={(e) => e.preventDefault()}>
+                                                <Space>
+                                                    <div className="cursor-pointer font-bold text-black pl-10">
+                                                        <FontAwesomeIcon icon={faEllipsisV} />
+                                                    </div>
+                                                </Space>
+                                            </a>
+                                        </Dropdown>
+                                    </div>
+                                }
                         </div>
                         <div className='flex mt-6'>
                             <div className='flex flex-1'>
