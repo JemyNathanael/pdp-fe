@@ -25,6 +25,7 @@ interface CategoryVerseContentProps {
     title: string;
     blobList: BlobListModel[];
     checklistIndex: number;
+    checklistLength: number | undefined;
     dropdownOptions: DefaultOptionType[];
     canUpdateStatus: boolean;
     removeFileFromChecklist: (checklistIndex: number, fileIndex: number) => void;
@@ -43,7 +44,7 @@ interface ResponseTest {
     data: string;
 }
 
-export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving, canSave, isSavingVoid, setIsUploading }) => {
+export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ checklistId, uploadStatus, title, blobList, checklistIndex, checklistLength, removeFileFromChecklist, dropdownOptions, canUpdateStatus, isSaving, canSave, isSavingVoid, setIsUploading }) => {
     const router = useRouter();
     const { fetchPUT, fetchGET } = useFetchWithAccessToken();
 
@@ -161,7 +162,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
     };
 
 
-    const items: MenuProps['items'] = [
+     const items: MenuProps['items'] = [
         {
             key: 'update',
             label: 'Update Checklist',
@@ -172,12 +173,15 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
             label: 'Add Checklist',
             onClick: () => setAddModal(true)
         },
-        {
+    ];
+    
+    if (checklistLength && checklistLength > 1) {
+        items.push({
             key: 'delete',
             label: 'Delete',
             onClick: () => setDeleteModal(true)
-        },
-    ]
+        });
+    }
 
     const handleCancel = () => {
         setUpdateModal(false);
