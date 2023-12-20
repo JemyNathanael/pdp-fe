@@ -238,24 +238,24 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ chec
                 <div className='flex-1'>
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
-                                <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>
-                                    <div className='py-1'>
-                                        <p style={{ whiteSpace: 'pre-line', textAlign: 'justify' }}>{title}</p>
-                                    </div>
-                                </Dropdown>
-                                {canSeeEllipsis.includes(role) &&
-                                    <div className="flex-1 text-right">
-                                        <Dropdown menu={{ items }} trigger={['click']}>
-                                            <a onClick={(e) => e.preventDefault()}>
-                                                <Space>
-                                                    <div className="cursor-pointer font-bold text-black pl-10">
-                                                        <FontAwesomeIcon icon={faEllipsisV} />
-                                                    </div>
-                                                </Space>
-                                            </a>
-                                        </Dropdown>
-                                    </div>
-                                }
+                            <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>
+                                <div className='py-1' id={checklistId}>
+                                    <p style={{ whiteSpace: 'pre-line', textAlign: 'justify' }}>{title}</p>
+                                </div>
+                            </Dropdown>
+                            {canSeeEllipsis.includes(role) &&
+                                <div className="flex-1 text-right">
+                                    <Dropdown menu={{ items }} trigger={['click']}>
+                                        <a onClick={(e) => e.preventDefault()}>
+                                            <Space>
+                                                <div className="cursor-pointer font-bold text-black pl-10">
+                                                    <FontAwesomeIcon icon={faEllipsisV} />
+                                                </div>
+                                            </Space>
+                                        </a>
+                                    </Dropdown>
+                                </div>
+                            }
                         </div>
                         <div className='flex mt-6'>
                             <div className='flex flex-1'>
