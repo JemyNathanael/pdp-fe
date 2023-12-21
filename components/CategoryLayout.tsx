@@ -168,15 +168,19 @@ const CategoryLayout: React.FC<{
 
     function handleExpandOrCollapseAll() {
         setToggledFromCollapseOrExpandAll(true);
+    
+        // Check if chaptersExpandedState is defined before using it
         if (chaptersExpandedState) {
+            // Check if all chapters are expanded
             const isAllExpanded = chaptersExpandedState.every(state => state === true);
-            if (isAllExpanded) {
-                setOpenAll(false);
-            } else {
-                setOpenAll(true);
-            }
+    
+            // Update the state based on the current state
+            setChaptersExpandedState(chaptersExpandedState.map(() => !isAllExpanded));
+    
+            // Update the open state based on the current state
+            setOpenAll(!isAllExpanded);
         }
-    }
+    }  
 
     const handleLogout = () => {
         if (status === 'authenticated') {
@@ -293,7 +297,7 @@ const CategoryLayout: React.FC<{
                                 </p>
                             </Link>
                         </Tooltip>
-                        <div className="m-4" style={{ backgroundColor: '##000000' }}>
+                        <div className="m-4 cursor-pointer" style={{ backgroundColor: '##000000' }}>
                             {firstSubCategories &&
                                 firstSubCategories.map((firstSub, i) =>
                                     <Collapsible
@@ -311,7 +315,7 @@ const CategoryLayout: React.FC<{
                                 )
                             }
                         </div>
-                        <button className="mx-8 mt-5 text-[#373737] underline text-xs" onClick={handleExpandOrCollapseAll}>
+                        <button className="mx-8 mt-5 mb-5 text-[#373737] underline text-xs" onClick={handleExpandOrCollapseAll}>
                             Expand / Collapse all
                         </button>
                     </Sider>
