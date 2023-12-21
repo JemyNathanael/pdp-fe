@@ -125,7 +125,7 @@ const Collapsible: React.FC<IProps> = ({
 
   return (
     <Collapse
-      className="p-0"
+      className="p-0 bg-white"
       bordered={false}
       activeKey={isOpen ? ["1"] : []} // Menggunakan activeKey daripada defaultActiveKey
       onChange={(keys) => {
@@ -140,7 +140,7 @@ const Collapsible: React.FC<IProps> = ({
       <Panel
         header={
           <div className={bgClassName}>
-            <div className="py-1 flex justify-content-between flex-1 items-center">
+            <div className="flex justify-content-between flex-1 items-center">
               <button
                 type="button"
                 className="p-0 mr-2"
