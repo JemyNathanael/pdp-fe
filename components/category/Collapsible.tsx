@@ -58,7 +58,7 @@ const Child: React.FC<ChildProps> = ({ routePath, title, isOpen }) => {
               </div>
             </Tooltip>
           ) : (
-            <Tooltip title={title} placement="right" className="hover:text-[#3788FD]">
+            <Tooltip title={title} placement="right">
               <p className={textClassName}>{title}</p>
             </Tooltip>
           )}
@@ -160,7 +160,7 @@ const Collapsible: React.FC<IProps> = ({
               </button>
 
               <Tooltip style={{}} title={title} placement="right">
-                <p onClick={handleTitleRouting} className={`${textClassName} hover:text-[#3788FD]`}>
+                <p onClick={handleTitleRouting} className={textClassName}>
                   {title}
                 </p>
               </Tooltip>

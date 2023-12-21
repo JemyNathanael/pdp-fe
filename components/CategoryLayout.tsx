@@ -220,17 +220,19 @@ const CategoryLayout: React.FC<{
                             <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin: '0px 70px 0px 40px' }} className="cursor-pointer" />
                         </div>
                         <div className="flex justify-between w-full">
+                            {/* Category Page */}
+                            {isCategoryPage && (
+                                <div style={{ maxWidth: '100%' }} className="mr-2">
+                                    <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
+                                    <SearchResultNav searchResults={searchResults} />
+                                </div>
+                            )}
+                            
                             {/* Second Sub Category Page */}
                             {isChecklistPage && (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
                                     <SearchChecklistNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
                                     <SearchChecklistResult searchResults={searchResults} />
-                                </div>
-                            )}
-                            {isCategoryPage && (
-                                <div style={{ maxWidth: '100%' }} className="mr-2">
-                                    <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
-                                    <SearchResultNav searchResults={searchResults} />
                                 </div>
                             )}
                             {/* View All files */}
