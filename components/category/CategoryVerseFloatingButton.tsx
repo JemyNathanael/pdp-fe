@@ -39,47 +39,53 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
                     <FloatButton.Group
                         trigger='click'
                         type='primary'
-                        style={{ right: 50 }}
+                        style={{ right: 50, zIndex: 11 }}
                         icon={<FontAwesomeIcon icon={faBars} />}
                     >
                         <>
                             <span style={{
+                                zIndex: 0,
                                 position: 'absolute',
                                 width: '200px',
                                 right: '0',
                                 top: '6px',
                                 fontWeight: 'bolder',
                                 color: 'white'
-                            }}>
+                            }} 
+                            onClick={() => setIsUpdateSubCategoryModalOpen(true)}>
                                 Update Sub-Category
                             </span>
-                            <FloatButton type="primary" icon={<FontAwesomeIcon icon={faArrowsRotate} />} onClick={() => setIsUpdateSubCategoryModalOpen(true)} />
+                            <FloatButton className='z-[1]' type="primary" icon={<FontAwesomeIcon icon={faArrowsRotate} />} onClick={() => setIsUpdateSubCategoryModalOpen(true)} />
                         </>
                         <>
                             <span style={{
+                                zIndex: 0,
                                 position: 'absolute',
                                 width: '180px',
                                 right: '0',
                                 top: '62px',
                                 fontWeight: 'bolder',
                                 color: 'white'
-                            }}>
+                            }} 
+                            onClick={() => setIsAddSubCategoryModalOpen(true)}>
                                 Add Sub-Category
                             </span>
-                            <FloatButton type="primary" icon={<FontAwesomeIcon icon={faPlus} />} onClick={() => setIsAddSubCategoryModalOpen(true)} />
+                            <FloatButton className='z-[1]'  type="primary" icon={<FontAwesomeIcon icon={faPlus} />} onClick={() => setIsAddSubCategoryModalOpen(true)} />
                         </>
                         <>
                             <span style={{
+                                zIndex: 0,
                                 position: 'absolute',
                                 width: '100px',
                                 right: '0',
                                 top: '120px',
                                 fontWeight: 'bold',
                                 color: 'white'
-                            }}>
+                            }} 
+                            onClick={() => setIsDeleteSubCategoryModalOpen(true)}>
                                 Delete
                             </span>
-                            <FloatButton type="primary" icon={<FontAwesomeIcon icon={faMinus} />} onClick={() => setIsDeleteSubCategoryModalOpen(true)} />
+                            <FloatButton className='z-[1]'  type="primary" icon={<FontAwesomeIcon icon={faMinus} />} onClick={() => setIsDeleteSubCategoryModalOpen(true)} />
                         </>
                     </FloatButton.Group>
                 </div>
