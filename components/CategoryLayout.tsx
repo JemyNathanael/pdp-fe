@@ -301,8 +301,8 @@ const CategoryLayout: React.FC<{
 
                 <Layout>
                     <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000, position: 'fixed', height: '100vh', overflowY: 'auto' }}>
-                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px', margin: 'auto' }} className="cursor-pointer" />
+                        <div onClick={() => router.push('/')} className="ml-6">
+                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px' }} className="cursor-pointer" />
                         </div>
                         <Tooltip title={data?.title} placement="right">
                             <Link href={`/${categoryId}`}>
