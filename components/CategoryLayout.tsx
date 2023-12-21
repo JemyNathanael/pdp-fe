@@ -220,6 +220,7 @@ const CategoryLayout: React.FC<{
                             <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin: '0px 70px 0px 40px' }} className="cursor-pointer" />
                         </div>
                         <div className="flex justify-between w-full">
+                            {/* Second Sub Category Page */}
                             {isChecklistPage && (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
                                     <SearchChecklistNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
@@ -232,6 +233,7 @@ const CategoryLayout: React.FC<{
                                     <SearchResultNav searchResults={searchResults} />
                                 </div>
                             )}
+                            {/* View All files */}
                             {isVersePage && (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
                                     <SearchFileNavBar setSearchResults={setSearchResults} searchResults={searchResults} />

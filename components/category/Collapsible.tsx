@@ -52,13 +52,13 @@ const Child: React.FC<ChildProps> = ({ routePath, title, isOpen }) => {
         <button className="flex-1" onClick={handleTitleRouting}>
           {isOpen && router.asPath.includes(routePath) ? (
             <Tooltip title={title} placement="right">
-              <p className={textClassName} style={{ fontSize: "110%" }}>
+              <div className={textClassName} style={{ fontSize: "110%" }}>
                 <FontAwesomeIcon icon={faCircle} size="2xs" display={"block"} />{" "}
                 {title}
-              </p>
+              </div>
             </Tooltip>
           ) : (
-            <Tooltip title={title} placement="right">
+            <Tooltip title={title} placement="right" className="hover:text-[#3788FD]">
               <p className={textClassName}>{title}</p>
             </Tooltip>
           )}
@@ -160,7 +160,7 @@ const Collapsible: React.FC<IProps> = ({
               </button>
 
               <Tooltip style={{}} title={title} placement="right">
-                <p onClick={handleTitleRouting} className={textClassName}>
+                <p onClick={handleTitleRouting} className={`${textClassName} hover:text-[#3788FD]`}>
                   {title}
                 </p>
               </Tooltip>
