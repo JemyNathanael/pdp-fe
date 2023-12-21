@@ -285,7 +285,7 @@ const CategoryLayout: React.FC<{
                                 </p>
                             </Link>
                         </Tooltip>
-                        <div className="m-4" style={{ backgroundColor: '##000000' }}>
+                        <div className="m-4 cursor-pointer" style={{ backgroundColor: '##000000' }}>
                             {firstSubCategories &&
                                 firstSubCategories.map((firstSub, i) =>
                                     <Collapsible
