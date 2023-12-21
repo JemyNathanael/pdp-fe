@@ -7,6 +7,7 @@ import {
     faFileWord,
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
   import { useRouter } from "next/router";
   import { useEffect, useState } from "react";
   
@@ -57,14 +58,12 @@ import {
       return parts.length > 1 ? parts[parts.length - 1] : "";
     }
 
-    const handleClick = (result) => {
-        
-        const url = `/${router.query['categoryId']}/${router.query['chapterId']}/${router.query['verseId']}/ChecklistFiles?id=${router.query['id']}&highlightBlob=${result.value}`
+    // const handleClick = (result) => {
+    //   setHighlightedFile(result.value);
+    //   router.push(`${router.asPath}?highlightedBlob=${result.value}`)
+    // }
 
-        router.push(url)
-    }
-
-    console.log(router)
+    // console.log(router)
     return (
       <div className='fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg overflow-y-scroll' 
           style={{ width: containerWidth, maxHeight: '550px' }}>
@@ -73,18 +72,20 @@ import {
             className='flex flex-col py-3 border-b' 
             key={`${result.value}-${result.label}`}>
               <div className="hover:bg-gray-200 cursor-pointer rounded-lg mx-3 px-2 py-1 flex"
-                    onClick={() => handleClick(result)}
+                    // onClick={() => handleClick(result)}
                     >
-                {/* <Link
-                    href={`/${router.query['categoryId']}/${router.query['chapterId']}/${router.query['verseId']}/ChecklistFiles?id=${router.query['id']}&highlightBlob=${result.value}`}
-                    className="hover:bg-gray-200 rounded-lg px-2 py-1 text-"
-                    >
-                        <FontAwesomeIcon icon={extensionToIcon(getFileExtension(result.label))} className="mr-2" color="blue" />
+                      <Link
+                        href={{
+                          pathname: `/${router.query['categoryId']}/${router.query['chapterId']}/${router.query['verseId']}/ChecklistFiles`,
+                          query: {
+                            id: router.query['id'],
+                            highlightBlob: result.value,
+                          },
+                        }}
+                      >
+                        <FontAwesomeIcon icon={extensionToIcon(getFileExtension(result.label))} className="mr-2 mt-1" color="blue" />
                         <span className="text-black">{result.label}</span>
-                </Link> */}
-
-                <FontAwesomeIcon icon={extensionToIcon(getFileExtension(result.label))} className="mr-2 mt-1" color="blue" />
-                <span className="text-black">{result.label}</span>
+                      </Link>
               </div>
           </div>
         ))}
