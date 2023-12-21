@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const SearchChecklistResult = ({searchResults}) => {
+const SearchChecklistResult = ({searchResults }) => {
   const calculateWidth = () => {
     const viewportWidth = window.innerWidth;
     if (viewportWidth >= 1300) {
@@ -70,6 +70,7 @@ const SearchChecklistResult = ({searchResults}) => {
         top: targetScrollPosition,
         behavior: "smooth",
       });
+      // setSearchResults('');
     }
   }
   // console.log(router)
