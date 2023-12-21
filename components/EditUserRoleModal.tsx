@@ -105,7 +105,7 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
             open={visible}
             onCancel={onCancel}
             centered
-            closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd"}} />}
+            closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{ color: '#3788fd', fontSize:'24px'}} />}
             width={750}
             className=''
             footer={[
@@ -120,7 +120,7 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
             </button>,
             ]}
         >
-            <h3 className='text-xl sm:text-2xl text-center font-body font-bold mt-6'>{`Change Role of "${record?.fullName}"`}</h3>
+            <h3 className='text-2xl sm:text-3xl text-center font-body font-bold mt-6'>{`Change Role of "${record?.fullName}"`}</h3>
             <div className='p-5'>
                 <h4 className='text-xl sm:text-2xl font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8'>
                     Current Role: <u className='text-[#3788FD]'>{record?.role}</u>
