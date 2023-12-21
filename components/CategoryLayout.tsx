@@ -16,6 +16,10 @@ import SearchCategoryNavBar from "./category/SearchCategoryNavBar";
 import Link from "next/link";
 import SearchChecklistNavBar from "./category/checklist/SearchChecklistNavBar";
 import SearchChecklistResult from "./category/checklist/SearchChecklistResult";
+import SearchFileNavBar from "./category/checklist/SearchFileNavBar";
+import SearchFileResult from "./category/checklist/SearchFileResult";
+import SearchSubCategoryNavBar from "./category/SearchSubCategoryNavBar";
+import SearchSubCategoryResultNav from "./category/SearchSubCategoryResultNav";
 
 const { Sider, Content } = Layout;
 
@@ -84,7 +88,11 @@ const CategoryLayout: React.FC<{
     const [searchResults, setSearchResults] = useState([]); // Search Bar Result
     const [selectedChapterIndex, setSelectedChapterIndex] = useState<number>(0);
     const isAdmin = userRole === "Admin";
+    const isCategoryPage = router.pathname === '/[categoryId]';
+    const isSubCategoryPage = router.pathname === '/[categoryId]/[chapterId]';
     const isChecklistPage = router.pathname === '/[categoryId]/[chapterId]/[verseId]';
+    const isVersePage = router.pathname === '/[categoryId]/[chapterId]/[verseId]/ChecklistFiles';
+    
     const goToManageUserPage = () => {
         router.push('/ManageUser');
     }
@@ -164,15 +172,19 @@ const CategoryLayout: React.FC<{
 
     function handleExpandOrCollapseAll() {
         setToggledFromCollapseOrExpandAll(true);
+    
+        // Check if chaptersExpandedState is defined before using it
         if (chaptersExpandedState) {
+            // Check if all chapters are expanded
             const isAllExpanded = chaptersExpandedState.every(state => state === true);
-            if (isAllExpanded) {
-                setOpenAll(false);
-            } else {
-                setOpenAll(true);
-            }
+    
+            // Update the state based on the current state
+            setChaptersExpandedState(chaptersExpandedState.map(() => !isAllExpanded));
+    
+            // Update the open state based on the current state
+            setOpenAll(!isAllExpanded);
         }
-    }
+    }  
 
     const handleLogout = () => {
         if (status === 'authenticated') {
@@ -182,7 +194,7 @@ const CategoryLayout: React.FC<{
             });
         }
     }
-
+    // console.log(router)
     return (
         <ConfigProvider theme={{
             components: {
@@ -212,17 +224,35 @@ const CategoryLayout: React.FC<{
                             <img src="/adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin: '0px 70px 0px 40px' }} className="cursor-pointer" />
                         </div>
                         <div className="flex justify-between w-full">
-                            {isChecklistPage ? (
-                                <div style={{ maxWidth: '100%' }} className="mr-2">
-                                    <SearchChecklistNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
-                                    <SearchChecklistResult searchResults={searchResults} />
-                                </div>
-                            ) : (
+                            {/* Category Page */}
+                            {isCategoryPage && (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
                                     <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
                                     <SearchResultNav searchResults={searchResults} />
                                 </div>
                             )}
+                            {/* First Sub Category Page */}
+                            {isSubCategoryPage && (
+                                <div style={{ maxWidth: '100%' }} className="mr-2">
+                                    <SearchSubCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults}/>
+                                    <SearchSubCategoryResultNav searchResults={searchResults} />
+                                </div>
+                            )}
+                            {/* Second Sub Category Page */}
+                            {isChecklistPage && (
+                                <div style={{ maxWidth: '100%' }} className="mr-2">
+                                    <SearchChecklistNavBar setSearchResults={setSearchResults} searchResults={searchResults}/>
+                                    <SearchChecklistResult searchResults={searchResults}/>
+                                </div>
+                            )}
+                            {/* View All files */}
+                            {isVersePage && (
+                                <div style={{ maxWidth: '100%' }} className="mr-2">
+                                    <SearchFileNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
+                                    <SearchFileResult searchResults={searchResults}/>
+                                </div>
+                            )}
+
                             <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 items-center">
                                 <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 items-center">
                                     <ul className="lg:flex space-x-4 items-center">
@@ -271,8 +301,8 @@ const CategoryLayout: React.FC<{
 
                 <Layout>
                     <Sider width={300} className="pb-24 hidden lg:block" style={{ zIndex: 1000, position: 'fixed', height: '100vh', overflowY: 'auto' }}>
-                        <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
-                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px', margin: 'auto' }} className="cursor-pointer" />
+                        <div onClick={() => router.push('/')} className="ml-6">
+                            <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px' }} className="cursor-pointer" />
                         </div>
                         <Tooltip title={data?.title} placement="right">
                             <Link href={`/${categoryId}`}>
@@ -299,7 +329,7 @@ const CategoryLayout: React.FC<{
                                 )
                             }
                         </div>
-                        <button className="mx-8 mt-5 text-[#373737] underline text-xs" onClick={handleExpandOrCollapseAll}>
+                        <button className="mx-8 mt-5 mb-5 text-[#373737] underline text-xs" onClick={handleExpandOrCollapseAll}>
                             Expand / Collapse all
                         </button>
                     </Sider>

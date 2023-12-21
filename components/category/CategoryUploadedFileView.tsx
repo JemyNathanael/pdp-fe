@@ -26,7 +26,6 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
         filename.length > MaxFileNameLength
             ? `${filename.substring(0, MaxFileNameLength - 4)}...${filename.substring(filename.lastIndexOf('.') + 1)}`
             : filename;
-
     const fileExtension = filename.substring(filename.lastIndexOf('.') + 1, filename.length).toLowerCase();
     const icon = extensionToIcon(fileExtension);
     const [isHovered, setIsHovered] = useState(false);
@@ -49,14 +48,10 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     const { data: session } = useSession();
     const role = session?.user?.['role'][0];
     const { fetchGET } = useFetchWithAccessToken();
-    const [isHighlighted, setIsHighlighted] = useState(false);
-
+    const [isHighlighted, setIsHighlighted] = useState<boolean>(highlightedBlob === fileId);
+    
     useEffect(() => {
         setIsHighlighted(highlightedBlob === fileId);
-        const timeoutId = setTimeout(() => {
-            setIsHighlighted(false);
-        }, 2000);
-        return () => clearTimeout(timeoutId);
     }, [highlightedBlob, fileId]);
 
     function RemoveFile(currentIndex){
@@ -91,6 +86,11 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
         }
     }
 
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+        setIsHighlighted(false);
+    }
+
     return (
         <div>
             <div 
@@ -99,7 +99,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
             >
                 {!canEditUploadStatusRole.includes(role) ? true :
                     <button onClick={() => RemoveFile(currentIndex)}>
-                        <div className='relative mr-[-130px] mt-[-5px]'>
+                        <div className='relative mr-[-130px] mt-[-5px]' style={{zIndex: 0}}>
                             <FontAwesomeIcon className='text-white text-[20px] absolute top-0 right-0 ' icon={faCircle} />
                             <FontAwesomeIcon className='text-[#FF0000] text-[20px] absolute top-0 right-0 ' icon={faCircleXmark} />
                         </div>
@@ -108,7 +108,7 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
             </div>
             <div
                 className='bg-white border-[#3788FD] border-[3px] h-[136px] w-[122px] rounded-md flex flex-col relative'
-                onMouseEnter={() => setIsHovered(true)}
+                onMouseEnter={() => handleMouseEnter()}
                 onMouseLeave={() => setIsHovered(false)}
                 onClick={DownloadFile}
                 style={{

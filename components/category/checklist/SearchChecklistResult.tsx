@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const SearchChecklistResult = ({searchResults}) => {
+const SearchChecklistResult = ({searchResults }) => {
   const calculateWidth = () => {
     const viewportWidth = window.innerWidth;
     if (viewportWidth >= 1300) {
@@ -58,6 +58,22 @@ const SearchChecklistResult = ({searchResults}) => {
     return parts.length > 1 ? parts[parts.length - 1] : "";
   }
 
+  const handleResultClick = (result) => {
+    const checklistId = result.value;
+    const checklistElement = document.getElementById(`${checklistId}`);
+    if (checklistElement) {
+      const navbarHeight = 10;
+      const paddingAdjustment = -95;
+      const targetScrollPosition = checklistElement.getBoundingClientRect().top + window.scrollY - navbarHeight + paddingAdjustment;
+
+      window.scrollTo({
+        top: targetScrollPosition,
+        behavior: "smooth",
+      });
+      // setSearchResults('');
+    }
+  }
+  // console.log(router)
   return (
     <div className='fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg overflow-y-scroll' 
         style={{ width: containerWidth, maxHeight: '550px' }}>
@@ -65,10 +81,9 @@ const SearchChecklistResult = ({searchResults}) => {
         <div 
           className='flex flex-col py-3 border-b' 
           key={`${result.value}-${result.label}`}>
-            <div className="hover:bg-gray-200 cursor-pointer rounded-lg mx-3 px-2 py-1">
-              <Link href="">
-                <p className='text-lg text-gray-800'>{result.label.length > 150 ? `${result.label.slice(0, 120)}...` : result.label}</p>
-              </Link>
+            <div className="hover:bg-gray-200 cursor-pointer rounded-lg mx-3 px-2 py-1"
+              onClick={() => handleResultClick(result)}>
+              <p className='text-lg text-gray-800'>{result.label.length > 150 ? `${result.label.slice(0, 120)}...` : result.label}</p>
             </div>
             {result.blobDatas?.map((blobData) => (
               <div className="flex flex-col px-5 py-1" key={blobData.blobId}>

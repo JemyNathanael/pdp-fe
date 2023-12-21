@@ -13,7 +13,7 @@ import { DefaultOptionType } from 'antd/es/select';
 import { useSession } from 'next-auth/react';
 import { RcFile } from 'antd/es/upload';
 import Link from 'next/link';
-import { Row, Progress} from 'antd';
+import { Row, Progress } from 'antd';
 
 interface ChecklistList {
     id: string;
@@ -40,12 +40,12 @@ interface UploadStatusDropdownModel {
     status: string;
 }
 
-interface Indexing{
+interface Indexing {
     checklistTitle: string;
     subCategoryTitle: string;
 }
 
-interface Percentage{
+interface Percentage {
     totalItems: number | undefined;
     value: number;
     percent: number;
@@ -61,7 +61,7 @@ const VersePage: Page = () => {
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data: checklistData } = useSWR<ChecklistModel>(GetChecklistList(verseId), swrFetcher);
     const { data: dropdownUploadStatusData } = useSWR<UploadStatusDropdownModel[]>(BackendApiUrl.getUploadStatus, swrFetcher);
-    const { data: indexData} = useSWR<Indexing>(GetChecklistTitle(verseId), swrFetcher);
+    const { data: indexData } = useSWR<Indexing>(GetChecklistTitle(verseId), swrFetcher);
     const [isUploading, setIsUploading] = useState<boolean>(true);
 
     const canEditUploadStatusRole = ['Admin', 'Auditor', 'Uploader'];
@@ -73,16 +73,16 @@ const VersePage: Page = () => {
     const [checklistPercentage, setChecklistPercentage] = useState<Percentage>();
 
     const getColorForIndex = (percent) => {
-        if(percent == 100){
+        if (percent == 100) {
             return '#3A86FF';
-        }else if(percent >= 81 && percent <= 99){
+        } else if (percent >= 81 && percent <= 99) {
             return '#27AE60'
-        }else if(percent >= 51 && percent <= 80){
+        } else if (percent >= 51 && percent <= 80) {
             return '#FFC300';
-        }else{
+        } else {
             return '#CC0404';
         }
-      };
+    };
 
     useEffect(() => {
         // map upload status dropdown from API to DefaultOptionType from ant design
@@ -101,20 +101,20 @@ const VersePage: Page = () => {
         let percentage = 0;
         const totalChecklist = checklistData?.checklistList.length;
         checklistData?.checklistList?.map((checklist) => {
-            if(checklist.uploadStatusId == 1){
+            if (checklist.uploadStatusId == 1) {
                 count++;
             }
         })
-        if(totalChecklist != null){
+        if (totalChecklist != null) {
             percentage = Math.round((count / totalChecklist) * 100);
         }
-        const checklistPercentage : Percentage = {
-            totalItems : totalChecklist,
+        const checklistPercentage: Percentage = {
+            totalItems: totalChecklist,
             value: count,
             percent: percentage
         }
         setChecklistPercentage(checklistPercentage);
-        
+
     }, [checklistData?.checklistList, dropdownUploadStatusData])
 
     // May need adjustment after integration
@@ -146,29 +146,34 @@ const VersePage: Page = () => {
 
     const [isSaving, setIsSaving] = useState<boolean>(false);
 
+    function ResetButton(){
+        setIsSaving(true);
+        setIsUploading(true);
+    }
+
     return (
         <Authorize>
             <Title>Ayat</Title>
             <div className='mb-10'>
-            <Row>
-                <Link href={ router.asPath.replace(verseId, "")}>
-                    <p style={{fontSize:'large', fontWeight:600, color:"grey"}}>{indexData?.subCategoryTitle} </p>
-                </Link>
-                <p style={{fontSize:'large',color:'#3788FD', fontWeight:600, marginLeft:'4px'}}> / {indexData?.checklistTitle}</p>
-            </Row>
-            <br />
-            <div>
-                <div style={{display:"flex", justifyContent:"space-between"}}>
-                    <p style={{fontWeight:"bold", color:getColorForIndex(checklistPercentage?.percent)}}>{checklistPercentage?.percent}%</p>
-                    <p>{checklistPercentage?.value}/{checklistPercentage?.totalItems}</p>
+                <Row>
+                    <Link href={router.asPath.replace(verseId, "")}>
+                        <p style={{ fontSize: 'large', fontWeight: 600, color: "grey" }}>{indexData?.subCategoryTitle} </p>
+                    </Link>
+                    <p style={{ fontSize: 'large', color: '#3788FD', fontWeight: 600, marginLeft: '4px' }}> / {indexData?.checklistTitle}</p>
+                </Row>
+                <br />
+                <div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <p style={{ fontWeight: "bold", color: getColorForIndex(checklistPercentage?.percent) }}>{checklistPercentage?.percent}%</p>
+                        <p>{checklistPercentage?.value}/{checklistPercentage?.totalItems}</p>
+                    </div>
+                    <Progress percent={checklistPercentage?.percent} strokeColor={getColorForIndex(checklistPercentage?.percent)} showInfo={false} />
                 </div>
-                <Progress percent={checklistPercentage?.percent} strokeColor={getColorForIndex(checklistPercentage?.percent)} showInfo={false}/>
-            </div>
-            <br />
+                <br />
                 {(checklist && uploadStatusDropdown) &&
                     checklist.map((checklist, i) =>
-                        <div key={i} className='mb-16'>
-                            
+                        <div key={i} className='mb-16' id={checklist.id}>
+
                             <CategoryVerseContent
                                 checklistId={checklist.id}
                                 title={checklist.description}
@@ -180,8 +185,8 @@ const VersePage: Page = () => {
                                 dropdownOptions={uploadStatusDropdown}
                                 canUpdateStatus={isRoleGrantedEditUploadStatus}
                                 isSaving={isSaving}
-                                canSave={() => 
-                                    setIsUploading(false) }
+                                canSave={() =>
+                                    setIsUploading(false)}
                                 isSavingVoid={() => setIsSaving(false)}
                                 setIsUploading={() => setIsUploading(true)}
                             />
@@ -190,8 +195,8 @@ const VersePage: Page = () => {
                 }
             </div>
             {isRoleGrantedEditUploadStatus &&
-                <div className='flex flex-row-reverse mr-5'>
-                    <CategoryButton disabled={isUploading} text='Save' className='px-10' onClick={() => setIsSaving(true)} />
+                <div className='flex flex-row-reverse mr-4'>
+                    <CategoryButton disabled={isUploading} text='Save' className='px-10' onClick={ResetButton} />
                 </div>
             }
         </Authorize>
