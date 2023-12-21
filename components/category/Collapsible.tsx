@@ -40,7 +40,7 @@ const Child: React.FC<ChildProps> = ({ routePath, title, isOpen }) => {
   let textClassName =
     "ml-12 font-semibold text-left text-black moveLeftSubcategory";
 
-  if (router.asPath === routePath) {
+  if (router.asPath.includes(routePath)) {
     bgClassName = "px-0 py-1";
     textClassName =
       "ml-12 font-semibold text-left text-[#3788FD] moveLeftSubcategory";
@@ -50,7 +50,7 @@ const Child: React.FC<ChildProps> = ({ routePath, title, isOpen }) => {
     <div className={bgClassName}>
       <div className="py-1 flex justify-content-between flex-1 items-center">
         <button className="flex-1" onClick={handleTitleRouting}>
-          {isOpen && router.asPath === routePath ? (
+          {isOpen && router.asPath.includes(routePath) ? (
             <Tooltip title={title} placement="right">
               <p className={textClassName} style={{ fontSize: "110%" }}>
                 <FontAwesomeIcon icon={faCircle} size="2xs" display={"block"} />{" "}
