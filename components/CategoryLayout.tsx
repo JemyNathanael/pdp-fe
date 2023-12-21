@@ -18,6 +18,8 @@ import SearchChecklistNavBar from "./category/checklist/SearchChecklistNavBar";
 import SearchChecklistResult from "./category/checklist/SearchChecklistResult";
 import SearchFileNavBar from "./category/checklist/SearchFileNavBar";
 import SearchFileResult from "./category/checklist/SearchFileResult";
+import SearchSubCategoryNavBar from "./category/SearchSubCategoryNavBar";
+import SearchSubCategoryResultNav from "./category/SearchSubCategoryResultNav";
 
 const { Sider, Content } = Layout;
 
@@ -86,9 +88,11 @@ const CategoryLayout: React.FC<{
     const [searchResults, setSearchResults] = useState([]); // Search Bar Result
     const [selectedChapterIndex, setSelectedChapterIndex] = useState<number>(0);
     const isAdmin = userRole === "Admin";
+    const isCategoryPage = router.pathname === '/[categoryId]';
+    const isSubCategoryPage = router.pathname === '/[categoryId]/[chapterId]';
     const isChecklistPage = router.pathname === '/[categoryId]/[chapterId]/[verseId]';
     const isVersePage = router.pathname === '/[categoryId]/[chapterId]/[verseId]/ChecklistFiles';
-    const isCategoryPage = router.pathname === '/[categoryId]';
+    
     const goToManageUserPage = () => {
         router.push('/ManageUser');
     }
@@ -227,12 +231,18 @@ const CategoryLayout: React.FC<{
                                     <SearchResultNav searchResults={searchResults} />
                                 </div>
                             )}
-                            
+                            {/* First Sub Category Page */}
+                            {isSubCategoryPage && (
+                                <div style={{ maxWidth: '100%' }} className="mr-2">
+                                    <SearchSubCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults}/>
+                                    <SearchSubCategoryResultNav searchResults={searchResults} />
+                                </div>
+                            )}
                             {/* Second Sub Category Page */}
                             {isChecklistPage && (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
-                                    <SearchChecklistNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
-                                    <SearchChecklistResult searchResults={searchResults} />
+                                    <SearchChecklistNavBar setSearchResults={setSearchResults} searchResults={searchResults}/>
+                                    <SearchChecklistResult searchResults={searchResults}/>
                                 </div>
                             )}
                             {/* View All files */}

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
-const SearchChecklistNavBar = ({setSearchResults, searchResults}) => {
+const SearchChecklistNavBar = ({setSearchResults, searchResults }) => {
 const [input, setInput] = useState<string>('');
 const [inputResize, setInputResize] = useState<string>('670px');
 const inputRef = useRef<HTMLInputElement>(null);

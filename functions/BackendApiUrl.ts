@@ -18,6 +18,7 @@ export const BackendApiUrl = {
     getChecklistDescription: baseUrl + '/api/v1/Checklist/get-description',
     getHomeSearch: baseUrl + '/api/v1/Home',
     getCategorySearch: baseUrl + '/api/v1/Category/search',
+    getSubCategorySearch : baseUrl + '/api/v1/Category/search-second',
     getChecklistSearch: baseUrl + '/api/v1/Checklist/search',
     getChecklistFileSearch: baseUrl + '/api/v1/Checklist/file',
     
