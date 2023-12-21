@@ -34,7 +34,7 @@ const SearchSubCategoryResultNav = ({ searchResults }) => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-    console.log(router.query['categoryId']);
+    // console.log(router.query['categoryId']);
     return (
         <div className='fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg'
             style={{ width: containerWidth }}>
