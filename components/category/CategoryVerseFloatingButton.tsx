@@ -44,6 +44,7 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
                     >
                         <>
                             <span style={{
+                                zIndex: 150,
                                 position: 'absolute',
                                 width: '200px',
                                 right: '0',
@@ -57,6 +58,7 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
                         </>
                         <>
                             <span style={{
+                                zIndex: 150,
                                 position: 'absolute',
                                 width: '180px',
                                 right: '0',
@@ -70,6 +72,7 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
                         </>
                         <>
                             <span style={{
+                                zIndex: 150,
                                 position: 'absolute',
                                 width: '100px',
                                 right: '0',
@@ -87,7 +90,7 @@ export const CategoryVerseFloatingButton: React.FC<CategoryVerseFloatingButtonPr
 
             {backdropVisible && (
                 <div
-                    className="h-screen w-screen fixed p-0 backdrop-blur bg-black/20" style={{ left: 300, top: 65 }}
+                    className="h-screen w-screen fixed p-0 backdrop-blur bg-black/20" style={{ zIndex: 10, left: 300, top: 65 }}
                     onClick={handleBackdrop}
                 ></div>
             )}

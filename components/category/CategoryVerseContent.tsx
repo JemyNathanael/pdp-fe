@@ -71,6 +71,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
         if (!notificationMap.get(checklistId)) {
             notification.success({
                 message: 'Success',
+                description: '',
                 placement: 'bottomRight',
                 className: 'custom-success-notification',
                 style: {
@@ -216,6 +217,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
 
     const onRemove = (file: RcFile) => {
         const newFileList = fileList.filter((item) => item.uid !== file.uid);
+        setIsUploading();
         setFileList(newFileList);
     };
 
