@@ -100,12 +100,13 @@ const ChecklistFiles: React.FC = () => {
 
     const onRemove = (file: RcFile) => {
         const newFileList = fileList.filter((item) => item.uid !== file.uid);
+        setIsUploading(true);
         setFileList(newFileList);
     };
 
     useEffect(() => {
         setFiles(checklistData?.checklistList.filter(item => item.id == id)),
-        setTempData(currChecklist?.blobList ?? []);
+            setTempData(currChecklist?.blobList ?? []);
     }, [checklistData?.checklistList, id, currChecklist]);
 
     const handleFileUpload = async (index: number) => {
@@ -118,7 +119,7 @@ const ChecklistFiles: React.FC = () => {
             });
         }
     }
-    
+
 
     const handleSave = async () => {
         if (tempData) {
@@ -135,7 +136,7 @@ const ChecklistFiles: React.FC = () => {
                     ContentType: item.contentType,
                 })),
             });
-    
+
             if (response) {
                 setFileList([]);
                 setTempData([]);
@@ -145,7 +146,7 @@ const ChecklistFiles: React.FC = () => {
             }
         }
     };
-    
+
 
     const showSuccessNotification = () => {
         notification.success({
@@ -162,7 +163,7 @@ const ChecklistFiles: React.FC = () => {
             duration: 2,
         });
     };
-    
+
     const handleChange = (file: RcFile, blobData: BlobListModel[]) => {
         const fileId = uuidv4();
 
@@ -232,7 +233,9 @@ const ChecklistFiles: React.FC = () => {
                                     </Upload>
                                 </div>
                             }
-                            <CategoryButton disabled={isUploading} text='Save' className='px-9' style={{ padding: '10px 0', maxHeight: '41px', marginLeft: '20px' }} onClick={handleSave}  />
+                            {isRoleGrantedEditUploadStatus &&
+                                <CategoryButton disabled={isUploading} text='Save' className='px-9' style={{ padding: '10px 0', maxHeight: '41px', marginLeft: '20px' }} onClick={handleSave} />
+                            }
                         </Row>
 
                     </div>
