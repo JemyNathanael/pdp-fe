@@ -26,12 +26,11 @@ const SearchSubCategoryNavBar = ({ setSearchResults, searchResults }) => {
                     label: item.title,
                 }));
                 setSearchResults(options);
-                console.log(options);
                 console.log(input);
             }
         }
         catch (error) {
-            console.log(error);
+            setSearchResults([]);
         }
     }
     const handleChange = (value: string) => {
