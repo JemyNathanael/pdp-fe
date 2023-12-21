@@ -33,7 +33,7 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
 
     return (
         <div className="mb-5 md:mb-8">
-            <label className="text-lg text-secondary-100 font-body font-bold">{label}</label>
+            <label className="text-xl sm:text-2xl font-body font-bold">{label}</label>
             <div className="relative">
                 {
                     inputType() == "password" ?

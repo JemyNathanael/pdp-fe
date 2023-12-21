@@ -195,7 +195,7 @@ const VersePage: Page = () => {
                 }
             </div>
             {isRoleGrantedEditUploadStatus &&
-                <div className='flex flex-row-reverse mr-5'>
+                <div className='flex flex-row-reverse mr-4'>
                     <CategoryButton disabled={isUploading} text='Save' className='px-10' onClick={ResetButton} />
                 </div>
             }

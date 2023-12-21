@@ -10,7 +10,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
  * Default style for buttons using Tailwind CSS.
  */
 
-const defaultStyle = "bg-[#3788FD] hover:bg-gray-200 hover:text-[#3788FD] text-white font-bold py-2 px-10 rounded min-w-[156px] max-w-[156px]";
+const defaultStyle = "bg-[#3788FD] text-white font-bold py-2 px-10 rounded min-w-[156px] max-w-[156px]";
 const outlinedStyle = "bg-transparent border-2 border-[#3788FD] hover:bg-gray-200 text-[#3788FD] font-bold py-2 px-10 rounded min-w-[156px] max-w-[156px]";
 
 const disabledButton = " opacity-50 cursor-not-allowed";
