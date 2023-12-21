@@ -71,7 +71,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
         if (!notificationMap.get(checklistId)) {
             notification.success({
                 message: 'Success',
-                description: 'Checklist ID: ' + checklistId,
                 placement: 'bottomRight',
                 className: 'custom-success-notification',
                 style: {
