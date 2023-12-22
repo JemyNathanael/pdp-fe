@@ -150,7 +150,7 @@ export const CategoryVerseFloatingButton: React.FC<
       {backdropVisible && (
         <div
           className="h-screen w-screen fixed p-0 backdrop-blur bg-black/20"
-          style={{ left: 300, top: 65 }}
+          style={{ left: 300, top: 65, zIndex:10 }}
           onClick={handleBackdrop}
         ></div>
       )}
