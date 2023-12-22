@@ -126,6 +126,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
     }
 
     const handleCancel = () => {
+        reset();
         onCancel();
     }
 
