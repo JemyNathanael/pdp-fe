@@ -46,7 +46,12 @@ export const InputSelectAddNewUserForm = <T,>({
                     dropdownIndicator: (baseStyle) => ({
                         ...baseStyle,
                         color: ColorPalette.primaryBlack100,
-                    })
+                    }),
+                    option: (baseStyle, { isFocused, isSelected }) => ({
+                        ...baseStyle,
+                        backgroundColor: isSelected ? '#E6F4FF' : isFocused ? '#f0f0f0' : baseStyle.backgroundColor,
+                        color: isSelected ? 'black' : baseStyle.color,
+                    }),
                 }}
             />
             {formErrorMessage && <p className='text-md text-red-600 font-normal font-body mt-1.5'>{formErrorMessage}</p>}
