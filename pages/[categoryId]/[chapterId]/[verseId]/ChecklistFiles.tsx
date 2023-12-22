@@ -102,6 +102,8 @@ const ChecklistFiles: React.FC = () => {
         const newFileList = fileList.filter((item) => item.uid !== file.uid);
         setIsUploading(true);
         setFileList(newFileList);
+        const updatedData = tempData.filter((item) => item.originFileObj?.uid !== file.uid);
+        setTempData(updatedData);
     };
 
     useEffect(() => {
