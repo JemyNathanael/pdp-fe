@@ -21,6 +21,8 @@ interface IProps {
   changeCollapseStatus: (index: number, state: boolean) => void;
   resetToggle: () => void;
   toggledFlag: boolean;
+  searchRoutePath?: string;
+  setSearchRoutePath: () => void;
 }
 
 interface ChildProps {
@@ -78,6 +80,8 @@ const Collapsible: React.FC<IProps> = ({
   changeCollapseStatus,
   toggledFlag,
   resetToggle,
+  searchRoutePath,
+  setSearchRoutePath
 }) => {
   const [isOpen, setIsOpen] = useState(open);
   const router = useRouter();
@@ -100,6 +104,18 @@ const Collapsible: React.FC<IProps> = ({
     toggledFlag,
     selectedIndex,
   ]);
+
+  useEffect(() => {
+
+    if (searchRoutePath !== '' && searchRoutePath !== undefined) {
+
+      if (searchRoutePath.includes(routePath)) {
+        setIsOpen(true);
+        changeCollapseStatus(currentIndex, true);
+        setSearchRoutePath();
+      }
+    }
+  }, [changeCollapseStatus, currentIndex, isOpen, routePath, searchRoutePath, setSearchRoutePath])
 
   const handleFilterOpening = () => {
     setIsOpen((prev) => !prev);

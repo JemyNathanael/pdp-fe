@@ -89,7 +89,7 @@ const Home: React.FC = () => {
                 </div>
                 <div style={{ maxWidth: '100%' }} className='mr-2'>
                     <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
-                    <SearchResultNav searchResults={searchResults} />
+                    <SearchResultNav onClick={() => console.log('')} searchResults={searchResults} />
                 </div>
                 <div className="flex items-center">
                     {status === 'authenticated' ?
