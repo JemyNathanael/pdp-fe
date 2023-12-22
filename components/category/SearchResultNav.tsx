@@ -11,7 +11,7 @@ const SearchResultNav = ({ onClick, searchResults }) => {
             return '670px';
         } else if (viewportWidth <= 775) {
             return '300px';
-        } 
+        }
         else {
             const ratio = (viewportWidth - 1200) / (1200 - 800);
             const width = 600 + (250 * ratio);
@@ -54,9 +54,13 @@ const SearchResultNav = ({ onClick, searchResults }) => {
         if (result.type == 'Second Sub-Category') {
             // <Link href={`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`} />
             // window.location.href = `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`;
-            onClick(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
             await delay(500);
-            router.push(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
+            router.push({
+                pathname: `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`,
+                query: { query: `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}` },
+            });
+            // router.push(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
+            // onClick(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
         }
     }
     // console.log("ini halaman search category, ", searchResults);
