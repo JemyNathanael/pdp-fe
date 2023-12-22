@@ -100,10 +100,12 @@ const ChecklistFiles: React.FC = () => {
 
     const onRemove = (file: RcFile) => {
         const newFileList = fileList.filter((item) => item.uid !== file.uid);
-        setIsUploading(true);
         setFileList(newFileList);
         const updatedData = tempData.filter((item) => item.originFileObj?.uid !== file.uid);
         setTempData(updatedData);
+        if(newFileList.length === 0){
+            setIsUploading(true);
+        }
     };
 
     useEffect(() => {
