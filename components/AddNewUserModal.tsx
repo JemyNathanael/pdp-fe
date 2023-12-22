@@ -33,20 +33,26 @@ interface AddNewUserModalProps {
 }
 
 
-const schema = z.object({
-    name: z.string({ required_error: 'Name can\'t be empty' }).min(1, 'Name can\'t be empty'),
-    email: z.string({ required_error: 'Email can\'t be empty' }).email({ message: 'Email Format not valid' }).min(1, 'Email can\'t be empty'),
+const passwordSchema = z.object({
     password: z.string({
         required_error: 'Password can\'t be empty'
     })
         .min(8, 'Password must be at least 8 characters')
         .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-])/, 'Passwords must have uppercase letters, lowercase letters, numbers, and special characters'),
     confirmPassword: z.string({ required_error: 'Confirmation password can\'t be empty' }),
-    role: z.string({ required_error: 'Role can\'t be empty' }).min(1, 'Role can\'t be empty'),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
 });
+
+
+const userSchema = z.object({
+    name: z.string({ required_error: 'Name can\'t be empty' }).min(1, 'Name can\'t be empty'),
+    email: z.string({ required_error: 'Email can\'t be empty' }).email({ message: 'Email Format not valid' }).min(1, 'Email can\'t be empty'),
+    role: z.string({ required_error: 'Role can\'t be empty' }).min(1, 'Role can\'t be empty'),
+})
+
+const schema = z.intersection(passwordSchema, userSchema);
 
 const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, onSave }) => {
     const { replace } = useRouter();
