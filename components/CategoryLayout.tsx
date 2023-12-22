@@ -70,13 +70,14 @@ const CategoryLayout: React.FC<{
     const [openAll, setOpenAll] = useState(false);
     const [toggledFromCollapseOrExpandAll, setToggledFromCollapseOrExpandAll] = useState(false);
     const [chaptersExpandedState, setChaptersExpandedState] = useState<boolean[]>();
-    const [routePath, setRoutePath] = useState<string>();
+    const router = useRouter();
+    const { query } = router.query;
+    const [routePath, setRoutePath] = useState<string>(query?.toString() ?? '');
 
     const [firstSubCategories, setFirstSubCategories] = useState<CategorySidebarItemsModel[]>()
 
     const [marginLeftValue, setMarginLeftValue] = useState<string>('300px');
 
-    const router = useRouter();
     const categoryId = router.query['categoryId']?.toString() ?? '';
 
     const { data: session, status } = useSession();
@@ -93,6 +94,7 @@ const CategoryLayout: React.FC<{
     const isSubCategoryPage = router.pathname === '/[categoryId]/[chapterId]';
     const isChecklistPage = router.pathname === '/[categoryId]/[chapterId]/[verseId]';
     const isVersePage = router.pathname === '/[categoryId]/[chapterId]/[verseId]/ChecklistFiles';
+    
     
     const goToManageUserPage = () => {
         router.push('/ManageUser');
@@ -112,6 +114,7 @@ const CategoryLayout: React.FC<{
     };
 
     useEffect(() => {
+        setRoutePath(query?.toString() ?? '')
         if (data) {
             const firstSubCategoriesItem: CategorySidebarItemsModel[] = data?.firstSubCategories.map((chapter) => {
                 // map each verses to make a child menu from each chapters
@@ -133,7 +136,7 @@ const CategoryLayout: React.FC<{
 
             setFirstSubCategories(firstSubCategoriesItem);
         }
-    }, [data, router.query])
+    }, [data, query, router.query])
     // console.log("first category : ", firstSubCategories)
     useEffect(() => {
         if (firstSubCategories) {
