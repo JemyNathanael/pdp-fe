@@ -261,10 +261,10 @@ const AddSubCategoryModal: React.FC<{
         const isChecklistFilled = addForm.checkList.some((item) => item.trim())
         if (!addForm.ayat) {
             if (!addForm.title) {
-                return '#A3A3A3'
+                return 'black'
             }
             else {
-                return '#3788FD'
+                return 'white'
             }
         }
         else if (addForm.ayat) {
