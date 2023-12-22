@@ -247,6 +247,8 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
         const newFileList = fileList.filter((item) => item.uid !== file.uid);
         setIsUploading();
         setFileList(newFileList);
+        const updatedData = tempData.filter((item) => item.originFileObj?.uid !== file.uid);
+        setTempData(updatedData);
     };
 
     function setCanSave() {
