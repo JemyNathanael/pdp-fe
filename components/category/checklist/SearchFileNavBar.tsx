@@ -5,13 +5,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
-const SearchChecklistNavBar = ({setSearchResults, searchResults }) => {
+const SearchFileNavBar = ({setSearchResults, searchResults}) => {
 const [input, setInput] = useState<string>('');
 const [inputResize, setInputResize] = useState<string>('670px');
 const inputRef = useRef<HTMLInputElement>(null);
 const swrFetcher = useSwrFetcherWithAccessToken();
 const router = useRouter();
-const secondSubCategoryId = router.query['verseId'];
+const checklistId = router.query['id'];
 
 const handleChange = (value: string) => {
     setInput(value);
@@ -19,7 +19,7 @@ const handleChange = (value: string) => {
 }
 
 const handleSearch = async (value: string) => {
-    const searchApiUrl = `${BackendApiUrl.getChecklistSearch}?search=${value}&secondSubCategoryId=${secondSubCategoryId}`;
+    const searchApiUrl = `${BackendApiUrl.getChecklistFileSearch}?search=${value}&checklistId=${checklistId}`;
     // console.log(searchApiUrl);
     try {
         if (value == '') {
@@ -28,12 +28,11 @@ const handleSearch = async (value: string) => {
         else {
             const response = await swrFetcher(searchApiUrl);
             const options = response?.map((item) => ({
-                value: item.checklistId,
-                label: item.description,
-                blobDatas: item.blobDatas,
+                value: item.blobId,
+                label: item.fileName,
             }));
             setSearchResults(options);
-            // console.log(input);
+            // console.log(options);
         }
     }
     catch (error) {
@@ -80,7 +79,7 @@ return (
     <div className="relative w-full">
             <input
                 ref={inputRef}
-                placeholder="Search Checklist Description or File Name"
+                placeholder="Search File Name"
                 className={`py-4 px-5 rounded-3xl text-black outline-none w-full ${searchResults.length === 0 ? '' : 'rounded-b-none'
                     }`}
                 onChange={(e) => handleChange(e.target.value)}
@@ -95,4 +94,4 @@ return (
     </div>
 )};
 
-export default SearchChecklistNavBar;
+export default SearchFileNavBar;

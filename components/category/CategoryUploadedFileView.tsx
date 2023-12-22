@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile, faFileExcel, faFileImage, faFilePdf, faFileWord, faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { IconDefinition, faCircle } from '@fortawesome/free-solid-svg-icons';
@@ -26,7 +26,6 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
         filename.length > MaxFileNameLength
             ? `${filename.substring(0, MaxFileNameLength - 4)}...${filename.substring(filename.lastIndexOf('.') + 1)}`
             : filename;
-
     const fileExtension = filename.substring(filename.lastIndexOf('.') + 1, filename.length).toLowerCase();
     const icon = extensionToIcon(fileExtension);
     const [isHovered, setIsHovered] = useState(false);
@@ -50,6 +49,10 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     const role = session?.user?.['role'][0];
     const { fetchGET } = useFetchWithAccessToken();
     const [isHighlighted, setIsHighlighted] = useState<boolean>(highlightedBlob === fileId);
+    
+    useEffect(() => {
+        setIsHighlighted(highlightedBlob === fileId);
+    }, [highlightedBlob, fileId]);
 
     function RemoveFile(currentIndex){
         removeFileByIndex(currentIndex);

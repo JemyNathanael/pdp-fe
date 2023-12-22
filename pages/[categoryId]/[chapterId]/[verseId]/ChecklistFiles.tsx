@@ -16,6 +16,7 @@ import { BackendApiUrl, GetChecklistList } from '@/functions/BackendApiUrl';
 import { useSession } from 'next-auth/react';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import { RcFile, UploadFile } from 'antd/es/upload';
+import Link from 'next/link';
 
 
 
@@ -47,6 +48,7 @@ interface ResponseTest {
 const ChecklistFiles: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
+    const highlightBlob = router.query['highlightBlob']?.toString() ?? '';
 
     const [files, setFiles] = useState<ChecklistList[]>();
     const canEditUploadStatusRole = ['Admin', 'Auditor', 'Uploader'];
@@ -64,10 +66,6 @@ const ChecklistFiles: React.FC = () => {
     const blobList = currChecklist?.blobList ?? [];
     const [tempData, setTempData] = useState<BlobListModel[]>(currChecklist?.blobList ?? []);
     const [isUploading, setIsUploading] = useState<boolean>(true);
-
-    function navigateBackToVerse() {
-        router.back();
-    }
 
     function removeFileFromChecklist(checklistIndex: number, fileIndex: number) {
         if (files) {
@@ -205,13 +203,12 @@ const ChecklistFiles: React.FC = () => {
         setTempData([...blobData, newFile]);
         return tempData.length;
     }
-
     return (
         <div className='flex flex-1'>
             <div>
-                <button onClick={navigateBackToVerse}>
+                <Link href={`/${router.query['categoryId']}/${router.query['chapterId']}/${router.query['verseId']}`}>
                     <FontAwesomeIcon icon={faCircleLeft} className='text-[#3788FD] mr-5' size={'2x'} />
-                </button>
+                </Link>
             </div>
 
             <div className='flex-1'>
@@ -229,7 +226,7 @@ const ChecklistFiles: React.FC = () => {
                                     filename={blob.fileName}
                                     removeFileByIndex={() => removeFileFromChecklist(i, j)}
                                     canSave={() => setIsUploading(false)}
-                                    highlightedBlob={router.query['highlightBlob']?.toString() ?? ''}
+                                    highlightedBlob={highlightBlob}
                                 />
                             ))
                         )
