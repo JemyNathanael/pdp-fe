@@ -65,7 +65,8 @@ const CategoryLayout: React.FC<{
 
     const [openAll, setOpenAll] = useState(false);
     const [toggledFromCollapseOrExpandAll, setToggledFromCollapseOrExpandAll] = useState(false);
-    const [chaptersExpandedState, setChaptersExpandedState] = useState<boolean[]>()
+    const [chaptersExpandedState, setChaptersExpandedState] = useState<boolean[]>();
+    const [routePath, setRoutePath] = useState<string>();
 
     const [firstSubCategories, setFirstSubCategories] = useState<CategorySidebarItemsModel[]>()
 
@@ -85,9 +86,15 @@ const CategoryLayout: React.FC<{
     const [selectedChapterIndex, setSelectedChapterIndex] = useState<number>(0);
     const isAdmin = userRole === "Admin";
     const isChecklistPage = router.pathname === '/[categoryId]/[chapterId]/[verseId]';
+    
     const goToManageUserPage = () => {
         router.push('/ManageUser');
     }
+
+    const receiveDataFromChild = (data) => {
+        
+        setRoutePath(data);
+      };
 
     const handleResize = () => {
         if (window.innerWidth < 1024) {
@@ -224,7 +231,7 @@ const CategoryLayout: React.FC<{
                             ) : (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
                                     <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
-                                    <SearchResultNav searchResults={searchResults} />
+                                    <SearchResultNav onClick={receiveDataFromChild} searchResults={searchResults} />
                                 </div>
                             )}
                             <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 items-center">
@@ -289,6 +296,8 @@ const CategoryLayout: React.FC<{
                             {firstSubCategories &&
                                 firstSubCategories.map((firstSub, i) =>
                                     <Collapsible
+                                        setSearchRoutePath={() => setRoutePath('')}
+                                        searchRoutePath={routePath}
                                         open={openAll}
                                         title={firstSub.title}
                                         routePath={firstSub.routePath}

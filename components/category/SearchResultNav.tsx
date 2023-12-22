@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-const SearchResultNav = ({ searchResults }) => {
+const SearchResultNav = ({ onClick, searchResults }) => {
     // console.log(searchResults);
 
     const calculateWidth = () => {
@@ -34,20 +34,28 @@ const SearchResultNav = ({ searchResults }) => {
         };
     }, []);
 
-    const handleClick = (result) => {
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+    const handleClick = async (result) => {
         // console.log("console log di category search", result);
         if (result.type == 'Category') {
             // <Link href={`/${result.value}`}/>
+            onClick(`/${result.value}`);
+            await delay(500);
             router.push(`/${result.value}`);
         }
         else if (result.type == 'First Sub-Category') {
             // <Link href={`/${result.value}/${result.firstSubCategoryId}`} />
             // window.location.href = `/${result.value}/${result.firstSubCategoryId}`;
+            onClick(`/${result.value}/${result.firstSubCategoryId}`);
+            await delay(500);
             router.push(`/${result.value}/${result.firstSubCategoryId}`);
         }
         if (result.type == 'Second Sub-Category') {
             // <Link href={`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`} />
             // window.location.href = `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`;
+            onClick(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
+            await delay(500);
             router.push(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
         }
     }
