@@ -71,7 +71,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
         if (!notificationMap.get(checklistId)) {
             notification.success({
                 message: 'Success',
-                description: 'Checklist ID: ' + checklistId,
+                description: '',
                 placement: 'bottomRight',
                 className: 'custom-success-notification',
                 style: {
@@ -165,6 +165,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
         };
         await fetchPUT(BackendApiUrl.updateChecklistUploadStatus, payload);
         showSuccessNotification(checklistId);
+        mutate(GetChecklistList(verseId));
     };
 
 
@@ -178,11 +179,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
             key: 'add',
             label: 'Add Checklist',
             onClick: () => setAddModal(true)
-        },
-        {
-            key: 'delete',
-            label: 'Delete',
-            onClick: () => setDeleteModal(true)
         },
     ]
     if (checklistLength && checklistLength > 1) {
@@ -200,6 +196,34 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
     };
 
     const handleChange = (file: RcFile, tempData: BlobListModel[]) => {
+
+        const isDuplicate = tempData.some((item) => item.fileName === file.name);
+
+        if (isDuplicate) {
+            const fileNameParts = file.name.split('.');
+            const baseName = fileNameParts.slice(0, -1).join('.');
+            const extension = fileNameParts[fileNameParts.length - 1];
+
+            let count = 1;
+            let newFileName = `${baseName}(${count}).${extension}`;
+
+            while (fileList.some((item) => item.name === newFileName)) {
+                count += 1;
+                newFileName = `${baseName}(${count}).${extension})`;
+            }
+
+            const fileId = uuidv4();
+            const newFile = {
+                id: fileId,
+                fileName: newFileName,
+                originFileObj: file,
+                contentType: file.type,
+            };
+            canSave();
+            setTempData([...tempData, newFile]);
+            return tempData.length;
+        }
+
         const fileId = uuidv4();
         const newFile = {
             id: fileId,
@@ -221,6 +245,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
 
     const onRemove = (file: RcFile) => {
         const newFileList = fileList.filter((item) => item.uid !== file.uid);
+        setIsUploading();
         setFileList(newFileList);
     };
 
@@ -250,7 +275,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
                     />
                 </div>
 
-                <div className='flex-1' id={checklistId}>
+                <div className='flex-1'>
                     <div className='flex-1 mx-5'>
                         <div className='text-base flex items-center'>
                             <Dropdown menu={{ items }} trigger={canSeeDropdown.includes(role) ? ['contextMenu'] : []}>

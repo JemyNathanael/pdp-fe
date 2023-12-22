@@ -16,6 +16,7 @@ import { BackendApiUrl, GetChecklistList } from '@/functions/BackendApiUrl';
 import { useSession } from 'next-auth/react';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import { RcFile, UploadFile } from 'antd/es/upload';
+import Link from 'next/link';
 
 
 
@@ -47,6 +48,7 @@ interface ResponseTest {
 const ChecklistFiles: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
+    const highlightBlob = router.query['highlightBlob']?.toString() ?? '';
 
     const [files, setFiles] = useState<ChecklistList[]>();
     const canEditUploadStatusRole = ['Admin', 'Auditor', 'Uploader'];
@@ -64,10 +66,6 @@ const ChecklistFiles: React.FC = () => {
     const blobList = currChecklist?.blobList ?? [];
     const [tempData, setTempData] = useState<BlobListModel[]>(currChecklist?.blobList ?? []);
     const [isUploading, setIsUploading] = useState<boolean>(true);
-
-    function navigateBackToVerse() {
-        router.back();
-    }
 
     function removeFileFromChecklist(checklistIndex: number, fileIndex: number) {
         if (files) {
@@ -102,12 +100,13 @@ const ChecklistFiles: React.FC = () => {
 
     const onRemove = (file: RcFile) => {
         const newFileList = fileList.filter((item) => item.uid !== file.uid);
+        setIsUploading(true);
         setFileList(newFileList);
     };
 
     useEffect(() => {
         setFiles(checklistData?.checklistList.filter(item => item.id == id)),
-        setTempData(currChecklist?.blobList ?? []);
+            setTempData(currChecklist?.blobList ?? []);
     }, [checklistData?.checklistList, id, currChecklist]);
 
     const handleFileUpload = async (index: number) => {
@@ -120,7 +119,7 @@ const ChecklistFiles: React.FC = () => {
             });
         }
     }
-    
+
 
     const handleSave = async () => {
         if (tempData) {
@@ -137,16 +136,17 @@ const ChecklistFiles: React.FC = () => {
                     ContentType: item.contentType,
                 })),
             });
-    
+
             if (response) {
                 setFileList([]);
                 setTempData([]);
                 mutate(GetChecklistList(verseId));
                 showSuccessNotification();
+                setIsUploading(true);
             }
         }
     };
-    
+
 
     const showSuccessNotification = () => {
         notification.success({
@@ -163,8 +163,34 @@ const ChecklistFiles: React.FC = () => {
             duration: 2,
         });
     };
-    
+
     const handleChange = (file: RcFile, blobData: BlobListModel[]) => {
+        const isDuplicate = tempData.some((item) => item.fileName === file.name);
+
+        if (isDuplicate) {
+            const fileNameParts = file.name.split('.');
+            const baseName = fileNameParts.slice(0, -1).join('.');
+            const extension = fileNameParts[fileNameParts.length - 1];
+
+            let count = 1;
+            let newFileName = `${baseName}(${count}).${extension}`;
+
+            while (fileList.some((item) => item.name === newFileName)) {
+                count += 1;
+                newFileName = `${baseName}(${count}).${extension})`;
+            }
+
+            const fileId = uuidv4();
+
+            const newFile = {
+                id: fileId,
+                fileName: newFileName,
+                originFileObj: file,
+                contentType: file.type,
+            };
+            setTempData([...blobData, newFile]);
+            return tempData.length;
+        }
         const fileId = uuidv4();
 
         const newFile = {
@@ -177,13 +203,12 @@ const ChecklistFiles: React.FC = () => {
         setTempData([...blobData, newFile]);
         return tempData.length;
     }
-
     return (
         <div className='flex flex-1'>
             <div>
-                <button onClick={navigateBackToVerse}>
+                <Link href={`/${router.query['categoryId']}/${router.query['chapterId']}/${router.query['verseId']}`}>
                     <FontAwesomeIcon icon={faCircleLeft} className='text-[#3788FD] mr-5' size={'2x'} />
-                </button>
+                </Link>
             </div>
 
             <div className='flex-1'>
@@ -201,7 +226,7 @@ const ChecklistFiles: React.FC = () => {
                                     filename={blob.fileName}
                                     removeFileByIndex={() => removeFileFromChecklist(i, j)}
                                     canSave={() => setIsUploading(false)}
-                                    highlightedBlob={router.query['highlightBlob']?.toString() ?? ''}
+                                    highlightedBlob={highlightBlob}
                                 />
                             ))
                         )
@@ -234,7 +259,9 @@ const ChecklistFiles: React.FC = () => {
                                     </Upload>
                                 </div>
                             }
-                            <CategoryButton disabled={isUploading} text='Save' className='px-9' style={{ padding: '10px 0', maxHeight: '41px', marginLeft: '20px' }} onClick={handleSave}  />
+                            {isRoleGrantedEditUploadStatus &&
+                                <CategoryButton disabled={isUploading} text='Save' className='px-9' style={{ padding: '10px 0', maxHeight: '41px', marginLeft: '20px' }} onClick={handleSave} />
+                            }
                         </Row>
 
                     </div>

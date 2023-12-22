@@ -172,7 +172,7 @@ const VersePage: Page = () => {
                 <br />
                 {(checklist && uploadStatusDropdown) &&
                     checklist.map((checklist, i) =>
-                        <div key={i} className='mb-16'>
+                        <div key={i} className='mb-16' id={checklist.id}>
 
                             <CategoryVerseContent
                                 checklistId={checklist.id}
@@ -195,7 +195,7 @@ const VersePage: Page = () => {
                 }
             </div>
             {isRoleGrantedEditUploadStatus &&
-                <div className='flex flex-row-reverse mr-5'>
+                <div className='flex flex-row-reverse mr-4'>
                     <CategoryButton disabled={isUploading} text='Save' className='px-10' onClick={ResetButton} />
                 </div>
             }

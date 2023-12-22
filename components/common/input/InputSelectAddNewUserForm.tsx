@@ -27,7 +27,7 @@ export const InputSelectAddNewUserForm = <T,>({
 
     return (
         <div className='mb-5 md:mb-8'>
-            <label className='text-lg text-secondary-100 font-body font-bold mb-5'>{label}</label>
+            <label className='text-xl sm:text-2xl text-secondary-100 font-body font-bold mb-5'>{label}</label>
             <Select
                 options={options}
                 placeholder={placeholder}

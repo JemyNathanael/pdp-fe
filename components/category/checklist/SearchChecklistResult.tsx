@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const SearchChecklistResult = ({searchResults}) => {
+const SearchChecklistResult = ({searchResults }) => {
   const calculateWidth = () => {
     const viewportWidth = window.innerWidth;
     if (viewportWidth >= 1300) {
@@ -61,12 +61,16 @@ const SearchChecklistResult = ({searchResults}) => {
   const handleResultClick = (result) => {
     const checklistId = result.value;
     const checklistElement = document.getElementById(`${checklistId}`);
-    if(checklistElement) {
-      checklistElement.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "nearest"
-        });
+    if (checklistElement) {
+      const navbarHeight = 10;
+      const paddingAdjustment = -95;
+      const targetScrollPosition = checklistElement.getBoundingClientRect().top + window.scrollY - navbarHeight + paddingAdjustment;
+
+      window.scrollTo({
+        top: targetScrollPosition,
+        behavior: "smooth",
+      });
+      // setSearchResults('');
     }
   }
   // console.log(router)

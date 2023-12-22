@@ -39,7 +39,7 @@ const DefaultLayout: React.FC<{
                 position: 'fixed',
                 width: '100%',
                 top: 0,
-                zIndex: 1
+                zIndex: 2
             }}>
                 <div className="flex flex-1 items-center">
                     <div onClick={() => router.push('/')} style={{ flexGrow: 1, }}>
