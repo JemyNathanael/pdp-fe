@@ -8,7 +8,7 @@ interface InputSelectProps<T> {
     options: SelectOptions<T>[];
     placeholder?: string;
     value: SelectOptions<T> | string | null;
-    onChange: (value: SelectOptions<T> | string | null) => void;
+    onChange: (e) => void;
     formErrorMessage?: string;
 }
 
@@ -27,7 +27,7 @@ export const InputSelectAddNewUserForm = <T,>({
                 labelInValue={value === null ? false : true}
                 options={options}
                 placeholder={placeholder}
-                className={`w-full`}
+                className={`w-full mt-2`}
                 onChange={onChange}
                 value={value ? options.find((opt) => opt.value === value) : undefined}
             />
