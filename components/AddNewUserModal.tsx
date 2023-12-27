@@ -196,12 +196,12 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
                         <InputSelectAddNewUserForm
                             label='Role'
                             value={listCurrentRole.find(e => e.value === fieldCurrentRole.value) ?? ''}
-                            name={fieldCurrentRole.name}
                             options={roleOptions}
                             onChange={(selectedOptions: SelectOptions<string>) => fieldCurrentRole.onChange(selectedOptions.value)}
                             placeholder='Choose Role'
                             formErrorMessage={errors?.role?.message}
                         />
+
                         <div className="col-span-1 text-end">
 
                             <button
