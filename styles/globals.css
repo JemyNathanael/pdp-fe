@@ -220,3 +220,19 @@
   background-color: white;
 }
 
+.custom-select {
+  width: 100%;
+  margin-top: 2.5px;
+  padding: 3.5px;
+  border: 2px solid #dbdbdb;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.custom-select:hover,
+.custom-select:focus,
+.custom-select.ant-select-focused,
+.custom-select.ant-select-open {
+  border: 2px solid #0099ff;
+}
+
