@@ -137,6 +137,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
                 onCancel={handleCancel}
                 footer={null}
                 width={800}
+                style={{ maxHeight: '80vh', overflowY: 'auto' }}
                 closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{ color: '#3788fd', fontSize: '24px' }} />}
             >
                 <div className="flex flex-col px-2 md:px-4 lg:px-8 mt-4 md:mt-16">

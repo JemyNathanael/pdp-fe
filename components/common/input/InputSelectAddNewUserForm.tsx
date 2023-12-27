@@ -27,8 +27,10 @@ export const InputSelectAddNewUserForm = <T,>({
                 labelInValue={value === null ? false : true}
                 options={options}
                 placeholder={placeholder}
-                className={`w-full mt-2`}
+                className={`mt-3 w-full custom-select h-100`}
                 onChange={onChange}
+                size={"large"}
+                bordered={false}
                 value={value ? options.find((opt) => opt.value === value) : undefined}
             />
             {formErrorMessage && <p className='text-md text-red-600 font-normal font-body mt-1.5'>{formErrorMessage}</p>}
