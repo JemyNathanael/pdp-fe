@@ -1,58 +1,35 @@
-import { ColorPalette } from "@/components/constants";
 import { SelectOptions } from "@/components/interfaces/AddNewUserForms";
 import React from "react";
-import Select from "react-select";
+import { Select } from "antd";
 
 interface InputSelectProps<T> {
-    label: string
-    className?: string,
-    options: SelectOptions<T>[],
-    placeholder?: string,
-    value: SelectOptions<T>[] | SelectOptions<T> | string | null,
-    onChange: (e) => void,
-    name: string
-    formErrorMessage?: string
+    label: string;
+    className?: string;
+    options: SelectOptions<T>[];
+    placeholder?: string;
+    value: SelectOptions<T> | string | null;
+    onChange: (value: SelectOptions<T> | string | null) => void;
+    formErrorMessage?: string;
 }
 
 export const InputSelectAddNewUserForm = <T,>({
     label,
     options,
     placeholder,
-    className,
     value,
     onChange,
-    name,
-    formErrorMessage
+    formErrorMessage,
 }: InputSelectProps<T>): React.FunctionComponentElement<T> => {
-
     return (
         <div className='mb-5 md:mb-8'>
             <label className='text-xl sm:text-2xl text-secondary-100 font-body font-bold mb-5'>{label}</label>
             <Select
+                labelInValue={value === null ? false : true}
                 options={options}
                 placeholder={placeholder}
-                className={`${className}`}
-                value={value}
+                className={`w-full`}
                 onChange={onChange}
-                name={name}
-                styles={{
-                    control: (baseTyle) => ({
-                        ...baseTyle,
-                        borderWidth: 2,
-                        borderColor: formErrorMessage ? ColorPalette.alertDanger : ColorPalette.primaryBlack100,
-                        padding: 8,
-                        marginTop: 10
-                    }),
-                    dropdownIndicator: (baseStyle) => ({
-                        ...baseStyle,
-                        color: ColorPalette.primaryBlack100,
-                    }),
-                    option: (baseStyle, { isFocused, isSelected }) => ({
-                        ...baseStyle,
-                        backgroundColor: isSelected ? '#E6F4FF' : isFocused ? '#f0f0f0' : baseStyle.backgroundColor,
-                        color: isSelected ? 'black' : baseStyle.color,
-                    }),
-                }}
+                value={value ? options.find((opt) => opt.value === value) : undefined}
             />
             {formErrorMessage && <p className='text-md text-red-600 font-normal font-body mt-1.5'>{formErrorMessage}</p>}
         </div>
