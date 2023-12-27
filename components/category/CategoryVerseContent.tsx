@@ -136,7 +136,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
 
     useEffect(() => {
         setSelectOptions(dropdownOptions);
-
     }, [dropdownOptions])
 
 
@@ -245,8 +244,12 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
 
     const onRemove = (file: RcFile) => {
         const newFileList = fileList.filter((item) => item.uid !== file.uid);
-        setIsUploading();
         setFileList(newFileList);
+        const updatedData = tempData.filter((item) => item.originFileObj?.uid !== file.uid);
+        setTempData(updatedData);
+        if(updatedData.length === 0){
+            setIsUploading();
+        }
     };
 
     function setCanSave() {
