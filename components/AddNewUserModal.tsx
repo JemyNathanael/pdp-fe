@@ -138,11 +138,11 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
                 onCancel={handleCancel}
                 footer={null}
                 width={800}
-                style={{ maxHeight: '80vh', overflowY: 'auto' }}
+                style={{ maxHeight: '90vh', overflowY: 'auto' }}
                 closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{ color: '#3788fd', fontSize: '24px' }} />}
             >
-                <div className="flex flex-col px-2 md:px-4 lg:px-8 mt-4 md:mt-16">
-                    <h3 className="text-2xl sm:text-3xl text-center font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8">Add New Account</h3>
+                <div className="flex flex-col px-2 py-2 md:px-4 lg:px-8">
+                    <h3 className="text-2xl sm:text-3xl text-center font-body font-bold  mb-4 sm:mb-8">Add New Account</h3>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Controller
                             name="name"
