@@ -171,7 +171,9 @@ const ChecklistFiles: React.FC = () => {
     const handleChange = (file: RcFile, blobData: BlobListModel[]) => {
         const isDuplicate = tempData.some((item) => item.fileName === file.name);
 
-        if (isDuplicate) {
+        const isFileListDuplicate = fileList.some((item) => item.fileName == file.name);
+
+        if (isDuplicate || isFileListDuplicate) {
             const fileNameParts = file.name.split('.');
             const baseName = fileNameParts.slice(0, -1).join('.');
             const extension = fileNameParts[fileNameParts.length - 1];
@@ -179,9 +181,9 @@ const ChecklistFiles: React.FC = () => {
             let count = 1;
             let newFileName = `${baseName}(${count}).${extension}`;
 
-            while (fileList.some((item) => item.name === newFileName)) {
+            while (tempData.some((item) => item.fileName === newFileName)) {
                 count += 1;
-                newFileName = `${baseName}(${count}).${extension})`;
+                newFileName = `${baseName}(${count}).${extension}`;
             }
 
             const fileId = uuidv4();
@@ -193,6 +195,7 @@ const ChecklistFiles: React.FC = () => {
                 contentType: file.type,
             };
             setTempData([...blobData, newFile]);
+            setFileList([...fileList, file]);
             return tempData.length;
         }
         const fileId = uuidv4();
@@ -203,6 +206,7 @@ const ChecklistFiles: React.FC = () => {
             originFileObj: file,
             contentType: file.type,
         };
+        setFileList([...fileList, file]);
 
         setTempData([...blobData, newFile]);
         return tempData.length;
@@ -253,7 +257,6 @@ const ChecklistFiles: React.FC = () => {
                                             else {
                                                 handleChange(file, tempData);
                                                 setIsUploading(false);
-                                                setFileList([...fileList, file]);
                                                 return false;
                                             }
 

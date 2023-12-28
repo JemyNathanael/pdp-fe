@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Input } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
@@ -60,10 +60,18 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
     const verseId = router.query['verseId']?.toString() ?? '';
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data: dataDesc } = useSWR<ChecklistDesc>(GetChecklistDescription(checkId), swrFetcher);
+    const [description, setDescription] = useState<string>(dataDesc?.checklistDescription ?? '')
 
-    const { handleSubmit, control, formState: { errors } } = useForm<UpdateChecklist>({
+    const { handleSubmit, control, formState: { errors }, reset } = useForm<UpdateChecklist>({
         resolver: zodResolver(schema),
     });
+
+    useEffect(() => {
+        if(!visible){
+            reset();
+            setDescription(dataDesc?.checklistDescription ?? '')
+        }
+    }, [reset, visible, dataDesc])
 
     const onSubmit = async (formData: UpdateChecklist) => {
         const payload = {
@@ -77,6 +85,7 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
             setSuccessModalVisible(true);
             mutate(GetChecklistList(verseId));
             onCancel();
+            reset();
         }
     };
 
@@ -104,10 +113,10 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
                         <Controller
                             name="description"
                             control={control}
+                            defaultValue={description}
                             render={({ field }) => (
                                 <TextArea 
                                     rows={10}
-                                    defaultValue={dataDesc?.checklistDescription}
                                     {...field}>
                                 </TextArea>
                             )}
