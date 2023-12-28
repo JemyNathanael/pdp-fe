@@ -69,13 +69,15 @@ const CategoryLayout: React.FC<{
 
     const [openAll, setOpenAll] = useState(false);
     const [toggledFromCollapseOrExpandAll, setToggledFromCollapseOrExpandAll] = useState(false);
-    const [chaptersExpandedState, setChaptersExpandedState] = useState<boolean[]>()
+    const [chaptersExpandedState, setChaptersExpandedState] = useState<boolean[]>();
+    const router = useRouter();
+    const { query } = router.query;
+    const [routePath, setRoutePath] = useState<string>(query?.toString() ?? '');
 
     const [firstSubCategories, setFirstSubCategories] = useState<CategorySidebarItemsModel[]>()
 
     const [marginLeftValue, setMarginLeftValue] = useState<string>('300px');
 
-    const router = useRouter();
     const categoryId = router.query['categoryId']?.toString() ?? '';
 
     const { data: session, status } = useSession();
@@ -93,9 +95,15 @@ const CategoryLayout: React.FC<{
     const isChecklistPage = router.pathname === '/[categoryId]/[chapterId]/[verseId]';
     const isVersePage = router.pathname === '/[categoryId]/[chapterId]/[verseId]/ChecklistFiles';
     
+    
     const goToManageUserPage = () => {
         router.push('/ManageUser');
     }
+
+    const receiveDataFromChild = (data) => {
+        
+        setRoutePath(data);
+      };
 
     const handleResize = () => {
         if (window.innerWidth < 1024) {
@@ -106,6 +114,7 @@ const CategoryLayout: React.FC<{
     };
 
     useEffect(() => {
+        setRoutePath(query?.toString() ?? '')
         if (data) {
             const firstSubCategoriesItem: CategorySidebarItemsModel[] = data?.firstSubCategories.map((chapter) => {
                 // map each verses to make a child menu from each chapters
@@ -127,7 +136,7 @@ const CategoryLayout: React.FC<{
 
             setFirstSubCategories(firstSubCategoriesItem);
         }
-    }, [data, router.query])
+    }, [data, query, router.query])
     // console.log("first category : ", firstSubCategories)
     useEffect(() => {
         if (firstSubCategories) {
@@ -228,7 +237,7 @@ const CategoryLayout: React.FC<{
                             {isCategoryPage && (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
                                     <SearchCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
-                                    <SearchResultNav searchResults={searchResults} />
+                                    <SearchResultNav onClick={receiveDataFromChild} searchResults={searchResults} />
                                 </div>
                             )}
                             {/* First Sub Category Page */}
@@ -315,6 +324,8 @@ const CategoryLayout: React.FC<{
                             {firstSubCategories &&
                                 firstSubCategories.map((firstSub, i) =>
                                     <Collapsible
+                                        setSearchRoutePath={() => setRoutePath('')}
+                                        searchRoutePath={routePath}
                                         open={openAll}
                                         title={firstSub.title}
                                         routePath={firstSub.routePath}

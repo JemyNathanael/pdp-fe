@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-const SearchResultNav = ({ searchResults }) => {
+const SearchResultNav = ({ onClick, searchResults }) => {
     // console.log(searchResults);
 
     const calculateWidth = () => {
@@ -11,7 +11,7 @@ const SearchResultNav = ({ searchResults }) => {
             return '670px';
         } else if (viewportWidth <= 775) {
             return '300px';
-        } 
+        }
         else {
             const ratio = (viewportWidth - 1200) / (1200 - 800);
             const width = 600 + (250 * ratio);
@@ -34,21 +34,36 @@ const SearchResultNav = ({ searchResults }) => {
         };
     }, []);
 
-    const handleClick = (result) => {
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+    const handleClick = async (result) => {
         // console.log("console log di category search", result);
         if (result.type == 'Category') {
             // <Link href={`/${result.value}`}/>
+            onClick(`/${result.value}`);
+            await delay(500);
             router.push(`/${result.value}`);
         }
         else if (result.type == 'First Sub-Category') {
             // <Link href={`/${result.value}/${result.firstSubCategoryId}`} />
             // window.location.href = `/${result.value}/${result.firstSubCategoryId}`;
-            router.push(`/${result.value}/${result.firstSubCategoryId}`);
+            onClick(`/${result.value}/${result.firstSubCategoryId}`);
+            await delay(500);
+            router.push({
+                pathname: `/${result.value}/${result.firstSubCategoryId}`,
+                query: { query: `/${result.value}/${result.firstSubCategoryId}`}
+            })
         }
         if (result.type == 'Second Sub-Category') {
             // <Link href={`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`} />
             // window.location.href = `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`;
-            router.push(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
+            await delay(500);
+            router.push({
+                pathname: `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`,
+                query: { query: `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}` },
+            });
+            // router.push(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
+            // onClick(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
         }
     }
     // console.log("ini halaman search category, ", searchResults);

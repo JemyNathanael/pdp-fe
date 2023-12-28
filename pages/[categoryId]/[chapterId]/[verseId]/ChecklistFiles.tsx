@@ -100,8 +100,12 @@ const ChecklistFiles: React.FC = () => {
 
     const onRemove = (file: RcFile) => {
         const newFileList = fileList.filter((item) => item.uid !== file.uid);
-        setIsUploading(true);
         setFileList(newFileList);
+        const updatedData = tempData.filter((item) => item.originFileObj?.uid !== file.uid);
+        setTempData(updatedData);
+        if(newFileList.length === 0){
+            setIsUploading(true);
+        }
     };
 
     useEffect(() => {
@@ -165,6 +169,35 @@ const ChecklistFiles: React.FC = () => {
     };
 
     const handleChange = (file: RcFile, blobData: BlobListModel[]) => {
+        const isDuplicate = tempData.some((item) => item.fileName === file.name);
+
+        const isFileListDuplicate = fileList.some((item) => item.fileName == file.name);
+
+        if (isDuplicate || isFileListDuplicate) {
+            const fileNameParts = file.name.split('.');
+            const baseName = fileNameParts.slice(0, -1).join('.');
+            const extension = fileNameParts[fileNameParts.length - 1];
+
+            let count = 1;
+            let newFileName = `${baseName}(${count}).${extension}`;
+
+            while (tempData.some((item) => item.fileName === newFileName)) {
+                count += 1;
+                newFileName = `${baseName}(${count}).${extension}`;
+            }
+
+            const fileId = uuidv4();
+
+            const newFile = {
+                id: fileId,
+                fileName: newFileName,
+                originFileObj: file,
+                contentType: file.type,
+            };
+            setTempData([...blobData, newFile]);
+            setFileList([...fileList, file]);
+            return tempData.length;
+        }
         const fileId = uuidv4();
 
         const newFile = {
@@ -173,6 +206,7 @@ const ChecklistFiles: React.FC = () => {
             originFileObj: file,
             contentType: file.type,
         };
+        setFileList([...fileList, file]);
 
         setTempData([...blobData, newFile]);
         return tempData.length;
@@ -223,7 +257,6 @@ const ChecklistFiles: React.FC = () => {
                                             else {
                                                 handleChange(file, tempData);
                                                 setIsUploading(false);
-                                                setFileList([...fileList, file]);
                                                 return false;
                                             }
 

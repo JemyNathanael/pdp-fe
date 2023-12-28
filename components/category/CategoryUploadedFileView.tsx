@@ -94,8 +94,8 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
     return (
         <div>
             <div 
-            className='relative'
-            style={{ zIndex: 1}}
+                className='relative'
+                style={{ zIndex: 1}}
             >
                 {!canEditUploadStatusRole.includes(role) ? true :
                     <button onClick={() => RemoveFile(currentIndex)}>
@@ -117,10 +117,9 @@ export const CategoryUploadedFileView: React.FC<UploadedFileViewProps> = ({ file
                     boxShadow: `${isHighlighted ? '0 20px 40px rgba(0, 0, 0, 0.2)' : (isHovered ? '0 20px 40px rgba(0, 0, 0, 0.2)' : 'none')}`,
                     transition: 'box-shadow',
                 }}
-            >
+>
                 <div className='flex flex-1 items-center justify-center'>
                     <Button
-                        onClick={DownloadFile}
                         type='link'
                     >
                         {isHovered ? (

@@ -136,7 +136,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
 
     useEffect(() => {
         setSelectOptions(dropdownOptions);
-
     }, [dropdownOptions])
 
 
@@ -196,6 +195,34 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
     };
 
     const handleChange = (file: RcFile, tempData: BlobListModel[]) => {
+
+        const isDuplicate = tempData.some((item) => item.fileName === file.name);
+
+        if (isDuplicate) {
+            const fileNameParts = file.name.split('.');
+            const baseName = fileNameParts.slice(0, -1).join('.');
+            const extension = fileNameParts[fileNameParts.length - 1];
+
+            let count = 1;
+            let newFileName = `${baseName}(${count}).${extension}`;
+
+            while (fileList.some((item) => item.name === newFileName)) {
+                count += 1;
+                newFileName = `${baseName}(${count}).${extension})`;
+            }
+
+            const fileId = uuidv4();
+            const newFile = {
+                id: fileId,
+                fileName: newFileName,
+                originFileObj: file,
+                contentType: file.type,
+            };
+            canSave();
+            setTempData([...tempData, newFile]);
+            return tempData.length;
+        }
+
         const fileId = uuidv4();
         const newFile = {
             id: fileId,
@@ -217,8 +244,12 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
 
     const onRemove = (file: RcFile) => {
         const newFileList = fileList.filter((item) => item.uid !== file.uid);
-        setIsUploading();
         setFileList(newFileList);
+        const updatedData = tempData.filter((item) => item.originFileObj?.uid !== file.uid);
+        setTempData(updatedData);
+        if(updatedData.length === 0){
+            setIsUploading();
+        }
     };
 
     function setCanSave() {

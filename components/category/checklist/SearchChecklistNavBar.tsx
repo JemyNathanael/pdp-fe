@@ -55,6 +55,11 @@ const calculateInputWidth = () => {
     }
 };
 useEffect(() => {
+    const handleRouteChangeStart = () => {
+        setInput('');
+      };
+  
+      router.events.on('routeChangeStart', handleRouteChangeStart);
     const handleResize = () => {
         setInputResize(calculateInputWidth());
     };
@@ -62,7 +67,7 @@ useEffect(() => {
     return () => {
         window.removeEventListener('resize', handleResize);
     };
-}, []);
+}, [router.events]);
 // console.log(searchResults);
 useEffect(() => {
     const handleClickOutside = (event) => {
