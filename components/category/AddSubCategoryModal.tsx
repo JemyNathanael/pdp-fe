@@ -336,7 +336,7 @@ const AddSubCategoryModal: React.FC<{
                         <p style={{
                             fontSize: '24px',
                             fontWeight: 'bold'
-                        }}>Dijadikan Checklist?</p>
+                        }}>Set as Checklist?</p>
 
                         <div style={{ marginLeft: '48px', paddingTop: '6px', flexGrow: 1 }}>
                             <Form.Item<AddSubCategoryType>
@@ -360,7 +360,7 @@ const AddSubCategoryModal: React.FC<{
                                 >
                                     <TreeSelect
                                         showSearch
-                                        placeholder="Pilih sub-category yang akan diberikan checklist"
+                                        placeholder="Choose the sub-category that will be given a checklist"
                                         // optionFilterProp="children"
                                         // filterOption={filterOption}
                                         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
