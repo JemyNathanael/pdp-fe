@@ -32,6 +32,7 @@ export const InputSelectAddNewUserForm = <T,>({
                 size={"large"}
                 bordered={false}
                 value={value ? options.find((opt) => opt.value === value) : undefined}
+                getPopupContainer={trigger => trigger.parentNode}
             />
             {formErrorMessage && <p className='text-md text-red-600 font-normal font-body mt-1.5'>{formErrorMessage}</p>}
         </div>
