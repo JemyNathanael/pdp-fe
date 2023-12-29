@@ -441,9 +441,6 @@ const AddSubCategoryModal: React.FC<{
                             <Button
                                 size='large'
                                 onClick={() => {
-                                    // setAddForm(prev => {
-                                    //     return { ...prev, checkList: [''] }
-                                    // })
                                     setChecklistDescriptionList(prev => [...prev, ''])
                                 }} style={{ backgroundColor: '#3788FD', color: 'white' }}>Add another checklist</Button>
                             <Button type='primary'
