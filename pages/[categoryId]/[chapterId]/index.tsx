@@ -183,7 +183,7 @@ const Chapter: React.FC = () => {
 const ChapterPage: Page = () => {
     return (
         <Authorize>
-            <Title>Pasal</Title>
+            <Title>Sub-Category </Title>
             <Chapter></Chapter>
         </Authorize>
     );
