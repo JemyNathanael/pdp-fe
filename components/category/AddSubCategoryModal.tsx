@@ -444,6 +444,9 @@ const AddSubCategoryModal: React.FC<{
                             <Button
                                 size='large'
                                 onClick={() => {
+                                    setAddForm(prev => {
+                                        return { ...prev, checkList: [''] }
+                                    })
                                     setChecklistDescriptionList(prev => [...prev, ''])
                                 }} style={{ backgroundColor: '#3788FD', color: 'white' }}>Add another checklist</Button>
                             <Button type='primary'
@@ -451,6 +454,9 @@ const AddSubCategoryModal: React.FC<{
                                 size='large'
                                 onClick={() => {
                                     const updatedList = checklistDescriptionList.slice(0, -1);
+                                    setAddForm(prev => {
+                                        return { ...prev, checkList: updatedList }
+                                    })
                                     setChecklistDescriptionList(updatedList);
                                 }} style={{ marginLeft: '16px' }}>Delete checklist</Button>
                         </>
