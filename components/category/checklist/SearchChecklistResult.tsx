@@ -87,15 +87,11 @@ const SearchChecklistResult = ({searchResults }) => {
             </div>
             {result.blobDatas?.map((blobData) => (
               <div className="flex flex-col px-5 py-1" key={blobData.blobId}>
-                <div className="mx-5">
-                  <p className='text-lg text-gray-800'>
                     <Link href={`${router.asPath}/ChecklistFiles?id=${result.value}&highlightBlob=${blobData.blobId}`}
-                      className="hover:bg-gray-200 rounded-lg px-2 py-1 text-">
+                      className="rounded-lg px-2 py-1 hover:bg-gray-200 text-lg mx-5">
                         <FontAwesomeIcon icon={extensionToIcon(getFileExtension(blobData.fileName))} className="mr-2" color="blue" />
                         <span className="text-black">{blobData.fileName}</span>
                     </Link>
-                  </p>
-                </div>
               </div>
             ))}
         </div>
