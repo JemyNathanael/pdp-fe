@@ -149,7 +149,7 @@ const Chapter: React.FC = () => {
                 {
                     checklist?.map((childProps, i) => 
                     <div key={i} >
-                        <Link href={`${currentPath}/${childProps.id}`}>
+                        <Link href={`${currentPath.replace('?', '')}/${childProps.id}`}>
                             <p style={{fontSize:'large'}}><b>{childProps.title}</b></p>
                         </Link>
                         <div>
