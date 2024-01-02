@@ -127,7 +127,7 @@ const Category: React.FC = () => {
                 {
                     percentage?.map((item,j) => (
                             <div key={j} >
-                                <Link href={{pathname: `${currentPath}/${item.id}`, query: {query: `${currentPath}/${item.id}`}}}>
+                                <Link href={`${currentPath}/${item.id}`}>
                                     <p style={{fontSize:'large'}}><b>{item.title}</b></p>
                                 </Link>
                                 <div style={{display:"flex", justifyContent:"space-between"}}>
