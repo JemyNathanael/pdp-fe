@@ -62,7 +62,6 @@ const Chapter: React.FC = () => {
     const [chapterProgress, setProgress] = useState<ProgressPercentage>();
     const currentChapter = data?.firstSubCategories.find((chapter) => chapter.id === chapterId);
     const checklist = currentChapter?.secondSubCategories;
-
     const { data: session } = useSession();
 
     const role = session?.user?.['role'][0];
@@ -149,7 +148,7 @@ const Chapter: React.FC = () => {
                 {
                     checklist?.map((childProps, i) => 
                     <div key={i} >
-                        <Link href={`${currentPath.replace('?', '')}/${childProps.id}`}>
+                        <Link href={`${currentPath}/${childProps.id}`}>
                             <p style={{fontSize:'large'}}><b>{childProps.title}</b></p>
                         </Link>
                         <div>
