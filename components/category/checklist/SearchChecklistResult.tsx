@@ -70,7 +70,22 @@ const SearchChecklistResult = ({searchResults }) => {
         top: targetScrollPosition,
         behavior: "smooth",
       });
-      // setSearchResults('');
+      // Add Tailwind CSS classes for background color change and fade in
+      checklistElement.classList.add("bg-gray-300", "ease-in", "duration-1000", "bg-opacity-0");
+
+      // Remove fade in class after a short delay
+      setTimeout(() => {
+        checklistElement.classList.remove("bg-opacity-0");
+      }, 100);
+
+      // Remove the classes after 5 seconds for a smoother fade out
+      setTimeout(() => {
+        checklistElement.classList.add("bg-opacity-0");
+      }, 4000); // Use a longer delay if you want a slower fade out
+
+      setTimeout(() => {
+        checklistElement.classList.remove("bg-gray-300", "ease-in", "duration-1000", "bg-opacity-0");
+      }, 5000); // 5-second total duration
     }
   }
   // console.log(router)
