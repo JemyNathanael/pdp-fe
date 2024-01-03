@@ -194,11 +194,12 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
         setDeleteModal(false);
     };
 
-    const handleChange = (file: RcFile, tempData: BlobListModel[]) => {
-
+    const handleChange = (file: RcFile, blobData: BlobListModel[]) => {
         const isDuplicate = tempData.some((item) => item.fileName === file.name);
 
-        if (isDuplicate) {
+        const isFileListDuplicate = fileList.some((item) => item.fileName == file.name);
+
+        if (isDuplicate || isFileListDuplicate) {
             const fileNameParts = file.name.split('.');
             const baseName = fileNameParts.slice(0, -1).join('.');
             const extension = fileNameParts[fileNameParts.length - 1];
@@ -208,10 +209,11 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
 
             while (tempData.some((item) => item.fileName === newFileName)) {
                 count += 1;
-                newFileName = `${baseName}(${count}).${extension})`;
+                newFileName = `${baseName}(${count}).${extension}`;
             }
 
             const fileId = uuidv4();
+
             const newFile = {
                 id: fileId,
                 fileName: newFileName,
@@ -219,21 +221,22 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
                 contentType: file.type,
             };
             canSave();
-            setTempData([...tempData, newFile]);
+            setTempData([...blobData, newFile]);
+            setFileList([...fileList, file]);
             return tempData.length;
         }
-
         const fileId = uuidv4();
+
         const newFile = {
             id: fileId,
             fileName: file.name,
             originFileObj: file,
             contentType: file.type,
         };
+        setFileList([...fileList, file]);
         canSave();
-        setTempData([...tempData, newFile]);
+        setTempData([...blobData, newFile]);
         return tempData.length;
-
     }
 
     const isValidFile = file => {
@@ -335,7 +338,6 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
                                                 }
                                                 else {
                                                     handleChange(file, tempData);
-                                                    setFileList([...fileList, file]);
                                                     return false;
                                                 }
 
