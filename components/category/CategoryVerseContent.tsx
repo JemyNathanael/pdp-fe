@@ -206,7 +206,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
             let count = 1;
             let newFileName = `${baseName}(${count}).${extension}`;
 
-            while (fileList.some((item) => item.name === newFileName)) {
+            while (tempData.some((item) => item.fileName === newFileName)) {
                 count += 1;
                 newFileName = `${baseName}(${count}).${extension})`;
             }
