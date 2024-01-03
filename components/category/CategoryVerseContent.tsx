@@ -342,7 +342,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
                                                 }
 
                                             }}>
-                                            <CategoryButton disabled={false} text='Upload File' mode='outlined' className='px-8' />
+                                            <CategoryButton disabled={false} text='Upload File' mode='outlined' className='px-8 bg-white' />
                                         </Upload>
                                     }
 
