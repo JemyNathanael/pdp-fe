@@ -1,4 +1,5 @@
 import { WithDefaultLayout } from '@/components/DefautLayout';
+import { Title } from '../../components/Title';
 import { Page } from '@/types/Page';
 import React, { useState } from 'react'
 import OverviewUser from './overviewUser';
@@ -64,6 +65,7 @@ const TabNavigation = () => {
 const ManageUser: Page = () => {
     return (
         <Authorize>
+            <Title>Manage User </Title>
             <div>
                 <h1 className='text-2xl font-bold my-5'>Manage User</h1>
                 <TabNavigation />

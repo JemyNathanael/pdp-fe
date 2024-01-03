@@ -153,7 +153,7 @@ const VersePage: Page = () => {
 
     return (
         <Authorize>
-            <Title>Ayat</Title>
+            <Title>Checklist </Title>
             <div className='mb-10'>
                 <Row>
                     <Link href={router.asPath.replace(verseId, "")}>

@@ -62,7 +62,6 @@ const Chapter: React.FC = () => {
     const [chapterProgress, setProgress] = useState<ProgressPercentage>();
     const currentChapter = data?.firstSubCategories.find((chapter) => chapter.id === chapterId);
     const checklist = currentChapter?.secondSubCategories;
-
     const { data: session } = useSession();
 
     const role = session?.user?.['role'][0];
@@ -183,7 +182,7 @@ const Chapter: React.FC = () => {
 const ChapterPage: Page = () => {
     return (
         <Authorize>
-            <Title>Pasal</Title>
+            <Title>Sub-Category </Title>
             <Chapter></Chapter>
         </Authorize>
     );

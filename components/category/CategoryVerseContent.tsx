@@ -271,7 +271,7 @@ export const CategoryVerseContent: React.FC<CategoryVerseContentProps> = ({ setI
                 <div className='flex flex-col'>
                     <Select
                         className='w-52'
-                        defaultValue={uploadStatus}
+                        value={uploadStatus}
                         options={selectOptions}
                         onChange={(selection) => handleStatusChange(selection)}
                         disabled={!canEditStatusRole.includes(role)}
