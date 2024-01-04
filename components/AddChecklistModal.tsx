@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
@@ -37,6 +37,14 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ onCancel, visible
     const [isDescriptionFilled, setIsDescriptionFilled] = useState(false);
     const { fetchPOST } = useFetchWithAccessToken();
     const [form] = Form.useForm();
+    const [description, setDescription] = useState<string>('');
+
+    useEffect(() => {
+        if(!visible){
+            setDescription('');
+            form.setFieldsValue({ description: '' });
+        }
+    }, [form, visible])
 
     const onFinish = async (formData: AddChecklistResponse) => {
         const payload = {
@@ -86,6 +94,7 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ onCancel, visible
                         >
                             <TextArea
                                 rows={10}
+                                value={description}
                                 className='text-slate-500'
                                 onChange={(e) => setIsDescriptionFilled(!!e.target.value.trim())}
                             />
