@@ -162,8 +162,7 @@ const AddSubCategoryModal: React.FC<{
     };
 
     function checkAddButton() {
-        const isChecklistEmpty = addForm.checkList.every((item) => !item.trim())
-        const isChecklistFilled = addForm.checkList.some((item) => item.trim())
+        const isChecklistFill = checklistDescriptionList.every((item) => item.trim())
         // console.log(addForm)
         if (!addForm.ayat) {
             if (!addForm.title) {
@@ -175,31 +174,31 @@ const AddSubCategoryModal: React.FC<{
         }
         else if (addForm.ayat) {
             // tidak ada di isi
-            if (!addForm.subCategory && !addForm.title && isChecklistEmpty) {
+            if (!addForm.subCategory && !addForm.title && !isChecklistFill) {
                 return true
             }
             // cuma isi sub category
-            else if (addForm.subCategory && !addForm.title && isChecklistEmpty) {
+            else if (addForm.subCategory && !addForm.title && !isChecklistFill) {
                 return true
             }
             // cuma isi checklist
-            else if (!addForm.subCategory && !addForm.title && isChecklistFilled) {
+            else if (!addForm.subCategory && !addForm.title && isChecklistFill) {
                 return true
             }
             // cuma isi title
-            else if (!addForm.subCategory && addForm.title && isChecklistEmpty) {
+            else if (!addForm.subCategory && addForm.title && !isChecklistFill) {
                 return true
             }
             // cuma isi sub category & title
-            else if (addForm.subCategory && addForm.title && isChecklistEmpty) {
+            else if (addForm.subCategory && addForm.title && !isChecklistFill) {
                 return true
             }
             // cuma isi sub category & checklist
-            else if (addForm.subCategory && !addForm.title && isChecklistFilled) {
+            else if (addForm.subCategory && !addForm.title && isChecklistFill) {
                 return true
             }
             // cuma isi title & checklist
-            else if (!addForm.subCategory && addForm.title && isChecklistFilled) {
+            else if (!addForm.subCategory && addForm.title && isChecklistFill) {
                 return true
             }
             else {
@@ -210,8 +209,7 @@ const AddSubCategoryModal: React.FC<{
     }
 
     function checkBackgroundColor() {
-        const isChecklistEmpty = addForm.checkList.every((item) => !item.trim())
-        const isChecklistFilled = addForm.checkList.some((item) => item.trim())
+        const isChecklistFill = checklistDescriptionList.every((item) => item.trim())
         if (!addForm.ayat) {
             if (!addForm.title) {
                 return '#A3A3A3'
@@ -222,31 +220,31 @@ const AddSubCategoryModal: React.FC<{
         }
         else if (addForm.ayat) {
             // tidak ada di isi
-            if (!addForm.subCategory && !addForm.title && isChecklistEmpty) {
+            if (!addForm.subCategory && !addForm.title && !isChecklistFill) {
                 return '#A3A3A3'
             }
             // cuma isi sub category
-            else if (addForm.subCategory && !addForm.title && isChecklistEmpty) {
+            else if (addForm.subCategory && !addForm.title && !isChecklistFill) {
                 return '#A3A3A3'
             }
             // cuma isi checklist
-            else if (!addForm.subCategory && !addForm.title && isChecklistFilled) {
+            else if (!addForm.subCategory && !addForm.title && isChecklistFill) {
                 return '#A3A3A3'
             }
             // cuma isi title
-            else if (!addForm.subCategory && addForm.title && isChecklistEmpty) {
+            else if (!addForm.subCategory && addForm.title && !isChecklistFill) {
                 return '#A3A3A3'
             }
             // cuma isi sub category & title
-            else if (addForm.subCategory && addForm.title && isChecklistEmpty) {
+            else if (addForm.subCategory && addForm.title && !isChecklistFill) {
                 return '#A3A3A3'
             }
             // cuma isi sub category & checklist
-            else if (addForm.subCategory && !addForm.title && isChecklistFilled) {
+            else if (addForm.subCategory && !addForm.title && isChecklistFill) {
                 return '#A3A3A3'
             }
             // cuma isi title & checklist
-            else if (!addForm.subCategory && addForm.title && isChecklistFilled) {
+            else if (!addForm.subCategory && addForm.title && isChecklistFill) {
                 return '#A3A3A3'
             }
             else {
@@ -257,8 +255,7 @@ const AddSubCategoryModal: React.FC<{
     }
 
     function checkColor() {
-        const isChecklistEmpty = addForm.checkList.every((item) => !item.trim())
-        const isChecklistFilled = addForm.checkList.some((item) => item.trim())
+        const isChecklistFill = checklistDescriptionList.every((item) => item.trim())
         if (!addForm.ayat) {
             if (!addForm.title) {
                 return 'black'
@@ -269,31 +266,31 @@ const AddSubCategoryModal: React.FC<{
         }
         else if (addForm.ayat) {
             // tidak ada di isi
-            if (!addForm.subCategory && !addForm.title && isChecklistEmpty) {
+            if (!addForm.subCategory && !addForm.title && !isChecklistFill) {
                 return 'black'
             }
             // cuma isi sub category
-            else if (addForm.subCategory && !addForm.title && isChecklistEmpty) {
+            else if (addForm.subCategory && !addForm.title && !isChecklistFill) {
                 return 'black'
             }
             // cuma isi checklist
-            else if (!addForm.subCategory && !addForm.title && isChecklistFilled) {
+            else if (!addForm.subCategory && !addForm.title && isChecklistFill) {
                 return 'black'
             }
             // cuma isi title
-            else if (!addForm.subCategory && addForm.title && isChecklistEmpty) {
+            else if (!addForm.subCategory && addForm.title && !isChecklistFill) {
                 return 'black'
             }
             // cuma isi sub category & title
-            else if (addForm.subCategory && addForm.title && isChecklistEmpty) {
+            else if (addForm.subCategory && addForm.title && !isChecklistFill) {
                 return 'black'
             }
             // cuma isi sub category & checklist
-            else if (addForm.subCategory && !addForm.title && isChecklistFilled) {
+            else if (addForm.subCategory && !addForm.title && isChecklistFill) {
                 return 'black'
             }
             // cuma isi title & checklist
-            else if (!addForm.subCategory && addForm.title && isChecklistFilled) {
+            else if (!addForm.subCategory && addForm.title && isChecklistFill) {
                 return 'black'
             }
             else {
@@ -336,7 +333,7 @@ const AddSubCategoryModal: React.FC<{
                         <p style={{
                             fontSize: '24px',
                             fontWeight: 'bold'
-                        }}>Dijadikan Checklist?</p>
+                        }}>Set as Checklist?</p>
 
                         <div style={{ marginLeft: '48px', paddingTop: '6px', flexGrow: 1 }}>
                             <Form.Item<AddSubCategoryType>
@@ -360,7 +357,7 @@ const AddSubCategoryModal: React.FC<{
                                 >
                                     <TreeSelect
                                         showSearch
-                                        placeholder="Pilih sub-category yang akan diberikan checklist"
+                                        placeholder="Choose the sub-category that will be given a checklist"
                                         // optionFilterProp="children"
                                         // filterOption={filterOption}
                                         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -451,6 +448,9 @@ const AddSubCategoryModal: React.FC<{
                                 size='large'
                                 onClick={() => {
                                     const updatedList = checklistDescriptionList.slice(0, -1);
+                                    setAddForm(prev => {
+                                        return { ...prev, checkList: updatedList }
+                                    })
                                     setChecklistDescriptionList(updatedList);
                                 }} style={{ marginLeft: '16px' }}>Delete checklist</Button>
                         </>

@@ -49,7 +49,10 @@ const SearchResultNav = ({ onClick, searchResults }) => {
             // window.location.href = `/${result.value}/${result.firstSubCategoryId}`;
             onClick(`/${result.value}/${result.firstSubCategoryId}`);
             await delay(500);
-            router.push(`/${result.value}/${result.firstSubCategoryId}`);
+            router.push({
+                pathname: `/${result.value}/${result.firstSubCategoryId}`,
+                query: { query: `/${result.value}/${result.firstSubCategoryId}`},
+            },`/${result.value}/${result.firstSubCategoryId}`)
         }
         if (result.type == 'Second Sub-Category') {
             // <Link href={`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`} />
@@ -58,7 +61,7 @@ const SearchResultNav = ({ onClick, searchResults }) => {
             router.push({
                 pathname: `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`,
                 query: { query: `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}` },
-            });
+            }, `/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
             // router.push(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
             // onClick(`/${result.value}/${result.firstSubCategoryId}/${result.secondSubCategoryId}`);
         }

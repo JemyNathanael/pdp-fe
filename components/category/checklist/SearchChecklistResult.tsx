@@ -70,10 +70,22 @@ const SearchChecklistResult = ({searchResults }) => {
         top: targetScrollPosition,
         behavior: "smooth",
       });
-      // setSearchResults('');
+
+      checklistElement.classList.add("bg-gray-300", "ease-in", "duration-1000", "bg-opacity-0");
+
+      setTimeout(() => {
+        checklistElement.classList.remove("bg-opacity-0");
+      }, 100);
+
+      setTimeout(() => {
+        checklistElement.classList.add("bg-opacity-0");
+      }, 4000); 
+
+      setTimeout(() => {
+        checklistElement.classList.remove("bg-gray-300", "ease-in", "duration-1000", "bg-opacity-0");
+      }, 5000); 
     }
   }
-  // console.log(router)
   return (
     <div className='fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg overflow-y-scroll' 
         style={{ width: containerWidth, maxHeight: '550px' }}>
@@ -87,15 +99,11 @@ const SearchChecklistResult = ({searchResults }) => {
             </div>
             {result.blobDatas?.map((blobData) => (
               <div className="flex flex-col px-5 py-1" key={blobData.blobId}>
-                <div className="mx-5">
-                  <p className='text-lg text-gray-800'>
                     <Link href={`${router.asPath}/ChecklistFiles?id=${result.value}&highlightBlob=${blobData.blobId}`}
-                      className="hover:bg-gray-200 rounded-lg px-2 py-1 text-">
+                      className="rounded-lg px-2 py-1 hover:bg-gray-200 text-lg mx-5">
                         <FontAwesomeIcon icon={extensionToIcon(getFileExtension(blobData.fileName))} className="mr-2" color="blue" />
                         <span className="text-black">{blobData.fileName}</span>
                     </Link>
-                  </p>
-                </div>
               </div>
             ))}
         </div>

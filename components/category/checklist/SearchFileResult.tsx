@@ -68,7 +68,7 @@ const SearchFileResult = ({ searchResults }) => {
           key={`${result.value}-${result.label}`}
         >
           <Link
-            className="hover:bg-gray-200 cursor-pointer py-2 text-md rounded-lg px-2"
+            className="hover:bg-gray-200 cursor-pointer py-2 text-lg rounded-lg px-2"
             href={{
               pathname: `/${router.query["categoryId"]}/${router.query["chapterId"]}/${router.query["verseId"]}/ChecklistFiles`,
               query: {

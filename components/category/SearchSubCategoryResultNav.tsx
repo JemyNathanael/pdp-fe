@@ -41,7 +41,8 @@ const SearchSubCategoryResultNav = ({ searchResults }) => {
             {searchResults?.map((result) => (
                 <div className='flex flex-col px-5 py-3 border-b hover:bg-gray-200 cursor-pointer'
                     key={`${result.value}`}>
-                    <Link href={`/${router.query['categoryId']}/${router.query['chapterId']}/${result.value}`}>
+                    <Link href={`/${router.query['categoryId']}/${router.query['chapterId']}/${result.value}`}
+                        className='text-lg'>
                         {result.label}
                     </Link>
                 </div>
