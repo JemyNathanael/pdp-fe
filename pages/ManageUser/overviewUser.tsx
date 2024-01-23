@@ -225,6 +225,8 @@ const OverviewUser: React.FC = () => {
     return null;
   }
 
+  const filteredDataSorted = filteredData.sort((a, b) => a.email.localeCompare(b.email));
+
   return (
     <div id="overview">
       <Modal
@@ -276,12 +278,13 @@ const OverviewUser: React.FC = () => {
         </div>
       </div>
       <Table
-        dataSource={filteredData}
+        dataSource={filteredDataSorted}
         columns={columns}
         loading={isValidating}
         pagination={{
           position: ['bottomCenter'],
-          simple: true, defaultCurrent: 1,
+          simple: true,
+          defaultCurrent: 1,
           total: data?.totalData,
           onChange: (page) => {
             setPages(page);
@@ -289,8 +292,8 @@ const OverviewUser: React.FC = () => {
           current: page,
           pageSize: 10
         }}
-
-        id="overviewTable" />
+        id="overviewTable"
+      />
       <EditUserRoleModal
         visible={isModalVisible}
         onCancel={handleCancel}
