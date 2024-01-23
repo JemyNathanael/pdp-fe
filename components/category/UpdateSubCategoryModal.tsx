@@ -161,6 +161,7 @@ const UpdateSubCategoryModal: React.FC<{
                 onCancel={handleCancel}
                 closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{color: "#3788fd", fontSize:'24px'}} />}
                 footer={[]}
+                maskClosable={false}
             >
                 <p style={{
                     fontSize: '32px',
@@ -269,6 +270,7 @@ const UpdateSubCategoryModal: React.FC<{
                 onCancel={handleCancelResult}
                 closable={false} 
                 footer={[]}
+                maskClosable={false}
             >
                 <Result
                     status={formResult.status}

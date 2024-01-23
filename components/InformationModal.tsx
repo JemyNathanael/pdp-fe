@@ -36,6 +36,7 @@ const InformationModal: React.FC<InformationModalProps> = ({ onCancel, visible, 
         onCancel={onCancel}
         footer={null}
         closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{ color: '#3788fd', fontSize:'24px'}} />}
+        maskClosable={false}
       >
         <div className='px-5 custom-scrollbar'>
           {informationData &&

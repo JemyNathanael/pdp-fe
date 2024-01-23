@@ -56,6 +56,7 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
                 <SuccessDeleteModal onGoToHome={handleSuccessModalClose} />
             }
             <Modal
+                maskClosable={false}
                 title={
                     <div className="flex flex-col items-center">
                         <svg width="124" height="124" viewBox="0 0 124 124" fill="none" xmlns="http://www.w3.org/2000/svg">

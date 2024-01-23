@@ -239,6 +239,7 @@ const OverviewUser: React.FC = () => {
         open={deleteModal}
         centered
         closable={false}
+        maskClosable={false}
         footer={[
           <div key={3} className="flex justify-center space-x-4">
             <button

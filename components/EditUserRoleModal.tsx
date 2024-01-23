@@ -102,6 +102,7 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ visible, onCancel
     return (
         <>
         <Modal
+            maskClosable={false}
             open={visible}
             onCancel={onCancel}
             centered
