@@ -135,6 +135,7 @@ const DeleteSubCategoryModal: React.FC<{
     return (
         <div>
             <Modal
+                maskClosable={false}
                 width={500}
                 centered
                 open={props.isModalOpen}
@@ -249,6 +250,7 @@ const DeleteSubCategoryModal: React.FC<{
                 onCancel={handleCancelResult}
                 closable={false} 
                 footer={[]}
+                maskClosable={false}
             >
                 <Result
                     status={formResult.status}

@@ -105,6 +105,7 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
                 onCancel={onCancel}
                 footer={null}
                 closeIcon={<FontAwesomeIcon icon={faCircleXmark} style={{ color: "#3788fd", fontSize: '24px' }} />}
+                maskClosable={false}
             >
                 <h3 className='text-xl sm:text-2xl text-center font-body font-bold mt-6'>Update Checklist</h3>
                 <div className='p-5'>

@@ -77,6 +77,7 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ onCancel, visible
                 width={750}
                 onCancel={onCancel}
                 footer={null}
+                maskClosable={false}
             >
                 <h3 className='text-xl sm:text-2xl text-center font-body font-bold mt-6'>Add Checklist</h3>
                 <div className='p-5'>
