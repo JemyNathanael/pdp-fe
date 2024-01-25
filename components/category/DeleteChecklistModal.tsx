@@ -20,6 +20,8 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
     const { fetchDELETE } = useFetchWithAccessToken();
     const [openModal, setOpenModal] = useState(true);
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
+    const [, setAutoCloseTimeout] = useState<NodeJS.Timeout | null>(null)
+
 
 
     const SuccessDeleteModal: React.FC<SuccessModalProps> = ({ onGoToHome }) => {
@@ -46,6 +48,10 @@ const DeleteChecklistModl: React.FC<DeleteChecklistModalProps> = ({ onCancel, ch
         if (data) {
             setOpenModal(false);
             setOpenSuccessModal(true);
+            const timeout = setTimeout(() => {
+                handleSuccessModalClose();
+            }, 1500);
+            setAutoCloseTimeout(timeout);
         }
     }
 

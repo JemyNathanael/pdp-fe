@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Button, Form, Input, Modal, Radio, RadioChangeEvent, Result, TreeSelect } from 'antd';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
-import useSWR from 'swr';
-import { BackendApiUrl } from '@/functions/BackendApiUrl';
+import useSWR, { mutate } from 'swr';
+import { BackendApiUrl, GetCategoryDetail, GetProgress } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import { useSession } from 'next-auth/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -45,6 +45,7 @@ const AddSubCategoryModal: React.FC<{
     const [isResultOpen, setIsResultOpen] = useState(false);
     const [isDijadikanAyat, setIsDijadikanAyat] = useState(false);
     const [checklistDescriptionList, setChecklistDescriptionList] = useState<string[]>([])
+    const [, setAutoCloseTimeout] = useState<NodeJS.Timeout | null>(null)
 
     const username = session?.user?.name;
 
@@ -157,7 +158,15 @@ const AddSubCategoryModal: React.FC<{
 
             resetForm()
 
-            setIsResultOpen(true)
+            setIsResultOpen(true);
+
+            const timeout = setTimeout(() => {
+                setIsResultOpen(false);
+                mutate(BackendApiUrl.getSubCategoryList + `/${props.categoryId}`)
+                mutate(GetCategoryDetail(props.categoryId))
+                mutate(GetProgress(props.categoryId))
+            }, 1500);
+            setAutoCloseTimeout(timeout);
         }
     };
 

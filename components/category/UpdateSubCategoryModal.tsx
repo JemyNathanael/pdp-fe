@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Button, Form, Input, Modal, Result, TreeSelect } from 'antd';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
-import useSWR from 'swr';
-import { BackendApiUrl } from '@/functions/BackendApiUrl';
+import useSWR, { mutate } from 'swr';
+import { BackendApiUrl, GetCategoryDetail, GetProgress } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCircleXmark} from '@fortawesome/free-regular-svg-icons';
@@ -41,6 +41,7 @@ const UpdateSubCategoryModal: React.FC<{
         status: 'success',
         message: ''
     })
+    const [, setAutoCloseTimeout] = useState<NodeJS.Timeout | null>(null)
 
     const swrFetcher = useSwrFetcherWithAccessToken()
     const fetch = useFetchWithAccessToken()
@@ -107,6 +108,13 @@ const UpdateSubCategoryModal: React.FC<{
             resetForm()
 
             setIsResultOpen(true)
+            const timeout = setTimeout(() => {
+                setIsResultOpen(false);
+                mutate(BackendApiUrl.getSubCategoryList + `/${props.categoryId}`)
+                mutate(GetCategoryDetail(props.categoryId))
+                mutate(GetProgress(props.categoryId))
+            }, 1500);
+            setAutoCloseTimeout(timeout);
         }
     }
 
