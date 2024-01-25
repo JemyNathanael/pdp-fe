@@ -38,6 +38,8 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ onCancel, visible
     const { fetchPOST } = useFetchWithAccessToken();
     const [form] = Form.useForm();
     const [description, setDescription] = useState<string>('');
+    const [, setAutoCloseTimeout] = useState<NodeJS.Timeout | null>(null)
+
 
     useEffect(() => {
         if(!visible){
@@ -59,6 +61,10 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ onCancel, visible
             onCancel();
         }
         form.resetFields();
+        const timeout = setTimeout(() => {
+            handleSuccessModalClose();
+        }, 1500);
+        setAutoCloseTimeout(timeout);
     };
 
     const handleSuccessModalClose = () => {

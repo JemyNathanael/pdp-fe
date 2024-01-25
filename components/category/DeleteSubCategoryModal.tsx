@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Button, Form, Modal, Result, TreeSelect } from 'antd';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
-import useSWR from 'swr';
-import { BackendApiUrl } from '@/functions/BackendApiUrl';
+import useSWR, { mutate } from 'swr';
+import { BackendApiUrl, GetCategoryDetail, GetProgress } from '@/functions/BackendApiUrl';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import { useRouter } from 'next/router';
 
@@ -30,6 +30,7 @@ const DeleteSubCategoryModal: React.FC<{
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [isResultOpen, setIsResultOpen] = useState(false);
+    const [, setAutoCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
     const [formResult, setFormResult] = useState<{ status: 'success' | 'error', message: string }>({
         status: 'success',
@@ -93,6 +94,13 @@ const DeleteSubCategoryModal: React.FC<{
             resetForm()
 
             setIsResultOpen(true)
+            const timeout = setTimeout(() => {
+                setIsResultOpen(false);
+                mutate(BackendApiUrl.getSubCategoryList + `/${props.categoryId}`)
+                mutate(GetCategoryDetail(props.categoryId))
+                mutate(GetProgress(props.categoryId))
+            }, 1500);
+            setAutoCloseTimeout(timeout);
         }
     }
 

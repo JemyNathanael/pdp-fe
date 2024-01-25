@@ -61,6 +61,8 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data: dataDesc } = useSWR<ChecklistDesc>(GetChecklistDescription(checkId), swrFetcher);
     const [description, setDescription] = useState<string>(dataDesc?.checklistDescription ?? '')
+    const [, setAutoCloseTimeout] = useState<NodeJS.Timeout | null>(null)
+
 
     const { handleSubmit, control, formState: { errors }, reset } = useForm<UpdateChecklist>({
         resolver: zodResolver(schema),
@@ -86,6 +88,10 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
             mutate(GetChecklistList(verseId));
             onCancel();
             reset();
+            const timeout = setTimeout(() => {
+                handleSuccessModalClose();
+            }, 1500);
+            setAutoCloseTimeout(timeout);
         }
     };
 
