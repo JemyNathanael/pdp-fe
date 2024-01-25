@@ -60,20 +60,24 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
     const verseId = router.query['verseId']?.toString() ?? '';
     const swrFetcher = useSwrFetcherWithAccessToken();
     const { data: dataDesc } = useSWR<ChecklistDesc>(GetChecklistDescription(checkId), swrFetcher);
-    const [description, setDescription] = useState<string>(dataDesc?.checklistDescription ?? '')
+    const [description] = useState<string>(dataDesc?.checklistDescription ?? '')
     const [, setAutoCloseTimeout] = useState<NodeJS.Timeout | null>(null)
 
 
-    const { handleSubmit, control, formState: { errors }, reset } = useForm<UpdateChecklist>({
+    const { handleSubmit, control, formState: { errors }, reset, setValue } = useForm<UpdateChecklist>({
         resolver: zodResolver(schema),
     });
 
     useEffect(() => {
-        if(!visible){
+        if (!visible) {
             reset();
-            setDescription(dataDesc?.checklistDescription ?? '')
+            setValue('description', dataDesc?.checklistDescription ?? '');
         }
-    }, [reset, visible, dataDesc])
+    }, [reset, visible, dataDesc, setValue]);
+
+    useEffect(() => {
+        setValue('description', description);
+    }, [description, setValue]);
 
     const onSubmit = async (formData: UpdateChecklist) => {
         const payload = {
@@ -85,6 +89,8 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
         if (data) {
             visible = false;
             setSuccessModalVisible(true);
+            setValue('description', description);
+            mutate(GetChecklistDescription(checkId));
             mutate(GetChecklistList(verseId));
             onCancel();
             reset();
@@ -120,9 +126,8 @@ const UpdateChecklistModal: React.FC<EditChecklistModalProps> = ({ onCancel, che
                         <Controller
                             name="description"
                             control={control}
-                            defaultValue={description}
                             render={({ field }) => (
-                                <TextArea 
+                                <TextArea
                                     rows={10}
                                     {...field}>
                                 </TextArea>
