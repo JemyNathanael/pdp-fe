@@ -5,16 +5,16 @@ import { z } from 'zod';
 import { useFetchWithAccessToken } from '@/functions/useFetchWithAccessToken';
 import PopupAddNewUser from '@/components/manage-user/PopupAddNewUser';
 import { AddNewUserFormProps } from '@/components/interfaces/AddNewUserForms';
-import { BackendApiUrl } from '@/functions/BackendApiUrl';
+import { BackendApiUrl, GetUser } from '@/functions/BackendApiUrl';
 import { useRouter } from 'next/router';
 import { listCurrentRole } from '@/components/constants';
 import { InputAddNewUserForm } from '@/components/common/input/InputAddNewUserForm';
 import { InputSelectAddNewUserForm } from '@/components/common/input/InputSelectAddNewUserForm';
 import { useController } from 'react-hook-form';
 import { SelectOptions } from '@/components/interfaces/AddNewUserForms';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
-import { Modal } from 'antd';
+import { Modal, notification } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 
@@ -22,15 +22,21 @@ interface DataItem {
     roleName: string;
 }
 
-interface AddNewUserFormResponse {
-    response: string;
-}
-
 interface AddNewUserModalProps {
+    page: number;
     visible: boolean;
+    search: string;
+    showLoading: () => void;
+    hideLoading: () => void;
     onCancel: () => void;
     onSave: () => void;
 }
+
+interface FilterData {
+    itemsPerPage: number,
+    page: number,
+    search: string
+  }
 
 
 const passwordSchema = z.object({
@@ -54,10 +60,14 @@ const userSchema = z.object({
 
 const schema = z.intersection(passwordSchema, userSchema);
 
-const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, onSave }) => {
+const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, page, visible, onCancel, onSave, showLoading }) => {
     const { replace } = useRouter();
-    const { fetchPOST } = useFetchWithAccessToken();
     const [showPopupSuccess, setShowPopupSuccess] = useState(false);
+    const [emailError, setEmailError] = useState('');
+    const [nameError, setNameError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [roleError, setRoleError] = useState('');
+    const fetch = useFetchWithAccessToken();
     const { handleSubmit, reset, control, formState: { errors, isValid } } = useForm<AddNewUserFormProps>({
         defaultValues: {
             email: undefined,
@@ -69,6 +79,12 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
         resolver: zodResolver(schema),
         mode: 'onChange',
     });
+
+    const filter: FilterData = {
+        itemsPerPage: 10,
+        page: page,
+        search: search
+      };
 
     const { field: fieldCurrentRole } = useController({ name: 'role', control });
 
@@ -103,27 +119,40 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
             ...formData,
         };
 
-        const { data } = await fetchPOST<AddNewUserFormResponse>(BackendApiUrl.getUser, payload);
-
-        if (data) {
-            visible = false;
-            setShowPopupSuccess(true);
-            reset();
-            onSave();
+        try {
+            showLoading();
+            const response = await fetch.fetchPOST(BackendApiUrl.getUser, payload);
+            if (response.data?.['success'] === 'Success') {
+                visible = false;
+                hideLoading();
+                setShowPopupSuccess(true);
+                reset();
+                onSave();
+                mutate(GetUser(
+                    filter.search,
+                    filter.itemsPerPage,
+                    filter.page,
+                  ));
+                setTimeout(() => {
+                    setShowPopupSuccess(false)
+                }, 3000);
+            }
+            else {
+                hideLoading();
+                setEmailError(response.problem?.['errors']['Email']);
+                setNameError(response.problem?.['errors']['Name']);
+                setPasswordError(response.problem?.['errors']['Password']);
+                setRoleError(response.problem?.['errors']['Role']);
+            }
+        } catch (error) {
+            hideLoading();
+            notification.error({
+                message: 'Error',
+                description: 'Something happened in the server',
+                duration: 4,
+            });
         }
     };
-
-    const renderPopupSuccess = () => {
-        if (showPopupSuccess) {
-            return <PopupAddNewUser onGoToHome={() => {
-                setShowPopupSuccess(false)
-                replace({
-                    pathname: '/ManageUser'
-                })
-            }} />
-        }
-        return null;
-    }
 
     const handleCancel = () => {
         reset();
@@ -145,14 +174,14 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
                 <div className="flex flex-col px-2 py-2 md:px-4 lg:px-8">
                     <h3 className="text-2xl sm:text-3xl text-center font-body font-bold  mb-4 sm:mb-8">Add New Account</h3>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        
-                    <InputSelectAddNewUserForm
+
+                        <InputSelectAddNewUserForm
                             label='Role'
                             value={listCurrentRole.find(e => e.value === fieldCurrentRole.value) ?? ''}
                             options={roleOptions}
                             onChange={(selectedOptions: SelectOptions<string>) => fieldCurrentRole.onChange(selectedOptions.value)}
                             placeholder='Choose Role'
-                            formErrorMessage={errors?.role?.message}
+                            formErrorMessage={errors?.role?.message || roleError}
                         />
                         <Controller
                             name="name"
@@ -163,7 +192,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
                                     label='Name'
                                     field={{ ...field }}
                                     placeholder='Insert Name'
-                                    formErrorMessage={errors.name?.message}
+                                    formErrorMessage={errors.name?.message || nameError}
                                 />
                             )} />
                         <Controller
@@ -175,7 +204,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
                                     label='Email'
                                     field={{ ...field }}
                                     placeholder='Insert Email'
-                                    formErrorMessage={errors.email?.message}
+                                    formErrorMessage={errors.email?.message || emailError}
                                 />
                             )} />
                         <Controller
@@ -187,7 +216,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
                                     label='Password'
                                     field={{ ...field }}
                                     placeholder='Insert Password'
-                                    formErrorMessage={errors.password?.message}
+                                    formErrorMessage={errors.password?.message || passwordError}
                                 />
                             )} />
 
@@ -200,7 +229,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
                                     label='Confirm Password'
                                     field={{ ...field }}
                                     placeholder='Insert Confirmation Password'
-                                    formErrorMessage={errors.confirmPassword?.message}
+                                    formErrorMessage={errors.confirmPassword?.message || passwordError}
                                 />
                             )} />
                         <div className="col-span-1 text-end">
@@ -216,7 +245,11 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ visible, onCancel, on
                     </form>
                 </div>
             </Modal>
-            {renderPopupSuccess()}
+            {showPopupSuccess && <PopupAddNewUser onGoToHome={() => {
+                replace({
+                    pathname: '/ManageUser'
+                })
+            }} />}
         </>
     );
 };
