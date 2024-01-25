@@ -70,10 +70,22 @@ const SearchChecklistResult = ({searchResults }) => {
         top: targetScrollPosition,
         behavior: "smooth",
       });
-      // setSearchResults('');
+
+      checklistElement.classList.add("bg-gray-300", "ease-in", "duration-1000", "bg-opacity-0");
+
+      setTimeout(() => {
+        checklistElement.classList.remove("bg-opacity-0");
+      }, 100);
+
+      setTimeout(() => {
+        checklistElement.classList.add("bg-opacity-0");
+      }, 4000); 
+
+      setTimeout(() => {
+        checklistElement.classList.remove("bg-gray-300", "ease-in", "duration-1000", "bg-opacity-0");
+      }, 5000); 
     }
   }
-  // console.log(router)
   return (
     <div className='fixed z-10 bg-white rounded-b-3xl overflow-hidden shadow-lg overflow-y-scroll' 
         style={{ width: containerWidth, maxHeight: '550px' }}>
