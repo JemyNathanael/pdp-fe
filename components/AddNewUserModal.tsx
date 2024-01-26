@@ -135,6 +135,10 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                 setTimeout(() => {
                     setShowPopupSuccess(false)
                 }, 1500);
+                setEmailError('');
+                setNameError('');
+                setPasswordError('');
+                setRoleError('');
             }
             else {
                 hideLoading();
@@ -156,6 +160,11 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
     const handleCancel = () => {
         reset();
         onCancel();
+
+        setEmailError('');
+        setNameError('');
+        setPasswordError('');
+        setRoleError('');
     }
 
     return (
