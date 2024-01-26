@@ -73,7 +73,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
             confirmPassword: undefined,
             name: undefined,
             password: undefined,
-            role: null
+            role: undefined
         },
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -126,7 +126,6 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                 hideLoading();
                 setShowPopupSuccess(true);
                 reset();
-                fieldCurrentRole.onChange()
                 onSave();
                 mutate(GetUser(
                     filter.search,
@@ -156,7 +155,6 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
 
     const handleCancel = () => {
         reset();
-        fieldCurrentRole.onChange()
         onCancel();
     }
 
