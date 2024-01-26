@@ -3,7 +3,7 @@ export interface AddNewUserFormProps {
     email: string
     password: string
     confirmPassword: string | null
-    role: string
+    role: string | null
 }
 
 export interface SelectOptions<T> {

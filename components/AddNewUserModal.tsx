@@ -7,7 +7,6 @@ import PopupAddNewUser from '@/components/manage-user/PopupAddNewUser';
 import { AddNewUserFormProps } from '@/components/interfaces/AddNewUserForms';
 import { BackendApiUrl, GetUser } from '@/functions/BackendApiUrl';
 import { useRouter } from 'next/router';
-import { listCurrentRole } from '@/components/constants';
 import { InputAddNewUserForm } from '@/components/common/input/InputAddNewUserForm';
 import { InputSelectAddNewUserForm } from '@/components/common/input/InputSelectAddNewUserForm';
 import { useController } from 'react-hook-form';
@@ -74,7 +73,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
             confirmPassword: undefined,
             name: undefined,
             password: undefined,
-            role: undefined
+            role: null
         },
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -127,6 +126,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                 hideLoading();
                 setShowPopupSuccess(true);
                 reset();
+                fieldCurrentRole.onChange()
                 onSave();
                 mutate(GetUser(
                     filter.search,
@@ -156,6 +156,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
 
     const handleCancel = () => {
         reset();
+        fieldCurrentRole.onChange()
         onCancel();
     }
 
@@ -177,7 +178,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
 
                         <InputSelectAddNewUserForm
                             label='Role'
-                            value={listCurrentRole.find(e => e.value === fieldCurrentRole.value) ?? ''}
+                            value={fieldCurrentRole.value}
                             options={roleOptions}
                             onChange={(selectedOptions: SelectOptions<string>) => fieldCurrentRole.onChange(selectedOptions.value)}
                             placeholder='Choose Role'
