@@ -189,7 +189,7 @@ const OverviewUser: React.FC = () => {
       ));
       setTimeout(() => {
         setIsDeleteSuccess(false)
-      }, 3000);
+      }, 1500);
     }
     else {
       setLoading(false);
