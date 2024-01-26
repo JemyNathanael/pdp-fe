@@ -457,7 +457,7 @@ const AddSubCategoryModal: React.FC<{
                                 danger
                                 size='large'
                                 onClick={() => {
-                                    const updatedList = checklistDescriptionList.slice(0, 1);
+                                    const updatedList = checklistDescriptionList.slice(0, -1);
                                     setAddForm(prev => {
                                         return { ...prev, checkList: updatedList }
                                     })
