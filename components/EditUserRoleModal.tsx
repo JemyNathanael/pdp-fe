@@ -109,7 +109,7 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ page, search, sho
                   ));
                 setTimeout(() => {
                     setSuccessModalVisible(false)
-                }, 3000);
+                }, 1500);
             }
         } catch {
             hideLoading();

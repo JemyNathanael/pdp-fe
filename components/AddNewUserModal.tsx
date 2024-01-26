@@ -135,7 +135,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                   ));
                 setTimeout(() => {
                     setShowPopupSuccess(false)
-                }, 3000);
+                }, 1500);
             }
             else {
                 hideLoading();
