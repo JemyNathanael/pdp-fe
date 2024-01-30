@@ -204,6 +204,8 @@ const UpdateSubCategoryModal: React.FC<{
                                     value={selectedId}
                                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                                     placeholder="Find or choose"
+                                    allowClear
+                                    treeNodeFilterProp='title'
                                     treeDefaultExpandAll
                                     onChange={onChange}
                                     treeData={

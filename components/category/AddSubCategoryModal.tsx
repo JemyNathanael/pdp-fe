@@ -309,8 +309,6 @@ const AddSubCategoryModal: React.FC<{
         return 'black'
     }
 
-
-
     return (
         <div>
             <Modal
@@ -368,9 +366,9 @@ const AddSubCategoryModal: React.FC<{
                                     <TreeSelect
                                         showSearch
                                         placeholder="Choose the sub-category that will be given a checklist"
-                                        // optionFilterProp="children"
-                                        // filterOption={filterOption}
                                         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                        allowClear
+                                        treeNodeFilterProp='title'
                                         treeDefaultExpandAll
                                         dropdownMatchSelectWidth={false}
                                         treeData={
