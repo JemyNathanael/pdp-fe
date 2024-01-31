@@ -59,7 +59,7 @@ const userSchema = z.object({
 
 const schema = z.intersection(passwordSchema, userSchema);
 
-const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, page, visible, onCancel, onSave, showLoading }) => {
+const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ search, page, visible, onCancel, onSave }) => {
     const { replace } = useRouter();
     const [showPopupSuccess, setShowPopupSuccess] = useState(false);
     const [emailError, setEmailError] = useState('');
@@ -121,13 +121,11 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
         };
 
         try {
-            showLoading();
             setLoading(true);
             const response = await fetch.fetchPOST(BackendApiUrl.getUser, payload);
             if (response.data?.['success'] === 'Success') {
                 setLoading(false);
                 visible = false;
-                hideLoading();
                 setShowPopupSuccess(true);
                 reset();
                 onSave();
@@ -147,14 +145,12 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
             }
             else {
                 setLoading(false);
-                hideLoading();
                 setEmailError(response.problem?.['errors']['Email']);
                 setNameError(response.problem?.['errors']['Name']);
                 setPasswordError(response.problem?.['errors']['Password']);
                 setRoleError(response.problem?.['errors']['Role']);
             }
         } catch (error) {
-            hideLoading();
             setLoading(false);
             notification.error({
                 message: 'Error',
