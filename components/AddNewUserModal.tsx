@@ -59,7 +59,7 @@ const userSchema = z.object({
 
 const schema = z.intersection(passwordSchema, userSchema);
 
-const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, page, visible, onCancel, onSave, showLoading }) => {
+const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, page, visible, onCancel, onSave }) => {
     const { replace } = useRouter();
     const [showPopupSuccess, setShowPopupSuccess] = useState(false);
     const [emailError, setEmailError] = useState('');
@@ -121,7 +121,6 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
         };
 
         try {
-            showLoading();
             setLoading(true);
             const response = await fetch.fetchPOST(BackendApiUrl.getUser, payload);
             if (response.data?.['success'] === 'Success') {
