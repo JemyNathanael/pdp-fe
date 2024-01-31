@@ -230,7 +230,16 @@ const OverviewUser: React.FC = () => {
 
   return (
     <div id="overview">
-      <Spin spinning={loading} tip="Loading...">
+      <Spin spinning={loading} tip="Loading..."
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          margin: 'auto',
+          zIndex: 9999,
+        }}>
         <Modal
           title={
             <div className="flex flex-col items-center">
@@ -287,7 +296,7 @@ const OverviewUser: React.FC = () => {
           pagination={{
             position: ['bottomCenter'],
             simple: true,
-          defaultCurrent: 1,
+            defaultCurrent: 1,
             total: data?.totalData,
             onChange: (page) => {
               setPages(page);
@@ -296,7 +305,7 @@ const OverviewUser: React.FC = () => {
             pageSize: 10
           }}
           id="overviewTable"
-      />
+        />
         <EditUserRoleModal
           search={search}
           page={page}

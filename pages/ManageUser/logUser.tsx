@@ -11,6 +11,7 @@ interface DataItem {
     dateandTime: string;
     description: string;
     user: string;
+    createdBy: string;
 }
 interface DataItems {
     datas: DataItem[]
@@ -61,6 +62,12 @@ const LogUser: React.FC = () => {
             key: "user",
             align: "center"
         },
+        {
+            title: "Created By",
+            dataIndex: "createdBy",
+            key: "createdBy",
+            align: "center"
+        },
     ];
 
     const swrFetcher = useSwrFetcherWithAccessToken();
@@ -86,7 +93,8 @@ const LogUser: React.FC = () => {
                 rowNumber: index + 1,
                 dateandTime: item.dateandTime,
                 description: item.description,
-                user: item.user
+                user: item.user,
+                createdBy: item.createdBy
             };
             return row;
         })
