@@ -1,4 +1,4 @@
-import React, { FC, InputHTMLAttributes, useEffect } from 'react';
+import React, { FC, InputHTMLAttributes } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 import { Input } from 'antd';
 
