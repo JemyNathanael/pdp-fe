@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Select, notification } from 'antd';
+import { Modal, Select, Spin, notification } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
@@ -62,6 +62,7 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ page, search, sho
     const swrFetcher = useSwrFetcherWithAccessToken();
     const [roleOptions, setRoleOptions] = useState<SelectOptions<string>[]>([]);
     const [selectedRole, setSelectedRole] = useState<string>(record?.role || '');
+    const [loading, setLoading] = useState(false);
 
     const filter: FilterData = {
         itemsPerPage: 10,
@@ -97,22 +98,25 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ page, search, sho
 
         try {
             showLoading();
+            setLoading(true);
             const response = await fetchPUT(BackendApiUrl.editUserRole, payload);
             if (response.data?.['success'] === 'Success') {
                 hideLoading();
+                setLoading(false);
                 setSuccessModalVisible(true);
                 onCancel();
                 mutate(GetUser(
                     filter.search,
                     filter.itemsPerPage,
                     filter.page,
-                  ));
+                ));
                 setTimeout(() => {
                     setSuccessModalVisible(false)
                 }, 1500);
             }
         } catch {
             hideLoading();
+            setLoading(false);
             notification.error({
                 message: 'Error',
                 description: 'Something happened in the server',
@@ -151,25 +155,28 @@ const EditUserRoleModal: React.FC<EditUserRoleModalProps> = ({ page, search, sho
                     </button>,
                 ]}
             >
-                <h3 className='text-2xl sm:text-3xl text-center font-body font-bold mt-6'>{`Change Role of "${record?.fullName}"`}</h3>
-                <div className='p-5'>
-                    <h4 className='text-xl sm:text-2xl font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8'>
-                        Current Role: <u className='text-[#3788FD]'>{record?.role}</u>
-                    </h4>
-                    <h4 className='text-xl sm:text-2xl font-body font-bold mb-2 sm:mb-3'>Please Select a New Role </h4>
-                    <Select
-                        options={roleOptions}
-                        className='text-slate-500 w-full'
-                        value={selectedRole}
-                        onChange={(value) => setSelectedRole(value)}
-                    >
-                        {roleOptions.map((item) => (
-                            <Select.Option key={item.value} value={item.value} disabled={item.disabled}>
-                                {item.label}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </div>
+                <Spin spinning={loading} tip="Loading...">
+                    <h3 className='text-2xl sm:text-3xl text-center font-body font-bold mt-6'>{`Change Role of "${record?.fullName}"`}</h3>
+                    <div className='p-5'>
+                        <h4 className='text-xl sm:text-2xl font-body font-bold mt-4 sm:mt-6 mb-4 sm:mb-8'>
+                            Current Role: <u className='text-[#3788FD]'>{record?.role}</u>
+                        </h4>
+                        <h4 className='text-xl sm:text-2xl font-body font-bold mb-2 sm:mb-3'>Please Select a New Role </h4>
+
+                        <Select
+                            options={roleOptions}
+                            className='text-slate-500 w-full'
+                            value={selectedRole}
+                            onChange={(value) => setSelectedRole(value)}
+                        >
+                            {roleOptions.map((item) => (
+                                <Select.Option key={item.value} value={item.value} disabled={item.disabled}>
+                                    {item.label}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </div>
+                </Spin>
             </Modal>
             {successModalVisible &&
                 (<SuccessUpdateModal onGoToHome={handleSuccessModalClose} />

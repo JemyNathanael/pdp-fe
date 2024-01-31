@@ -1,4 +1,4 @@
-import React, { FC, InputHTMLAttributes} from 'react';
+import React, { FC, InputHTMLAttributes } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 import { Input } from 'antd';
 
@@ -8,6 +8,7 @@ interface InputAddNewUserFormProps extends InputHTMLAttributes<HTMLInputElement>
     placeholder?: string;
     formErrorMessage?: string;
     field: ControllerRenderProps;
+    password: boolean;
 }
 
 export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
@@ -16,7 +17,9 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
     placeholder,
     formErrorMessage,
     field,
+    password
 }) => {
+    //const [passwordVisible, setPasswordVisible] = React.useState(false);
 
     const inputType = () => {
         if (id === 'email') return 'email';
@@ -41,6 +44,7 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
                             className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
                             {...field}
                             placeholder={placeholder}
+                            visibilityToggle={{ visible: password }}
                         /> :
                         <Input
                             className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
