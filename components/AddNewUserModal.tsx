@@ -247,7 +247,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                                         <Input.Password
                                             className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
                                             placeholder='Insert Password'
-                                            {...register('password', {onChange: e => setValue('password', e.target.value)})}
+                                            {...register('password', { onChange: e => setValue('password', e.target.value) })}
                                             value={pass}
                                             visibilityToggle={{
                                                 visible: passwordVisible,
@@ -257,9 +257,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                                             }}
                                         />
                                     )} />
-                                {errors.password?.message || passwordError && (
-                                    <p className="text-md text-red-600 font-normal font-body mt-1.5">{errors.password?.message || passwordError}</p>
-                                )}
+                                <p className="text-md text-red-600 font-normal font-body mt-1.5">{errors.password?.message || passwordError}</p>
                             </div>
 
                             <div className="mb-5 md:mb-8">
@@ -272,7 +270,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                                         <Input.Password
                                             className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
                                             placeholder='Insert Password'
-                                            {...register('confirmPassword', {onChange: e => setValue('confirmPassword', e.target.value)})}
+                                            {...register('confirmPassword', { onChange: e => setValue('confirmPassword', e.target.value) })}
                                             value={confirmPass || ""}
                                             visibilityToggle={{
                                                 visible: confirmPasswordVisible,
@@ -282,9 +280,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                                             }}
                                         />
                                     )} />
-                                {errors.confirmPassword?.message || passwordError && (
-                                    <p className="text-md text-red-600 font-normal font-body mt-1.5">{errors.confirmPassword?.message || passwordError}</p>
-                                )}
+                                <p className="text-md text-red-600 font-normal font-body mt-1.5">{errors.confirmPassword?.message || passwordError}</p>
                             </div>
 
                             <div className="col-span-1 text-end">
