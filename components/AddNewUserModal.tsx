@@ -13,7 +13,7 @@ import { useController } from 'react-hook-form';
 import { SelectOptions } from '@/components/interfaces/AddNewUserForms';
 import useSWR, { mutate } from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
-import { Modal, Spin, notification } from 'antd';
+import { Input, Modal, Spin, notification } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 
@@ -69,7 +69,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
     const fetch = useFetchWithAccessToken();
     const [passwordVisible, setPasswordVisible] = React.useState(false);
     const [loading, setLoading] = useState(false);
-    const { handleSubmit, reset, control, formState: { errors, isValid } } = useForm<AddNewUserFormProps>({
+    const { setValue, watch, handleSubmit, reset, control, formState: { errors, isValid } } = useForm<AddNewUserFormProps>({
         defaultValues: {
             email: undefined,
             confirmPassword: undefined,
@@ -93,7 +93,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
     const [roleOptions, setRoleOptions] = useState<SelectOptions<string>[]>([]);
 
     const { data } = useSWR<DataItem[]>(BackendApiUrl.getRoleList, swrFetcher);
-
+    const pass = watch('password');
 
     useEffect(() => {
         const dataSource = () => {
@@ -167,12 +167,17 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
     const handleCancel = () => {
         reset();
         onCancel();
-
+        setValue('password', '');
+        setPasswordVisible(false);
         setEmailError('');
         setNameError('');
         setPasswordError('');
         setRoleError('');
     }
+
+    const borderClass = () => {
+        return errors.password?.message ? 'border-alertdanger' : 'border-secondary-100';
+    };
 
     return (
         <>
@@ -226,19 +231,40 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                                         formErrorMessage={errors.email?.message || emailError}
                                     />
                                 )} />
-                            <Controller
-                                name="password"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputAddNewUserForm
-                                        password={passwordVisible}
-                                        id={'password'}
-                                        label='Password'
-                                        field={{ ...field }}
-                                        placeholder='Insert Password'
-                                        formErrorMessage={errors.password?.message || passwordError}
-                                    />
-                                )} />
+                            <div className="mb-5 md:mb-8">
+                                <label className="text-xl sm:text-2xl font-body font-bold">Password</label>
+                                <div className="relative"></div>
+                                <Controller
+                                    name="password"
+                                    control={control}
+                                    render={() => (
+                                        <Input.Password
+                                            className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
+                                            name='password'
+                                            placeholder='Insert Password'
+                                            onChange={(e) => setValue('password', e.target.value)}
+                                            value={pass}
+                                            visibilityToggle={{
+                                                visible: passwordVisible,
+                                                onVisibleChange: (visible) => {
+                                                    setPasswordVisible(visible);
+                                                }
+                                            }}
+                                        />
+                                        // <InputAddNewUserForm
+                                        //     password={passwordVisible}
+                                        //     id={'password'}
+                                        //     label='Password'
+                                        //     field={{ ...field }}
+                                        //     placeholder='Insert Password'
+                                        //     formErrorMessage={errors.password?.message || passwordError}
+                                        // />
+                                    )} />
+                                {errors.password?.message || passwordError && (
+                                    <p className="text-md text-red-600 font-normal font-body mt-1.5">{errors.password?.message || passwordError}</p>
+                                )}
+                            </div>
+
 
                             <Controller
                                 name="confirmPassword"
