@@ -17,7 +17,7 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
     placeholder,
     formErrorMessage,
     field,
-    // password
+    // password,
 }) => {
     const [passwordVisible, setPasswordVisible] = React.useState(false);
 
@@ -34,6 +34,12 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
         return formErrorMessage ? 'border-alertdanger' : 'border-secondary-100';
     };
 
+    const handlePasswordBlur = () => {
+        if(passwordVisible){
+            setPasswordVisible(false);
+        }
+    };
+    
     return (
         <div className="mb-5 md:mb-8">
             <label className="text-xl sm:text-2xl font-body font-bold">{label}</label>
@@ -47,14 +53,10 @@ export const InputAddNewUserForm: FC<InputAddNewUserFormProps> = ({
                             visibilityToggle={{
                                 visible: passwordVisible,
                                 onVisibleChange: (visible) => {
-                                    setPasswordVisible(visible);
+                                   setPasswordVisible(visible);
                                 }
                             }}
-                            onBlur={() => {
-                                if (passwordVisible) {
-                                    setPasswordVisible(false);
-                                }
-                            }}
+                            onBlur={handlePasswordBlur}
                         /> :
                         <Input
                             className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
