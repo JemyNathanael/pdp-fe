@@ -70,7 +70,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
     const [passwordVisible, setPasswordVisible] = React.useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = React.useState(false);
     const [loading, setLoading] = useState(false);
-    const { setValue, watch, handleSubmit, reset, control, formState: { errors, isValid } } = useForm<AddNewUserFormProps>({
+    const { register, setValue, watch, handleSubmit, reset, control, formState: { errors, isValid } } = useForm<AddNewUserFormProps>({
         defaultValues: {
             email: undefined,
             confirmPassword: undefined,
@@ -246,9 +246,8 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                                     render={() => (
                                         <Input.Password
                                             className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
-                                            name='password'
                                             placeholder='Insert Password'
-                                            onChange={(e) => setValue('password', e.target.value)}
+                                            {...register('password', {onChange: e => setValue('password', e.target.value)})}
                                             value={pass}
                                             visibilityToggle={{
                                                 visible: passwordVisible,
@@ -272,9 +271,8 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                                     render={() => (
                                         <Input.Password
                                             className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
-                                            name='confirmPassword'
                                             placeholder='Insert Password'
-                                            onChange={(e) => setValue('confirmPassword', e.target.value)}
+                                            {...register('confirmPassword', {onChange: e => setValue('confirmPassword', e.target.value)})}
                                             value={confirmPass || ""}
                                             visibilityToggle={{
                                                 visible: confirmPasswordVisible,
