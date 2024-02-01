@@ -13,7 +13,7 @@ import { useController } from 'react-hook-form';
 import { SelectOptions } from '@/components/interfaces/AddNewUserForms';
 import useSWR, { mutate } from 'swr';
 import { useSwrFetcherWithAccessToken } from '@/functions/useSwrFetcherWithAccessToken';
-import { Modal, Spin, notification } from 'antd';
+import { Input, Modal, Spin, notification } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 
@@ -68,8 +68,9 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ search, page, visible
     const [roleError, setRoleError] = useState('');
     const fetch = useFetchWithAccessToken();
     const [passwordVisible, setPasswordVisible] = React.useState(false);
+    const [confirmPasswordVisible, setConfirmPasswordVisible] = React.useState(false);
     const [loading, setLoading] = useState(false);
-    const { handleSubmit, reset, control, formState: { errors, isValid } } = useForm<AddNewUserFormProps>({
+    const { register, setValue, watch, handleSubmit, reset, control, formState: { errors, isValid } } = useForm<AddNewUserFormProps>({
         defaultValues: {
             email: undefined,
             confirmPassword: undefined,
@@ -93,7 +94,8 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ search, page, visible
     const [roleOptions, setRoleOptions] = useState<SelectOptions<string>[]>([]);
 
     const { data } = useSWR<DataItem[]>(BackendApiUrl.getRoleList, swrFetcher);
-
+    const pass = watch('password');
+    const confirmPass = watch('confirmPassword');
 
     useEffect(() => {
         const dataSource = () => {
@@ -142,6 +144,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ search, page, visible
                 setPasswordError('');
                 setRoleError('');
                 setPasswordVisible(false);
+                setConfirmPasswordVisible(false);
             }
             else {
                 setLoading(false);
@@ -149,6 +152,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ search, page, visible
                 setNameError(response.problem?.['errors']['Name']);
                 setPasswordError(response.problem?.['errors']['Password']);
                 setRoleError(response.problem?.['errors']['Role']);
+                setValue('password', response.problem?.['errors']['Password']);
             }
         } catch (error) {
             setLoading(false);
@@ -163,12 +167,19 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ search, page, visible
     const handleCancel = () => {
         reset();
         onCancel();
-
+        setValue('password', '');
+        setPasswordVisible(false);
+        setValue('confirmPassword', '');
+        setConfirmPasswordVisible(false);
         setEmailError('');
         setNameError('');
         setPasswordError('');
         setRoleError('');
     }
+
+    const borderClass = () => {
+        return errors.password?.message ? 'border-alertdanger' : 'border-secondary-100';
+    };
 
     return (
         <>
@@ -222,33 +233,52 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ search, page, visible
                                         formErrorMessage={errors.email?.message || emailError}
                                     />
                                 )} />
-                            <Controller
-                                name="password"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputAddNewUserForm
-                                        password={passwordVisible}
-                                        id={'password'}
-                                        label='Password'
-                                        field={{ ...field }}
-                                        placeholder='Insert Password'
-                                        formErrorMessage={errors.password?.message || passwordError}
-                                    />
-                                )} />
+                            <div className="mb-5 md:mb-8">
+                                <label className="text-xl sm:text-2xl font-body font-bold">Password</label>
+                                <div className="relative"></div>
+                                <Controller
+                                    name="password"
+                                    control={control}
+                                    render={() => (
+                                        <Input.Password
+                                            className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
+                                            placeholder='Insert Password'
+                                            {...register('password', { onChange: e => setValue('password', e.target.value) })}
+                                            value={pass}
+                                            visibilityToggle={{
+                                                visible: passwordVisible,
+                                                onVisibleChange: (visible) => {
+                                                    setPasswordVisible(visible);
+                                                }
+                                            }}
+                                        />
+                                    )} />
+                                <p className="text-md text-red-600 font-normal font-body mt-1.5">{errors.password?.message || passwordError}</p>
+                            </div>
 
-                            <Controller
-                                name="confirmPassword"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputAddNewUserForm
-                                        password={passwordVisible}
-                                        id={'confirmPassword'}
-                                        label='Confirm Password'
-                                        field={{ ...field }}
-                                        placeholder='Insert Confirmation Password'
-                                        formErrorMessage={errors.confirmPassword?.message || passwordError}
-                                    />
-                                )} />
+                            <div className="mb-5 md:mb-8">
+                                <label className="text-xl sm:text-2xl font-body font-bold">Confirm Password</label>
+                                <div className="relative"></div>
+                                <Controller
+                                    name="confirmPassword"
+                                    control={control}
+                                    render={() => (
+                                        <Input.Password
+                                            className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
+                                            placeholder='Insert Password'
+                                            {...register('confirmPassword', { onChange: e => setValue('confirmPassword', e.target.value) })}
+                                            value={confirmPass || ""}
+                                            visibilityToggle={{
+                                                visible: confirmPasswordVisible,
+                                                onVisibleChange: (visible) => {
+                                                    setConfirmPasswordVisible(visible);
+                                                }
+                                            }}
+                                        />
+                                    )} />
+                                <p className="text-md text-red-600 font-normal font-body mt-1.5">{errors.confirmPassword?.message || passwordError}</p>
+                            </div>
+
                             <div className="col-span-1 text-end">
 
                                 <button
