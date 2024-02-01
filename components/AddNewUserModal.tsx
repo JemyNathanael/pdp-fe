@@ -143,6 +143,8 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ search, page, visible
                 setNameError('');
                 setPasswordError('');
                 setRoleError('');
+                setValue('password', '');
+                setValue('confirmPassword', '');
                 setPasswordVisible(false);
                 setConfirmPasswordVisible(false);
             }
@@ -152,7 +154,6 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ search, page, visible
                 setNameError(response.problem?.['errors']['Name']);
                 setPasswordError(response.problem?.['errors']['Password']);
                 setRoleError(response.problem?.['errors']['Role']);
-                setValue('password', response.problem?.['errors']['Password']);
             }
         } catch (error) {
             setLoading(false);
