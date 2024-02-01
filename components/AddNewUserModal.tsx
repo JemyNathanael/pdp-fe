@@ -68,6 +68,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
     const [roleError, setRoleError] = useState('');
     const fetch = useFetchWithAccessToken();
     const [passwordVisible, setPasswordVisible] = React.useState(false);
+    const [confirmPasswordVisible, setConfirmPasswordVisible] = React.useState(false);
     const [loading, setLoading] = useState(false);
     const { setValue, watch, handleSubmit, reset, control, formState: { errors, isValid } } = useForm<AddNewUserFormProps>({
         defaultValues: {
@@ -94,6 +95,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
 
     const { data } = useSWR<DataItem[]>(BackendApiUrl.getRoleList, swrFetcher);
     const pass = watch('password');
+    const confirmPass = watch('confirmPassword');
 
     useEffect(() => {
         const dataSource = () => {
@@ -144,6 +146,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                 setPasswordError('');
                 setRoleError('');
                 setPasswordVisible(false);
+                setConfirmPasswordVisible(false);
             }
             else {
                 setLoading(false);
@@ -152,6 +155,7 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                 setNameError(response.problem?.['errors']['Name']);
                 setPasswordError(response.problem?.['errors']['Password']);
                 setRoleError(response.problem?.['errors']['Role']);
+                setValue('password', response.problem?.['errors']['Password']);
             }
         } catch (error) {
             hideLoading();
@@ -169,6 +173,8 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
         onCancel();
         setValue('password', '');
         setPasswordVisible(false);
+        setValue('confirmPassword', '');
+        setConfirmPasswordVisible(false);
         setEmailError('');
         setNameError('');
         setPasswordError('');
@@ -251,34 +257,38 @@ const AddNewUserModal: React.FC<AddNewUserModalProps> = ({ hideLoading, search, 
                                                 }
                                             }}
                                         />
-                                        // <InputAddNewUserForm
-                                        //     password={passwordVisible}
-                                        //     id={'password'}
-                                        //     label='Password'
-                                        //     field={{ ...field }}
-                                        //     placeholder='Insert Password'
-                                        //     formErrorMessage={errors.password?.message || passwordError}
-                                        // />
                                     )} />
                                 {errors.password?.message || passwordError && (
                                     <p className="text-md text-red-600 font-normal font-body mt-1.5">{errors.password?.message || passwordError}</p>
                                 )}
                             </div>
 
+                            <div className="mb-5 md:mb-8">
+                                <label className="text-xl sm:text-2xl font-body font-bold">Confirm Password</label>
+                                <div className="relative"></div>
+                                <Controller
+                                    name="confirmPassword"
+                                    control={control}
+                                    render={() => (
+                                        <Input.Password
+                                            className={`border-2 rounded ${borderClass()} w-full mt-2.5 p-3.5`}
+                                            name='confirmPassword'
+                                            placeholder='Insert Password'
+                                            onChange={(e) => setValue('confirmPassword', e.target.value)}
+                                            value={confirmPass || ""}
+                                            visibilityToggle={{
+                                                visible: confirmPasswordVisible,
+                                                onVisibleChange: (visible) => {
+                                                    setConfirmPasswordVisible(visible);
+                                                }
+                                            }}
+                                        />
+                                    )} />
+                                {errors.confirmPassword?.message || passwordError && (
+                                    <p className="text-md text-red-600 font-normal font-body mt-1.5">{errors.confirmPassword?.message || passwordError}</p>
+                                )}
+                            </div>
 
-                            <Controller
-                                name="confirmPassword"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputAddNewUserForm
-                                        password={passwordVisible}
-                                        id={'confirmPassword'}
-                                        label='Confirm Password'
-                                        field={{ ...field }}
-                                        placeholder='Insert Confirmation Password'
-                                        formErrorMessage={errors.confirmPassword?.message || passwordError}
-                                    />
-                                )} />
                             <div className="col-span-1 text-end">
 
                                 <button
