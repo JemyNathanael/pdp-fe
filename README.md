@@ -1,7 +1,8 @@
 # Accelist PDP Frontend
 
 ## About
-> Accelist PDP Front end will serve as Personal Data Protection Website.
+> Branch `main` is Accelist PDP Front end will serve as Personal Data Protection Website.
+> Branch `public-page/main` is Accelist PDP Front end will serve as Public Page of Personal Data Protection Website.
 
 ## Template
 We are using the Accelist Next.js starter. The documentation are on the [https://github.com/accelist/nextjs-starter](https://github.com/accelist/nextjs-starter) repository.
