@@ -2,6 +2,7 @@
 
 ## About
 > Branch `main` is Accelist PDP Front end will serve as Personal Data Protection Website.
+
 > Branch `public-page/main` is Accelist PDP Front end will serve as Public Page of Personal Data Protection Website.
 
 ## Template
