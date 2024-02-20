@@ -34,7 +34,7 @@ function getSecurityHeaders(isProd) {
                 // https://report-uri.com/home/generate
                 // https://csp-evaluator.withgoogle.com/
                 key: 'Content-Security-Policy',
-                value: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' http://new-dev.accelist.com:9000 data: blob:; font-src 'self'; object-src 'none'; connect-src 'self' http://new-dev.accelist.com:9000;`
+                value: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://minio.accelist.com data: blob:; font-src 'self'; object-src 'none'; connect-src 'self' https://minio.accelist.com;`
             }
         );
     }
