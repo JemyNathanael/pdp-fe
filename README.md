@@ -58,3 +58,6 @@ Here are the steps to deploy the application:
 * makesure there is a server.js file
 * Run command `npm run start`
 * Open windows service -> go to the windows service that already register using NSSM, right click on the service name, click restart
+
+## Deployment to Production Server
+For deployment on Production, create release branch from main or public-page/main that wants to be deployed. The release branch name should be `release/x.x.x` for main branch and `release-public-page/x.x.x` for public-page/main. Then create a release on github using the tag vx.x.x for main and public-pagevx.x.x for public-page and target to the branch created for release. Include any changes for documentation.
