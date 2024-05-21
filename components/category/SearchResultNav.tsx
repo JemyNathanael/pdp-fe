@@ -6,7 +6,7 @@ const SearchResultNav = ({ onClick, searchResults }) => {
     // console.log(searchResults);
 
     const calculateWidth = () => {
-        const viewportWidth = window.innerWidth;
+        const viewportWidth = 1920;
         if (viewportWidth >= 1300) {
             return '670px';
         } else if (viewportWidth <= 775) {

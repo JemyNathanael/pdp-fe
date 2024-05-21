@@ -94,16 +94,15 @@ const CategoryLayout: React.FC<{
     const isSubCategoryPage = router.pathname === '/[categoryId]/[chapterId]';
     const isChecklistPage = router.pathname === '/[categoryId]/[chapterId]/[verseId]';
     const isVersePage = router.pathname === '/[categoryId]/[chapterId]/[verseId]/ChecklistFiles';
-    
-    
+    const isMasterPage = router.pathname === '/[categoryId]/master/masterQuestion' || '/[categoryId]/master/masterQuestion/masterQuestionId';
+
     const goToManageUserPage = () => {
         router.push('/ManageUser');
     }
 
     const receiveDataFromChild = (data) => {
-        
         setRoutePath(data);
-      };
+    };
 
     const handleResize = () => {
         if (window.innerWidth < 1024) {
@@ -145,13 +144,11 @@ const CategoryLayout: React.FC<{
             const categoryIdFromUrl = router.query['categoryId']?.toString() ?? '';
             const firstSubCategoryIdFromUrl = router.query['chapterId']?.toString() ?? '';
             const secondSubCategoryIdFromUrl = router.query['verseId']?.toString() ?? '';
-    
             const selectedChapterIndex = firstSubCategories.findIndex(
                 (chapter) => chapter.routePath === `/${categoryIdFromUrl}/${firstSubCategoryIdFromUrl}`
             );
 
             const shouldKeepFirstSubCategoryExpanded = !!secondSubCategoryIdFromUrl;
-    
             setSelectedChapterIndex(selectedChapterIndex);
 
             itemsCollapseStateMap[selectedChapterIndex] = shouldKeepFirstSubCategoryExpanded;
@@ -181,20 +178,16 @@ const CategoryLayout: React.FC<{
 
     function handleExpandOrCollapseAll() {
         setToggledFromCollapseOrExpandAll(true);
-    
         // Check if chaptersExpandedState is defined before using it
         if (chaptersExpandedState) {
             // Check if all chapters are expanded
             const isAllExpanded = chaptersExpandedState.every(state => state === true);
-    
             // Update the state based on the current state
             setChaptersExpandedState(chaptersExpandedState.map(() => !isAllExpanded));
-    
             // Update the open state based on the current state
             setOpenAll(!isAllExpanded);
         }
-    }  
-
+    }
     const handleLogout = () => {
         if (status === 'authenticated') {
             nProgress.start();
@@ -225,7 +218,7 @@ const CategoryLayout: React.FC<{
                     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
                     padding: '10px',
                     position: 'fixed',
-                    width: '100%',
+                    width: '100%', 
                     zIndex: 2,
                 }}>
                     <div className="flex items-center">
@@ -243,23 +236,26 @@ const CategoryLayout: React.FC<{
                             {/* First Sub Category Page */}
                             {isSubCategoryPage && (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
-                                    <SearchSubCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults}/>
+                                    <SearchSubCategoryNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
                                     <SearchSubCategoryResultNav searchResults={searchResults} />
                                 </div>
                             )}
                             {/* Second Sub Category Page */}
                             {isChecklistPage && (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
-                                    <SearchChecklistNavBar setSearchResults={setSearchResults} searchResults={searchResults}/>
-                                    <SearchChecklistResult searchResults={searchResults}/>
+                                    <SearchChecklistNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
+                                    <SearchChecklistResult searchResults={searchResults} />
                                 </div>
                             )}
                             {/* View All files */}
                             {isVersePage && (
                                 <div style={{ maxWidth: '100%' }} className="mr-2">
                                     <SearchFileNavBar setSearchResults={setSearchResults} searchResults={searchResults} />
-                                    <SearchFileResult searchResults={searchResults}/>
+                                    <SearchFileResult searchResults={searchResults} />
                                 </div>
+                            )}
+                            {isMasterPage && (
+                                <div style={{ maxWidth: '100%' }} className="mr-2"></div>
                             )}
 
                             <div className="grid grid-cols-1 lg:grid-cols-auto lg:grid-flow-col lg:grid-rows-1 items-center">
@@ -314,11 +310,20 @@ const CategoryLayout: React.FC<{
                             <img src='/adaptist-blue-logo.png' alt="logo" style={{ maxWidth: '250px' }} className="cursor-pointer" />
                         </div>
                         <Tooltip title={data?.title} placement="right">
-                            <Link href={`/${categoryId}`}>
-                                <p className="moveLeft p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
-                                    {data?.title}
-                                </p>
-                            </Link>
+                            {data?.title.includes("ROPA") &&
+                                <Link href={`/${categoryId}/RopaSelection`}>
+                                    <p className="moveLeft p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
+                                        {data?.title}
+                                    </p>
+                                </Link>
+                            }
+                            {!data?.title.includes("ROPA") &&
+                                <Link href={`/${categoryId}`}>
+                                    <p className="moveLeft p-2 px-4 m-4 text-white font-bold" style={{ backgroundColor: '#3788FD', borderRadius: '10px', opacity: '0.8' }}>
+                                        {data?.title}
+                                    </p>
+                                </Link>
+                            }
                         </Tooltip>
                         <div className="m-4 cursor-pointer" style={{ backgroundColor: '##000000' }}>
                             {firstSubCategories &&
@@ -333,13 +338,44 @@ const CategoryLayout: React.FC<{
                                         changeCollapseStatus={changeCollapseStatusByIndex}
                                         resetToggle={resetToggleFromButtonState}
                                         toggledFlag={toggledFromCollapseOrExpandAll}
-                                        selectedIndex = {selectedChapterIndex}
+                                        selectedIndex={selectedChapterIndex}
                                         currentIndex={i}
                                         key={i}
                                     />
                                 )
                             }
                         </div>
+
+                        {data?.title.includes("Master") && <>
+                            <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}/master/masterQuestion`)}>Master Question</p>
+                            <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}/master/masterGroupUser`)}>Master Group User</p>
+                        </>}
+
+                        {data?.title.includes("ROPA") && <>
+                            <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}`)}>Compliance</p>
+                            <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}/RopaList`)}>ROPA List</p>
+                        </>}
+
+                        {data?.title.includes("PIA") && <>
+                            <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}/PiaList`)}>PIA List</p>
+                        </>}
+                        {data?.title.includes("Incident") && <>
+                            <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}/IncidentList`)}>Incident List</p>
+                            {isAdmin && <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}/ReminderTemplate`)}>Reminder Template</p>}
+                        </>}
+                        {data?.title.includes("TRIA") && <>
+                            <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}/TriaList`)}>Tria List</p>
+                        </>}
+                        {data?.title.includes("Data Subject Right") && <>
+                            <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}/DsrList`)}>Request List</p>
+                            {isAdmin && <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}/ReminderTemplate`)}>Reminder Template</p>}
+                        </>}
+                        {data?.title.includes("Policy") && <>
+                            <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}/PrivacyPolicyList`)}>Policy Records</p>
+                        </>}
+                        {data?.title.includes("Consent") && <>
+                            <p className="mx-10 mt-3 mb-5 text-[#373737] font-semibold cursor-pointer" onClick={() => router.push(`/${router.query['categoryId']}/ConsentRecordList`)}>Consent Records</p>
+                        </>}
                         <button className="mx-8 mt-5 mb-5 text-[#373737] underline text-xs" onClick={handleExpandOrCollapseAll}>
                             Expand / Collapse all
                         </button>

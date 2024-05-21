@@ -236,3 +236,20 @@
   border: 2px solid #0099ff;
 }
 
+#ListTable .ant-table-thead > tr > th {
+  background-color: #d1d5db !important;
+  color: black !important;
+  text-align:left !important;
+  border-top: 1px solid black !important;
+  border-radius: 0 !important; 
+} 
+#ListTable .ant-table-tbody > tr > td {
+  border-top: 1px solid black !important;
+}
+#ListTable .ant-table-tbody > tr:last-child > td {
+  border-bottom: 1px solid black !important;
+}
+
+.overflow-x-auto {
+  background-color: #ffffff;
+}

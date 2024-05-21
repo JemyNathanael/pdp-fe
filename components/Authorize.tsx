@@ -43,7 +43,7 @@ export const Authorize: React.FC<{
 
     return (
         <AuthorizationContext.Provider value={ctx}>
-            {children}
+                {children}
         </AuthorizationContext.Provider>
     );
 };

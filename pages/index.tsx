@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Title } from '../components/Title';
 import { Page } from '../types/Page';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition, faArrowRightFromBracket, faUserGear, faHandshake, faLaptop, faPeopleArrows, faPeopleGroup, faServer, faSigning, faCalendarDays, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faArrowRightFromBracket, faUserGear, faPeopleArrows, faPeopleGroup, faServer, faSigning, faInfoCircle, faWarning, faLock, faDatabase, faListCheck, faSignalPerfect } from '@fortawesome/free-solid-svg-icons';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import nProgress from 'nprogress';
 import { Authorize } from '@/components/Authorize';
@@ -32,9 +32,14 @@ const Home: React.FC = () => {
     const swrFetcher = useSwrFetcherWithAccessToken();
 
     const { data, isValidating } = useSWR<CategoryHomeApiModel[]>(BackendApiUrl.getCategories, swrFetcher);
+    const ropaId = data?.find(item => item.title.includes("ROPA"))?.id;
 
     const onClickCategory = (categoryId: string) => {
-        router.push(`/${categoryId}`)
+        if(categoryId == ropaId){
+            router.push(`/${categoryId}/RopaSelection`);
+        }else{
+            router.push(`/${categoryId}`);
+        }
     }
 
     const handleIconModal = (categoryId: string) => {
@@ -48,21 +53,23 @@ const Home: React.FC = () => {
     }
     function getRelatedIcon(title: string): IconDefinition {
         title = title.toLowerCase()
-        
-        if(title.includes('hak')){
+
+        if (title.includes('ropa')) {
             return faServer
-        } else if(title.includes('hukum')){
-            return faHandshake
-        } else if(title.includes('keamanan')) {
-            return faPeopleGroup
-        } else if(title.includes('pemrosesan')) {
-            return faLaptop
-        } else if(title.includes('akuntabilitas')) {
-            return faCalendarDays
-        } else if(title.includes('transfer')) {
+        } else if (title.includes('pia')) {
             return faPeopleArrows
+        } else if (title.includes('tria')) {
+            return faPeopleGroup
+        } else if (title.includes('subject')) {
+            return faDatabase
+        } else if (title.includes('incident')) {
+            return faWarning
+        } else if (title.includes('policy')) {
+            return faLock
+        } else if (title.includes('consent')) {
+            return faListCheck
         } else {
-            return faHandshake
+            return faSignalPerfect
         }
     }
 
@@ -85,7 +92,7 @@ const Home: React.FC = () => {
                 zIndex: 1000
             }}>
                 <div className="hidden lg:block">
-                    <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin:'0px 0px 0px 40px' }} />
+                    <img src="adaptist-white-logo.png" alt="logo" style={{ maxWidth: '200px', margin: '0px 0px 0px 40px' }} />
                 </div>
                 <div style={{ maxWidth: '100%' }} className='mr-2'>
                     <SearchBarNavs setSearchResults={setSearchResults} searchResults={searchResults} />
@@ -131,7 +138,6 @@ const Home: React.FC = () => {
                         <div>
                             <button onClick={() => {
                                 nProgress.start();
-                                signIn('oidc');
                             }}>
                                 <div style={{
                                     border: 'solid white 2px',
